@@ -6,6 +6,7 @@ import { CriticalTermsPanel } from './components/CriticalTermsPanel';
 import { QuechuistaConsultationView } from './components/QuechuistaConsultationView';
 import { TranslatorView } from './components/TranslatorView';
 import { ConversationView } from './components/ConversationView';
+import { PersonalPronounsGuide } from './components/PersonalPronounsGuide';
 
 function AppContent() {
   const { activeTab } = useQuechua();
@@ -18,7 +19,12 @@ function AppContent() {
         {activeTab === 'bank' && <LexicalBankView />}
         {activeTab === 'doubts' && <CriticalTermsPanel />}
         {activeTab === 'consultation' && <QuechuistaConsultationView />}
-        {activeTab === 'translator' && <TranslatorView />}
+        {activeTab === 'translator' && (
+          <div className="space-y-6">
+            <TranslatorView />
+            <PersonalPronounsGuide />
+          </div>
+        )}
         {activeTab === 'chat' && <ConversationView />}
       </main>
 
@@ -31,9 +37,7 @@ function AppContent() {
             <span>·</span>
             <span>Variedad Cochabambina (-sha-, -min, -sina, -raj, -taj, -puni)</span>
           </div>
-          <div>
-            Entrenador contextual e investigación morfológica para quechua andino
-          </div>
+          <div>Entrenador contextual e investigación morfológica para quechua andino</div>
         </div>
       </footer>
     </div>
