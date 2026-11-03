@@ -1,0 +1,102 @@
+export type GrammarCategory = 
+  | 'sustantivo' 
+  | 'verbo' 
+  | 'adjetivo' 
+  | 'adverbio' 
+  | 'pronombre' 
+  | 'partícula' 
+  | 'interjección';
+
+export type SuffixType = 'nominal' | 'verbal' | 'independiente';
+
+export type DoubtTrigger = 'low_confidence' | 'dialect_variant' | 'out_of_glossary';
+
+export type DoubtStatus = 'pending' | 'queued_for_expert' | 'resolved';
+
+export interface LexicalRoot {
+  id: string;
+  quechua: string;
+  spanish: string;
+  category: GrammarCategory;
+  dialectNote: string;
+  verified: boolean;
+  frequency: number;
+  examples: string[];
+}
+
+export interface SuffixRule {
+  id: string;
+  suffix: string;
+  type: SuffixType;
+  slotOrder: number; // 1 to 6 concatenation order
+  function: string;
+  cochabambaUsage: string;
+  examples: string[];
+}
+
+export interface MorphToken {
+  surface: string;
+  root: string;
+  suffixes: string[];
+  gloss: string;
+  isRecognized: boolean;
+  doubtFlag?: DoubtTrigger;
+}
+
+export interface CorpusPhrase {
+  id: string;
+  quechua: string;
+  spanish: string;
+  morphologicalBreakdown: string; // e.g., "wasi-y-pi ka-sha-ni"
+  gloss: string; // e.g., "casa-1SG.POSS-LOC ser/estar-PROG-1SG"
+  grammaticalNotes: string;
+  tags: string[];
+  verified: boolean;
+}
+
+export interface CriticalDoubt {
+  id: string;
+  term: string;
+  trigger: DoubtTrigger;
+  contextPhrase: string;
+  occurrences: number;
+  aiHypothesis: string;
+  quechuistaQuestion: string;
+  suggestedAction: string;
+  status: DoubtStatus;
+  resolutionNote?: string;
+  createdAt: string;
+}
+
+export interface GrammarRule {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  cochabambaSpecificity: string;
+  examples: {
+    quechua: string;
+    spanish: string;
+    morphology?: string;
+    gloss?: string;
+  }[];
+}
+
+export interface TranslationResult {
+  sourceText: string;
+  translatedText: string;
+  direction: 'qu-es' | 'es-qu';
+  tokens: MorphToken[];
+  grammaticalExplanation: string;
+  detectedDoubts: Omit<CriticalDoubt, 'id' | 'createdAt'>[];
+}
+
+export interface ChatMessage {
+  id: string;
+  sender: 'user' | 'model';
+  quechuaText: string;
+  spanishTranslation: string;
+  tokens?: MorphToken[];
+  pedagogicalNote?: string;
+  timestamp: string;
+}

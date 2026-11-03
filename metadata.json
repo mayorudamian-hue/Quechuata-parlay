@@ -1,0 +1,6 @@
+{
+  "name": "Qhawana - Quechua Cochabambino",
+  "description": "Entrenador y banco lingüístico de quechua cochabambino con modelo Gemini, matriz de sufijos, panel de términos críticos y lista para quechuistas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
