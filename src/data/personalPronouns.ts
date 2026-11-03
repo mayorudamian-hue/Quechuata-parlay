@@ -1,0 +1,105 @@
+import { GrammarRule, LexicalRoot, CorpusPhrase } from '../types/quechua';
+
+/** Pronombres personales adicionales de la variedad cochabambina. */
+export const SEED_PERSONAL_PRONOUNS: LexicalRoot[] = [
+  {
+    id: 'root-pronoun-noqanchej',
+    quechua: 'noqanchej',
+    spanish: 'nosotros (incluye al oyente: tú y yo)',
+    category: 'pronombre',
+    dialectNote: 'Primera persona plural inclusiva: incluye obligatoriamente a la persona a quien se habla. En la variedad cochabambina se escribe con j final (-nchej/-nchij), no con la grafía peruana -nchik.',
+    verified: true,
+    frequency: 18,
+    examples: ['Noqanchej risaqchij', 'Noqanchej llank\'ashanchij'],
+  },
+  {
+    id: 'root-pronoun-noqayku',
+    quechua: 'noqayku',
+    spanish: 'nosotros (excluye al oyente)',
+    category: 'pronombre',
+    dialectNote: 'Primera persona plural exclusiva: incluye al hablante y a otras personas, pero no a la persona a quien se habla.',
+    verified: true,
+    frequency: 16,
+    examples: ['Noqayku jamushayku', 'Noqayku risaqku'],
+  },
+  {
+    id: 'root-pronoun-qankuna',
+    quechua: 'qankuna',
+    spanish: 'ustedes, vosotros',
+    category: 'pronombre',
+    dialectNote: 'Segunda persona plural, formada por qan + el pluralizador -kuna.',
+    verified: true,
+    frequency: 12,
+    examples: ['Qankuna jamunkichij', 'Qankuna allin kashankichij'],
+  },
+  {
+    id: 'root-pronoun-paykuna',
+    quechua: 'paykuna',
+    spanish: 'ellos, ellas',
+    category: 'pronombre',
+    dialectNote: 'Tercera persona plural, formada por pay + el pluralizador -kuna. Pay y paykuna no distinguen género gramatical.',
+    verified: true,
+    frequency: 12,
+    examples: ['Paykuna wasiypi kashanku', 'Paykuna jamunku'],
+  },
+];
+
+export const PERSONAL_PRONOUNS_PHRASES: CorpusPhrase[] = [
+  {
+    id: 'phrase-pronoun-noqanchej',
+    quechua: 'Noqanchej risaqchij.',
+    spanish: 'Nosotros (tú y yo) iremos.',
+    morphologicalBreakdown: 'noqa-nchej ri-saq-chij',
+    gloss: 'yo-INCL ir-FUT-1PL',
+    grammaticalNotes: 'Primera persona plural inclusiva en Cochabamba: incluye al oyente.',
+    tags: ['pronombre', 'inclusivo', 'cochabambino'],
+    verified: true,
+  },
+  {
+    id: 'phrase-pronoun-noqayku',
+    quechua: 'Noqayku jamushayku.',
+    spanish: 'Nosotros (ellos y yo, pero no tú) vamos a venir.',
+    morphologicalBreakdown: 'noqa-yku jamu-sha-yku',
+    gloss: 'yo-EXCL venir-PROG-1PL',
+    grammaticalNotes: 'Primera persona plural exclusiva: se excluye al interlocutor.',
+    tags: ['pronombre', 'exclusivo', 'cochabambino'],
+    verified: true,
+  },
+  {
+    id: 'phrase-pronoun-qankuna',
+    quechua: 'Qankuna imata ruwashankichij?',
+    spanish: '¿Qué están haciendo ustedes?',
+    morphologicalBreakdown: 'qan-kuna ima-ta ruwa-sha-nkichij',
+    gloss: 'tú-PL qué-ACUS hacer-PROG-2PL',
+    grammaticalNotes: 'Segunda persona plural con -kuna y la interrogación de "qué".',
+    tags: ['pronombre', 'plural', 'pregunta'],
+    verified: true,
+  },
+  {
+    id: 'phrase-pronoun-paykuna',
+    quechua: 'Paykuna wasiypi kashanku.',
+    spanish: 'Ellos/ellas están en la casa.',
+    morphologicalBreakdown: 'pay-kuna wasi-y-pi ka-sha-nku',
+    gloss: 'él/ella-PL casa-1SG.POSS-LOC estar-PROG-3PL',
+    grammaticalNotes: 'Tercera persona plural sin distinción de género.',
+    tags: ['pronombre', 'plural', 'tercera persona'],
+    verified: true,
+  },
+];
+
+export const PERSONAL_PRONOUNS_RULE: GrammarRule = {
+  id: 'rule-personal-pronouns-cochabamba',
+  title: 'Pronombres personales del Quechua Cochabambino',
+  category: 'Morfología pronominal',
+  description: 'Noqa significa yo; qan, tú/vos/usted; y pay, él/ella. La primera persona plural distingue noqanchej (incluye al oyente) de noqayku (lo excluye). Qankuna y paykuna se forman con -kuna: ustedes y ellos/ellas, respectivamente.',
+  cochabambaSpecificity: 'Pay no marca género. En la variedad cochabambina se usa la grafía con j final en -nchej/-nchij; se diferencia de la grafía peruana -nchik. La elección entre inclusivo y exclusivo depende de si se incluye a la persona interlocutora.',
+  examples: [
+    { quechua: 'Noqa', spanish: 'Yo', morphology: 'noqa', gloss: '1SG' },
+    { quechua: 'Qan', spanish: 'Tú / vos / usted', morphology: 'qan', gloss: '2SG' },
+    { quechua: 'Pay', spanish: 'Él / ella', morphology: 'pay', gloss: '3SG (sin género)' },
+    { quechua: 'Noqanchej', spanish: 'Nosotros, incluyéndote', morphology: 'noqa-nchej', gloss: '1PL.INCL' },
+    { quechua: 'Noqayku', spanish: 'Nosotros, sin incluirte', morphology: 'noqa-yku', gloss: '1PL.EXCL' },
+    { quechua: 'Qankuna', spanish: 'Ustedes / vosotros', morphology: 'qan-kuna', gloss: '2-PL' },
+    { quechua: 'Paykuna', spanish: 'Ellos / ellas', morphology: 'pay-kuna', gloss: '3-PL (sin género)' },
+  ],
+};
