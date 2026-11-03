@@ -1,3 +1,4 @@
+import { parseSenses, sensesToText } from '../utils/retrieval';
 import React, { useState } from 'react';
 import { useQuechua } from '../context/QuechuaContext';
 import { 
@@ -100,6 +101,7 @@ export const LexicalBankView: React.FC = () => {
   const [editRootSpanish, setEditRootSpanish] = useState('');
   const [editRootCategory, setEditRootCategory] = useState<GrammarCategory>('sustantivo');
   const [editRootNote, setEditRootNote] = useState('');
+  const [editRootSenses, setEditRootSenses] = useState('');
   const [editRootVerified, setEditRootVerified] = useState(true);
   const [applyCascadeToCorpus, setApplyCascadeToCorpus] = useState(true);
 
@@ -237,6 +239,7 @@ export const LexicalBankView: React.FC = () => {
     setEditRootSpanish(root.spanish);
     setEditRootCategory(root.category);
     setEditRootNote(root.dialectNote);
+    setEditRootSenses(sensesToText(root.senses));
     setEditRootVerified(root.verified);
     setApplyCascadeToCorpus(true);
   };
@@ -254,6 +257,7 @@ export const LexicalBankView: React.FC = () => {
       spanish: editRootSpanish.trim(),
       category: editRootCategory,
       dialectNote: editRootNote.trim(),
+      senses: parseSenses(editRootSenses),
       verified: editRootVerified,
     });
 
@@ -681,6 +685,11 @@ export const LexicalBankView: React.FC = () => {
                       </td>
                       <td className="py-3.5 px-6 text-stone-700 dark:text-stone-300 font-medium">
                         {root.spanish}
+                        {(root.senses || []).map((sense, i) => (
+                          <div key={i} className={`mt-0.5 text-xs font-normal ${sense.verified === false ? 'text-amber-700 dark:text-amber-400' : 'text-stone-500 dark:text-stone-400'}`}>
+                            ◦ {sense.meaning}{sense.context ? ` — ${sense.context}` : ''}{sense.verified === false ? ' (sin verificar)' : ''}
+                          </div>
+                        ))}
                       </td>
                       <td className="py-3.5 px-6">
                         <span className="text-xs text-stone-600 dark:text-stone-400">
@@ -1124,6 +1133,19 @@ export const LexicalBankView: React.FC = () => {
                   rows={2}
                   value={editRootNote}
                   onChange={(e) => setEditRootNote(e.target.value)}
+                  className="mt-1 w-full px-3 py-2 text-xs bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg text-stone-900 dark:text-stone-100 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-stone-700 dark:text-stone-300">
+                  Otros significados según el contexto (uno por línea: significado | cuándo se usa)
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder={"ej.\nsentarse | con persona como sujeto\nvivir, habitar | con lugar"}
+                  value={editRootSenses}
+                  onChange={(e) => setEditRootSenses(e.target.value)}
                   className="mt-1 w-full px-3 py-2 text-xs bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg text-stone-900 dark:text-stone-100 focus:outline-none"
                 />
               </div>

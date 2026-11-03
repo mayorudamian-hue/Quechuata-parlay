@@ -6,7 +6,9 @@ import {
   CriticalDoubt,
   GrammarRule,
   DoubtStatus,
+  MorphToken,
 } from '../types/quechua';
+import { normalizeText, rootExists, findRoot, meaningCovered } from '../utils/retrieval';
 import {
   SEED_ROOTS,
   SEED_SUFFIXES,
@@ -41,6 +43,8 @@ interface QuechuaContextType {
   updatePhrase: (id: string, updates: Partial<CorpusPhrase>) => void;
   deletePhrase: (id: string) => void;
   toggleVerifyPhrase: (id: string) => void;
+  upsertPhrase: (direction: 'qu-es' | 'es-qu', phrase: Omit<CorpusPhrase, 'id'>) => 'created' | 'updated';
+  learnFromTranslation: (tokens: MorphToken[], context: { quechua: string; spanish: string }) => { roots: string[]; senses: string[] };
   addDoubt: (doubt: Omit<CriticalDoubt, 'id' | 'createdAt'>) => void;
   updateDoubt: (id: string, updates: Partial<CriticalDoubt>) => void;
   setDoubtStatus: (id: string, status: DoubtStatus, resolutionNote?: string) => void;
@@ -145,6 +149,123 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
       return [{ ...newDoubt, id: makeId('doubt'), createdAt: new Date().toISOString() }, ...prev];
     });
   };
+
+  /**
+   * Guarda una frase; si ya existe una con el mismo texto origen la reemplaza
+   * (así una corrección no deja la versión vieja compitiendo en el corpus).
+   */
+  const upsertPhrase = (direction: 'qu-es' | 'es-qu', phrase: Omit<CorpusPhrase, 'id'>): 'created' | 'updated' => {
+    const sourceOf = (p: { quechua: string; spanish: string }) => direction === 'qu-es' ? p.quechua : p.spanish;
+    const targetOf = (p: { quechua: string; spanish: string }) => direction === 'qu-es' ? p.spanish : p.quechua;
+    const key = normalizeText(sourceOf(phrase));
+    const existing = phrases.find((p) => normalizeText(sourceOf(p)) === key);
+    if (!existing) {
+      addPhrase(phrase);
+      return 'created';
+    }
+    const changed = normalizeText(targetOf(existing)) !== normalizeText(targetOf(phrase));
+    setPhrases((prev) => prev.map((p) => p.id === existing.id
+      ? {
+          ...p,
+          ...phrase,
+          grammaticalNotes: changed
+            ? `${phrase.grammaticalNotes} [Corregido: antes «${targetOf(existing)}»]`
+            : phrase.grammaticalNotes,
+        }
+      : p));
+    return 'updated';
+  };
+
+  /**
+   * Toma las palabras de una traducción guardada/corregida y agrega al directorio las raíces
+   * que todavía no existen (sin verificar), creando además un término crítico para revisarlas.
+   * Devuelve las raíces nuevas.
+   */
+  const learnFromTranslation = (tokens: MorphToken[], context: { quechua: string; spanish: string }): { roots: string[]; senses: string[] } => {
+    const seen = new Set<string>();
+    const fresh: Array<{ root: string; meaning: string }> = [];
+    const newSenses: Array<{ rootId: string; root: string; meaning: string }> = [];
+
+    const realMeaning = (token: MorphToken, key: string): string => {
+      if (token.meaning && normalizeText(token.meaning) !== key) return token.meaning.trim();
+      const lexical = (token.gloss || '').split('-')[0].trim();
+      return lexical && normalizeText(lexical) !== key && !/^[A-Z0-9.]+$/.test(lexical) ? lexical : '';
+    };
+
+    tokens.forEach((token) => {
+      const root = (token.root || '').replace(/^-+|-+$/g, '').trim();
+      const key = normalizeText(root);
+      if (!root || /^\d+$/.test(root) || seen.has(key)) return;
+      seen.add(key);
+
+      const existing = findRoot(root, roots);
+      const given = realMeaning(token, key);
+
+      if (existing) {
+        // Raíz conocida: si aquí se usa con un significado que no tenía, se registra como otro sentido.
+        if (given && !meaningCovered(given, existing)) {
+          newSenses.push({ rootId: existing.id, root: existing.quechua, meaning: given });
+        }
+        return;
+      }
+
+      const meaning = given
+        || (tokens.length === 1 && context.spanish.split(/\s+/).length <= 4
+          ? context.spanish
+          : `Pendiente de glosar (aparece en «${context.spanish}»)`);
+      fresh.push({ root, meaning });
+    });
+
+    if (fresh.length) {
+      setRoots((prev) => {
+        const additions: LexicalRoot[] = fresh
+          .filter((item) => !rootExists(item.root, prev))
+          .map((item) => ({
+            id: makeId('root'),
+            quechua: item.root,
+            spanish: item.meaning,
+            category: item.root.endsWith('y') ? 'verbo' : 'sustantivo',
+            dialectNote: 'Agregada automáticamente desde una traducción corregida; pendiente de revisión.',
+            verified: false,
+            frequency: 1,
+            examples: [context.quechua],
+          }));
+        return additions.length ? [...additions, ...prev] : prev;
+      });
+      fresh.forEach((item) => addDoubt({
+        term: item.root,
+        trigger: 'out_of_glossary',
+        contextPhrase: context.quechua,
+        occurrences: 1,
+        aiHypothesis: `Raíz nueva agregada al directorio desde una traducción guardada. Significado provisional: «${item.meaning}».`,
+        quechuistaQuestion: `¿"${item.root}" es la raíz correcta y su significado es el que se usa en Cochabamba?`,
+        suggestedAction: 'Revisar y marcar como verificada en el Banco Lingüístico (o corregir con la corrección en cascada).',
+        status: 'pending',
+      }));
+    }
+
+    if (newSenses.length) {
+      setRoots((prev) => prev.map((r) => {
+        const adds = newSenses.filter((n) => n.rootId === r.id && !meaningCovered(n.meaning, r));
+        return adds.length
+          ? { ...r, senses: [...(r.senses || []), ...adds.map((n) => ({ meaning: n.meaning, context: context.spanish, verified: false }))] }
+          : r;
+      }));
+      newSenses.forEach((n) => addDoubt({
+        term: `${n.root} («${n.meaning}»)`,
+        trigger: 'low_confidence',
+        contextPhrase: context.quechua,
+        occurrences: 1,
+        aiHypothesis: `"${n.root}" ya está en el directorio, pero aquí se usó con otro significado: «${n.meaning}». Se guardó como sentido adicional sin verificar.`,
+        quechuistaQuestion: `¿"${n.root}" puede significar también «${n.meaning}»? ¿En qué contexto se usa cada significado?`,
+        suggestedAction: 'Revisar los significados de la raíz en el Banco Lingüístico y precisar el contexto de cada uno.',
+        status: 'pending',
+      }));
+    }
+
+    return { roots: fresh.map((item) => item.root), senses: newSenses.map((n) => `${n.root} → ${n.meaning}`) };
+  };
+
   const updateDoubt = (id: string, updates: Partial<CriticalDoubt>) =>
     setDoubts((prev) => prev.map((item) => item.id === id ? { ...item, ...updates } : item));
   const setDoubtStatus = (id: string, status: DoubtStatus, resolutionNote?: string) =>
@@ -270,7 +391,7 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
       roots, suffixes, phrases, doubts, grammarRules, activeTab, setActiveTab, darkMode, setDarkMode,
       addRoot, updateRoot, deleteRoot, toggleVerifyRoot,
       addSuffix, updateSuffix, deleteSuffix,
-      addPhrase, updatePhrase, deletePhrase, toggleVerifyPhrase,
+      addPhrase, updatePhrase, deletePhrase, toggleVerifyPhrase, upsertPhrase, learnFromTranslation,
       addDoubt, updateDoubt, setDoubtStatus, deleteDoubt, applyCascadeCorrection, autoScanCorpus,
       addGrammarRule, updateGrammarRule, deleteGrammarRule,
       exportDatasetJSON, importDatasetJSON, resetToDefaults,

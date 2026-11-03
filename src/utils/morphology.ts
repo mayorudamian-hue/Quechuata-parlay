@@ -40,7 +40,7 @@ export function parseMorphologicalBreakdown(
           surface: cleanSurface,
           root: matchedRoot ? matchedRoot.quechua : rawRoot,
           suffixes,
-          gloss: cleanGloss || `${rawRoot}-GLOSA`,
+          gloss: cleanGloss || (matchedRoot ? `${matchedRoot.spanish.split(',')[0].trim()}${suffixes.join('')}` : `${rawRoot}${suffixes.join('')}`),
           isRecognized: true,
         };
       }
@@ -101,6 +101,7 @@ export function analyzeWordWithKnownDatabase(
       // Ordenar sufijos conocidos por longitud descendente
       const sortedSuffixes = [...knownSuffixes].sort((a, b) => b.suffix.length - a.suffix.length);
 
+      let hasUnknownFragment = false;
       let safetyLoop = 0;
       while (currentRemainder.length > 0 && safetyLoop < 8) {
         safetyLoop++;
@@ -119,11 +120,15 @@ export function analyzeWordWithKnownDatabase(
         if (!matchedSuffix) {
           // Si no empareja con sufijo conocido, tomar el fragmento restante
           if (currentRemainder.length > 0) {
+            hasUnknownFragment = true;
             foundSuffixes.push(`-${currentRemainder}`);
             currentRemainder = '';
           }
         }
       }
+
+      // Una raíz corta con un resto que no son sufijos conocidos es casi siempre un falso positivo
+      if (hasUnknownFragment && rootBase.length < 4) continue;
 
       return {
         surface: word,

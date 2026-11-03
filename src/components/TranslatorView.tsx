@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuechua } from '../context/QuechuaContext';
 import { TranslationResult, MorphToken } from '../types/quechua';
 import { parseMorphologicalBreakdown, analyzeWordWithKnownDatabase } from '../utils/morphology';
+import { findExactMatch, findRelevantPhrases, findRelevantRoots, formatMeanings, normalizeText, rootExists } from '../utils/retrieval';
 import { 
   ArrowRightLeft, 
   Sparkles, 
@@ -18,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export const TranslatorView: React.FC = () => {
-  const { roots, suffixes, phrases, grammarRules, addDoubt, addPhrase, setActiveTab } = useQuechua();
+  const { roots, suffixes, phrases, grammarRules, addDoubt, upsertPhrase, learnFromTranslation, setActiveTab } = useQuechua();
 
   const [direction, setDirection] = useState<'qu-es' | 'es-qu'>('es-qu');
   const [inputText, setInputText] = useState('');
@@ -28,6 +29,9 @@ export const TranslatorView: React.FC = () => {
   const [addedDoubtsMap, setAddedDoubtsMap] = useState<Record<string, boolean>>({});
   const [addedToCorpus, setAddedToCorpus] = useState(false);
   const [isManualInputOpen, setIsManualInputOpen] = useState(false);
+  const [learnedRoots, setLearnedRoots] = useState<string[]>([]);
+  const [learnedSenses, setLearnedSenses] = useState<string[]>([]);
+  const [glossWithAI, setGlossWithAI] = useState(true);
 
   // Manual Input Form State
   const [manualSource, setManualSource] = useState('');
@@ -55,7 +59,7 @@ export const TranslatorView: React.FC = () => {
     'Paqarin jamusaqpuni llank\'aj'
   ];
 
-  const handleTranslate = async (textToTranslate?: string) => {
+  const handleTranslate = async (textToTranslate?: string, forceAI = false) => {
     const text = (textToTranslate || inputText).trim();
     if (!text) return;
 
@@ -63,13 +67,46 @@ export const TranslatorView: React.FC = () => {
     setErrorMsg('');
     setAddedToCorpus(false);
     setIsEditingResult(false);
+    setLearnedRoots([]);
+    setLearnedSenses([]);
 
     try {
+      // 1. Si la frase ya está en el corpus, se responde desde ahí (sin gastar IA ni arriesgar otra versión).
+      const exact = forceAI ? null : findExactMatch(text, direction, phrases);
+      if (exact) {
+        const tokens = parseMorphologicalBreakdown(
+          exact.quechua,
+          exact.morphologicalBreakdown || exact.quechua,
+          exact.gloss || '',
+          roots,
+          suffixes
+        );
+        const fromCorpus: TranslationResult = {
+          sourceText: text,
+          translatedText: direction === 'qu-es' ? exact.spanish : exact.quechua,
+          direction,
+          tokens,
+          grammaticalExplanation: exact.grammaticalNotes,
+          detectedDoubts: [],
+          source: 'corpus',
+        };
+        setResult(fromCorpus);
+        setEditedTranslatedText(fromCorpus.translatedText);
+        setEditedExplanation(fromCorpus.grammaticalExplanation);
+        setAddedToCorpus(true);
+        return;
+      }
+
+      // 2. Si no, se le da a la IA lo más parecido del corpus y las raíces pertinentes (no "las últimas 10").
+      const relevantPhrases = findRelevantPhrases(text, direction, phrases, 12);
+      const relevantRoots = findRelevantRoots(text, direction, roots, relevantPhrases, 80);
       const customRules = grammarRules.map((r) => `${r.title}: ${r.cochabambaSpecificity}`).join('\n');
-      const extraCorpus = phrases.slice(0, 10).map((p) => ({
+      const extraCorpus = relevantPhrases.map((p) => ({
         quechua: p.quechua,
         spanish: p.spanish,
         morphology: p.morphologicalBreakdown,
+        gloss: p.gloss,
+        verified: p.verified,
       }));
 
       const res = await fetch('/api/quechua/translate', {
@@ -80,7 +117,7 @@ export const TranslatorView: React.FC = () => {
           direction,
           customRules,
           extraCorpus,
-          knownRoots: roots.slice(0, 60).map((r) => ({ quechua: r.quechua, spanish: r.spanish, category: r.category })),
+          knownRoots: relevantRoots.map((r) => ({ quechua: r.quechua, spanish: formatMeanings(r), category: r.category })),
           knownSuffixes: suffixes.map((s) => ({ suffix: s.suffix, function: s.function, slot: s.slotOrder })),
         }),
       });
@@ -99,6 +136,7 @@ export const TranslatorView: React.FC = () => {
           tokens: localTokens,
           grammaticalExplanation: 'Análisis morfológico generado directamente desde las raíces y reglas gramaticales del banco.',
           detectedDoubts: [],
+          source: 'fallback',
         };
       } else {
         if (!res.ok) {
@@ -106,6 +144,7 @@ export const TranslatorView: React.FC = () => {
           throw new Error(errData.error || `Error del servidor (${res.status})`);
         }
         data = await res.json();
+        data.source = data.source || 'ai';
       }
 
       // Refinar tokens asegurando raíces reales si el modelo dejó la palabra aglutinada
@@ -117,6 +156,33 @@ export const TranslatorView: React.FC = () => {
       });
 
       data.tokens = refinedTokens;
+
+      // Palabras que la IA usó y que no están en el directorio: se marcan y se registran como dudas
+      // (aunque el modelo no las haya señalado). addDoubt no duplica un término ya registrado.
+      if (data.source === 'ai') {
+        const alreadyReported = new Set((data.detectedDoubts || []).map((d) => normalizeText(d.term)));
+        data.tokens = data.tokens.map((token) => {
+          const root = (token.root || '').replace(/^-+|-+$/g, '');
+          if (!root || /^\d+$/.test(root) || root.length < 2 || rootExists(root, roots)) return token;
+          if (!alreadyReported.has(normalizeText(root))) {
+            addDoubt({
+              term: root,
+              trigger: 'out_of_glossary',
+              contextPhrase: text,
+              occurrences: 1,
+              aiHypothesis: `La IA usó "${root}" (${token.meaning || token.gloss || 'sin glosa'}) y no está en tu directorio.`,
+              quechuistaQuestion: `¿"${root}" es correcto y se usa así en Cochabamba?`,
+              suggestedAction: 'Verificar y, si es correcto, agregarlo al Banco Lingüístico.',
+              status: 'pending',
+            });
+          }
+          return { ...token, doubtFlag: token.doubtFlag || 'out_of_glossary' };
+        });
+      }
+
+      if (data.source === 'fallback') {
+        setErrorMsg('La IA no respondió a tiempo (o no hay cuota): este resultado es aproximado, armado con tu banco local. Vuelve a intentar o ingresa la traducción a mano.');
+      }
       setResult(data);
       setEditedTranslatedText(data.translatedText);
       setEditedExplanation(data.grammaticalExplanation);
@@ -150,6 +216,7 @@ export const TranslatorView: React.FC = () => {
         tokens: localTokens,
         grammaticalExplanation: 'Se aplicó el desglosador morfológico local con las raíces y sufijos del banco léxico.',
         detectedDoubts: [],
+        source: 'fallback',
       });
       setErrorMsg(`Aviso: ${error.message || 'Se aplicó análisis con el banco local.'}`);
     } finally {
@@ -166,73 +233,158 @@ export const TranslatorView: React.FC = () => {
     setIsManualInputOpen(true);
   };
 
-  const handleSaveManualTranslation = (e: React.FormEvent) => {
+  /**
+   * Guarda una frase en el corpus (reemplazando la anterior si el texto origen ya existía)
+   * y agrega al directorio las raíces nuevas, que quedan en Términos críticos para revisión.
+   */
+  const persistTranslation = (
+    quechuaStr: string,
+    spanishStr: string,
+    tokens: MorphToken[],
+    notes: string,
+    tags: string[],
+    verified: boolean,
+    morphOverride?: string,
+    glossOverride?: string
+  ) => {
+    upsertPhrase(direction, {
+      quechua: quechuaStr,
+      spanish: spanishStr,
+      morphologicalBreakdown: morphOverride || tokens.map((t) => (t.suffixes.length ? `${t.root}${t.suffixes.map((x) => (x.startsWith('-') ? x : `-${x}`)).join('')}` : t.root)).join(' '),
+      gloss: glossOverride || tokens.map((t) => t.gloss).join(' '),
+      grammaticalNotes: notes,
+      tags,
+      verified,
+    });
+    const added = learnFromTranslation(tokens, { quechua: quechuaStr, spanish: spanishStr });
+    setLearnedRoots(added.roots);
+    setLearnedSenses(added.senses);
+    setAddedToCorpus(true);
+    return added;
+  };
+
+  /** Pide a la IA raíz, sufijos y significado de las palabras indicadas; si falla, devuelve los tokens sin cambios. */
+  const glossTokensWithAI = async (
+    tokens: MorphToken[],
+    indices: number[],
+    quechuaStr: string,
+    spanishStr: string
+  ): Promise<MorphToken[]> => {
+    if (!indices.length) return tokens;
+    setLoading(true);
+    try {
+      const res = await fetch('/api/quechua/gloss', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quechua: quechuaStr,
+          spanish: spanishStr,
+          words: indices.map((i) => tokens[i].surface),
+          knownRoots: findRelevantRoots(quechuaStr, 'qu-es', roots, [], 40).map((r) => ({ quechua: r.quechua, spanish: formatMeanings(r) })),
+        }),
+      });
+      if (!res.ok) throw new Error('IA no disponible');
+      const data: { tokens?: Array<{ surface: string; root: string; suffixes: string[]; gloss: string; meaning: string }> } = await res.json();
+      const bySurface = new Map((data.tokens || []).map((g) => [normalizeText(g.surface), g]));
+      const target = new Set(indices);
+      return tokens.map((t, idx) => {
+        const g = target.has(idx) ? bySurface.get(normalizeText(t.surface)) : undefined;
+        return g && g.root
+          ? { ...t, root: g.root, suffixes: g.suffixes || [], gloss: g.gloss || t.gloss, meaning: g.meaning || undefined, isRecognized: true }
+          : t;
+      });
+    } catch {
+      setErrorMsg('No se pudo glosar con la IA: las palabras nuevas se guardaron como "pendiente de glosar" y puedes completarlas en el Banco Lingüístico.');
+      return tokens;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveManualTranslation = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!manualSource.trim() || !manualTranslation.trim()) return;
 
     const quechuaStr = direction === 'qu-es' ? manualSource.trim() : manualTranslation.trim();
     const spanishStr = direction === 'qu-es' ? manualTranslation.trim() : manualSource.trim();
 
-    // 1. Extraer de manera determinista las RAÍCES REALES a partir de la separación del usuario
-    const tokens = parseMorphologicalBreakdown(
+    let tokens = parseMorphologicalBreakdown(
       quechuaStr,
       manualMorph.trim() || quechuaStr,
-      manualGloss.trim() || spanishStr,
+      manualGloss.trim() || '',
       roots,
       suffixes
     );
 
-    // 2. Incorporar al corpus para instruir inmediatamente al modelo
-    addPhrase({
-      quechua: quechuaStr,
-      spanish: spanishStr,
-      morphologicalBreakdown: manualMorph.trim() || tokens.map(t => t.suffixes.length ? `${t.root}-${t.suffixes.join('-')}` : t.root).join(' '),
-      gloss: manualGloss.trim() || tokens.map(t => t.gloss).join(' '),
-      grammaticalNotes: manualNotes.trim() || 'Traducción manual añadida por el usuario para instruir al modelo con raíces reales.',
-      tags: ['traduccion-manual', 'validado'],
-      verified: true,
-    });
+    // Si el usuario no escribió su propia glosa, la IA glosa las palabras con raíz fuera del directorio
+    if (glossWithAI && !manualGloss.trim()) {
+      const indices = tokens
+        .map((t, idx) => ({ t, idx }))
+        .filter(({ t }) => !t.isRecognized || !rootExists(t.root, roots))
+        .map(({ idx }) => idx);
+      tokens = await glossTokensWithAI(tokens, indices, quechuaStr, spanishStr);
+    }
+    const notes = manualNotes.trim() || 'Traducción manual añadida por el usuario.';
+
+    persistTranslation(quechuaStr, spanishStr, tokens, notes, ['traduccion-manual', 'validado'], true, manualMorph.trim() || undefined, manualGloss.trim() || undefined);
 
     setResult({
       sourceText: manualSource.trim(),
       translatedText: manualTranslation.trim(),
       direction,
       tokens,
-      grammaticalExplanation: manualNotes.trim() || 'Traducción manual certificada por el usuario e incorporada al corpus con raíces reales.',
+      grammaticalExplanation: notes,
       detectedDoubts: [],
+      source: 'corpus',
     });
-
-    setAddedToCorpus(true);
     setIsManualInputOpen(false);
     setErrorMsg('');
   };
 
-  const handleSaveEditedResult = () => {
+  const handleSaveEditedResult = async () => {
     if (!result) return;
-    const updatedResult: TranslationResult = {
+    const newTranslation = editedTranslatedText.trim();
+    if (!newTranslation) return;
+
+    const quechuaStr = direction === 'qu-es' ? result.sourceText : newTranslation;
+    const spanishStr = direction === 'qu-es' ? newTranslation : result.sourceText;
+
+    // Los tokens del resultado corresponden a la traducción ANTERIOR: se vuelven a armar
+    // sobre el quechua corregido, reutilizando los que siguen iguales.
+    const oldByWord = new Map(result.tokens.map((t) => [normalizeText(t.surface), t]));
+    const reused = new Set<number>();
+    let tokens: MorphToken[] = quechuaStr
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((raw, idx) => {
+        const word = raw.replace(/^[.,!?¿¡;:]+|[.,!?;:]+$/g, '');
+        const old = oldByWord.get(normalizeText(word));
+        if (old) reused.add(idx);
+        return old || analyzeWordWithKnownDatabase(word, roots, suffixes);
+      });
+
+    // Palabras nuevas (no reutilizadas y con raíz fuera del directorio): se pide a la IA que las glose,
+    // así entran al directorio con su significado en vez de "Pendiente de glosar".
+    const needGloss = tokens
+      .map((t, idx) => ({ t, idx }))
+      .filter(({ t, idx }) => !reused.has(idx) && (!t.isRecognized || !rootExists(t.root, roots)));
+
+    if (glossWithAI && needGloss.length > 0) {
+      tokens = await glossTokensWithAI(tokens, needGloss.map(({ idx }) => idx), quechuaStr, spanishStr);
+    }
+
+    const notes = editedExplanation.trim();
+    persistTranslation(quechuaStr, spanishStr, tokens, notes, ['correccion-manual', 'validado'], true);
+
+    setResult({
       ...result,
-      translatedText: editedTranslatedText.trim(),
-      grammaticalExplanation: editedExplanation.trim(),
-    };
-    setResult(updatedResult);
-    setIsEditingResult(false);
-
-    // Save edited version to corpus
-    const quechuaStr = direction === 'qu-es' ? updatedResult.sourceText : updatedResult.translatedText;
-    const spanishStr = direction === 'qu-es' ? updatedResult.translatedText : updatedResult.sourceText;
-    const morphologyStr = updatedResult.tokens.map((t) => (t.suffixes.length ? `${t.root}-${t.suffixes.join('-')}` : t.root)).join(' ');
-    const glossStr = updatedResult.tokens.map((t) => t.gloss).join(' ');
-
-    addPhrase({
-      quechua: quechuaStr,
-      spanish: spanishStr,
-      morphologicalBreakdown: morphologyStr,
-      gloss: glossStr,
-      grammaticalNotes: updatedResult.grammaticalExplanation,
-      tags: ['correccion-manual', 'validado'],
-      verified: true,
+      translatedText: newTranslation,
+      grammaticalExplanation: notes,
+      tokens,
+      source: 'corpus',
     });
-    setAddedToCorpus(true);
+    setIsEditingResult(false);
   };
 
   const handleAddDetectedDoubt = (doubt: TranslationResult['detectedDoubts'][0]) => {
@@ -243,23 +395,12 @@ export const TranslatorView: React.FC = () => {
     setAddedDoubtsMap((prev) => ({ ...prev, [doubt.term]: true }));
   };
 
+  // Guardar tal cual lo devolvió la IA: queda SIN verificar (para que se revise), pero ya se reutiliza.
   const handleSaveToCorpus = () => {
     if (!result) return;
     const quechuaStr = direction === 'qu-es' ? result.sourceText : result.translatedText;
     const spanishStr = direction === 'qu-es' ? result.translatedText : result.sourceText;
-    const morphologyStr = result.tokens.map((t) => (t.suffixes.length ? `${t.root}-${t.suffixes.join('-')}` : t.root)).join(' ');
-    const glossStr = result.tokens.map((t) => t.gloss).join(' ');
-
-    addPhrase({
-      quechua: quechuaStr,
-      spanish: spanishStr,
-      morphologicalBreakdown: morphologyStr,
-      gloss: glossStr,
-      grammaticalNotes: result.grammaticalExplanation,
-      tags: ['traduccion', 'validado'],
-      verified: true,
-    });
-    setAddedToCorpus(true);
+    persistTranslation(quechuaStr, spanishStr, result.tokens, result.grammaticalExplanation, ['traduccion-ia', 'sin-verificar'], false);
   };
 
   return (
@@ -442,6 +583,15 @@ export const TranslatorView: React.FC = () => {
                   className="w-full p-2 text-xs bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-lg text-stone-900 dark:text-stone-100 focus:outline-none"
                 />
 
+                <label className="flex items-center gap-2 text-xs text-stone-700 dark:text-stone-300 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={glossWithAI}
+                    onChange={(e) => setGlossWithAI(e.target.checked)}
+                  />
+                  Glosar con la IA las palabras nuevas de mi versión (raíz y significado)
+                </label>
+
                 <div className="flex justify-end gap-2">
                   <button
                     onClick={() => setIsEditingResult(false)}
@@ -468,12 +618,55 @@ export const TranslatorView: React.FC = () => {
               Texto origen: "{result.sourceText}"
             </div>
 
-            {addedToCorpus && (
+            {result.source === 'corpus' && (
+              <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs text-emerald-800 dark:text-emerald-300 flex flex-wrap items-center gap-2 justify-between">
+                <span className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  Traducción tomada de tu corpus: no se consultó a la IA.
+                </span>
+                <button
+                  onClick={() => handleTranslate(result.sourceText, true)}
+                  className="px-2.5 py-1 font-semibold bg-white dark:bg-stone-900 border border-emerald-300 dark:border-emerald-800 rounded-md"
+                >
+                  Consultar a la IA de todos modos
+                </button>
+              </div>
+            )}
+
+            {addedToCorpus && result.source !== 'corpus' && (
               <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>Guardada en el corpus: la próxima vez que escribas esta frase, se responderá desde aquí.</span>
+              </div>
+            )}
+
+            {learnedSenses.length > 0 && (
+              <div className="p-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-xs text-amber-900 dark:text-amber-200 flex flex-wrap items-center gap-2 justify-between">
                 <span>
-                  Esta frase forma parte ahora de tu corpus activo. El modelo la tomará como ejemplo inmediato en futuras traducciones y conversaciones.
+                  Posible(s) otro(s) significado(s) de raíces ya existentes (guardados como sentido adicional, sin verificar):{' '}
+                  <span className="font-mono font-semibold">{learnedSenses.join('; ')}</span>
                 </span>
+                <button
+                  onClick={() => setActiveTab('doubts')}
+                  className="px-2.5 py-1 font-semibold bg-amber-800 hover:bg-amber-900 text-white rounded-md"
+                >
+                  Revisar en Términos críticos →
+                </button>
+              </div>
+            )}
+
+            {learnedRoots.length > 0 && (
+              <div className="p-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-xs text-amber-900 dark:text-amber-200 flex flex-wrap items-center gap-2 justify-between">
+                <span>
+                  {learnedRoots.length} palabra(s) nueva(s) agregada(s) al directorio (sin verificar):{' '}
+                  <span className="font-mono font-semibold">{learnedRoots.join(', ')}</span>
+                </span>
+                <button
+                  onClick={() => setActiveTab('doubts')}
+                  className="px-2.5 py-1 font-semibold bg-amber-800 hover:bg-amber-900 text-white rounded-md"
+                >
+                  Revisar en Términos críticos →
+                </button>
               </div>
             )}
           </div>
@@ -686,6 +879,15 @@ export const TranslatorView: React.FC = () => {
                   className="mt-1 w-full px-3 py-2 text-xs bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg text-stone-900 dark:text-stone-100 focus:outline-none"
                 />
               </div>
+
+              <label className="flex items-center gap-2 text-xs text-stone-700 dark:text-stone-300 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={glossWithAI}
+                  onChange={(e) => setGlossWithAI(e.target.checked)}
+                />
+                Si dejo la glosa vacía, glosar con la IA las palabras nuevas (raíz y significado)
+              </label>
 
               <div className="flex items-center justify-end gap-2 pt-2">
                 <button

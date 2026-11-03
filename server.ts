@@ -177,14 +177,14 @@ function generateLinguisticFallback(
   let translatedText = '';
   let grammaticalExplanation = '';
 
-  // 1. Verificar coincidencia con el corpus existente del usuario
+  // 1. Verificar coincidencia EXACTA (normalizada) con el corpus existente del usuario
+  const norm = (v: string) => (v || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[ʼ’‘`´]/g, "'").replace(/[^\p{L}\p{N}'\s-]/gu, ' ').replace(/\s+/g, ' ').trim();
+  const normInput = norm(text);
   for (const item of extraCorpus) {
-    const qClean = (item.quechua || '').toLowerCase().replace(/[.,!?;:]/g, '').trim();
-    const sClean = (item.spanish || '').toLowerCase().replace(/[.,!?;:]/g, '').trim();
-    if (isQuechua && (qClean === cleanInput || qClean.includes(cleanInput) || cleanInput.includes(qClean))) {
+    if (isQuechua && norm(item.quechua) === normInput) {
       translatedText = item.spanish;
       break;
-    } else if (!isQuechua && (sClean === cleanInput || sClean.includes(cleanInput) || cleanInput.includes(sClean))) {
+    } else if (!isQuechua && norm(item.spanish) === normInput) {
       translatedText = item.quechua;
       break;
     }
@@ -585,6 +585,7 @@ function generateLinguisticFallback(
     tokens,
     grammaticalExplanation,
     detectedDoubts,
+    source: 'fallback' as const,
   };
 }
 
@@ -640,7 +641,9 @@ REGLA FUNDAMENTAL DE EXTRACCIÓN DE RAÍCES REALES (LEIPZIG GLOSSING):
 ${knownRoots.length ? `BANCO DE RAÍCES REALES CONOCIDAS DEL USUARIO:\n${knownRoots.map((r: { quechua: string; spanish: string; category?: string }) => `${r.quechua} (${r.spanish})`).join(', ')}\n` : ''}
 ${knownSuffixes.length ? `BANCO DE SUFIJOS CONOCIDOS DEL USUARIO:\n${knownSuffixes.map((s: { suffix: string; function?: string }) => `${s.suffix} (${s.function || ''})`).join(', ')}\n` : ''}
 ${customRules ? `Reglas gramaticales vigentes:\n${customRules}\n` : ''}
-${extraCorpus.length ? `Corpus de apoyo del usuario con sus desgloses:\n${JSON.stringify(extraCorpus.slice(0, 8))}\n` : ''}
+${extraCorpus.length ? `TRADUCCIONES GUARDADAS POR EL USUARIO (las más parecidas al texto). Tienen PRIORIDAD sobre tu conocimiento general: si el texto es igual o similar a alguna, reutiliza su vocabulario, su ortografía y su estructura; solo cambia lo que el texto nuevo exija. Las marcadas verified:true fueron corregidas por el usuario y no se contradicen:\n${JSON.stringify(extraCorpus.slice(0, 15))}\n` : ''}
+REGLA DE POLISEMIA: en el banco, una raíz puede tener varios significados separados por ";" (a veces con "(cuando ...)" indicando el contexto). Elige el significado según el contexto de la frase. Si el contexto no alcanza para decidir, o usas un significado que no figura, inclúyela en detectedDoubts con trigger "low_confidence" y lista los significados posibles en aiHypothesis.
+REGLA DE PALABRAS NUEVAS: si usas o encuentras una raíz que NO está en el banco de raíces de arriba ni en las traducciones guardadas, inclúyela en detectedDoubts con trigger "out_of_glossary" y tu mejor hipótesis de significado en aiHypothesis.
 
 Devuelve una respuesta estructurada con:
 - sourceText: el texto original recibido.
@@ -651,6 +654,7 @@ Devuelve una respuesta estructurada con:
     * root: la raíz léxica REAL base (ej: "kay", "wasi", "mikhuy", "llajta")
     * suffixes: array de sufijos encontrados (ej: ["-sha-", "-ni"] o ["-y", "-pi"])
     * gloss: glosa morfológica interlineal precisa (ej: "estar-PROG-1SG" o "casa-1SG.POSS-LOC")
+    * meaning: SOLO el significado léxico de la raíz en español, en minúsculas y sin etiquetas (ej: "casa", "comer", "pueblo"); si la raíz tiene varios significados, el que corresponde a este contexto
     * isRecognized: true si la raíz o término es estándar cochabambino
     * doubtFlag: (opcional) "low_confidence" | "dialect_variant" | "out_of_glossary" si detectas alguna anomalía o variante ajena
 - grammaticalExplanation: explicación didáctica y clara de la sintaxis y sufijos utilizados.
@@ -659,7 +663,7 @@ Devuelve una respuesta estructurada con:
 
   try {
     const response = await runGeminiWithFallback(async (modelName) => {
-      const timeoutPromise = new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout de Gemini')), 7000));
+      const timeoutPromise = new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout de Gemini')), 20000));
       const responsePromise = callWithRetry(async () => {
         return await ai.models.generateContent({
           model: modelName,
@@ -682,6 +686,7 @@ Devuelve una respuesta estructurada con:
                       root: { type: Type.STRING },
                       suffixes: { type: Type.ARRAY, items: { type: Type.STRING } },
                       gloss: { type: Type.STRING },
+                      meaning: { type: Type.STRING },
                       isRecognized: { type: Type.BOOLEAN },
                       doubtFlag: { type: Type.STRING },
                     },
@@ -721,6 +726,66 @@ Devuelve una respuesta estructurada con:
     console.log('[Qhawana] Operando mediante analizador lingüístico morfológico de contingencia.');
     const fallback = generateLinguisticFallback(text, direction, knownRoots, knownSuffixes, extraCorpus);
     res.json(fallback);
+  }
+});
+
+// 1b. Glosar una frase ya traducida (p. ej. corregida a mano): raíz, sufijos y significado por palabra
+app.post('/api/quechua/gloss', async (req, res) => {
+  const { quechua, spanish, words = [], knownRoots = [] } = req.body;
+  if (!quechua || typeof quechua !== 'string') {
+    res.status(400).json({ error: 'El texto quechua es obligatorio.' });
+    return;
+  }
+  if (!hasGeminiApiKey || isQuotaExhausted()) {
+    res.status(503).json({ error: 'IA no disponible' });
+    return;
+  }
+  const target: string[] = Array.isArray(words) && words.length ? words : quechua.split(/\s+/);
+  const prompt = `
+Analiza morfológicamente esta frase en quechua cochabambino y su traducción.
+Quechua: "${quechua}"
+Español: "${spanish || ''}"
+Palabras a analizar (devuelve exactamente una entrada por cada una, en este orden): ${JSON.stringify(target)}
+
+Para cada palabra devuelve: surface, root (raíz léxica real; verbos en infinitivo con -y), suffixes (array, ej. ["-sha-","-ni"]), gloss (glosa Leipzig, ej. "casa-1SG.POSS-LOC"), meaning (SOLO el significado léxico de la raíz en español, en minúsculas y sin etiquetas, según el contexto de la frase).
+Usa la ortografía boliviana (RM 1032/84) y respeta la palabra tal como está escrita en la frase: no la "corrijas".
+${knownRoots.length ? `Raíces ya conocidas (si coinciden, usa su significado):\n${knownRoots.map((r: { quechua: string; spanish: string }) => `${r.quechua} (${r.spanish})`).join(', ')}\n` : ''}`;
+  try {
+    const response = await runGeminiWithFallback(async (modelName) => {
+      const timeoutPromise = new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout de Gemini')), 20000));
+      const responsePromise = callWithRetry(async () => ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: {
+          systemInstruction: QUECHUA_COCHABAMBA_SYSTEM_PROMPT,
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              tokens: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    surface: { type: Type.STRING },
+                    root: { type: Type.STRING },
+                    suffixes: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    gloss: { type: Type.STRING },
+                    meaning: { type: Type.STRING },
+                  },
+                  required: ['surface', 'root', 'suffixes', 'gloss', 'meaning'],
+                },
+              },
+            },
+            required: ['tokens'],
+          },
+        },
+      }));
+      return (await Promise.race([responsePromise, timeoutPromise])) as { text?: string };
+    });
+    res.json(JSON.parse(response.text || '{"tokens":[]}'));
+  } catch {
+    res.status(503).json({ error: 'IA no disponible' });
   }
 });
 

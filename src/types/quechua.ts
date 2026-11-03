@@ -13,6 +13,14 @@ export type DoubtTrigger = 'low_confidence' | 'dialect_variant' | 'out_of_glossa
 
 export type DoubtStatus = 'pending' | 'queued_for_expert' | 'resolved';
 
+/** Un significado adicional de una raíz, con el contexto en que se usa. */
+export interface WordSense {
+  meaning: string;
+  context: string;
+  /** false = detectado automáticamente, pendiente de revisión */
+  verified?: boolean;
+}
+
 export interface LexicalRoot {
   id: string;
   quechua: string;
@@ -22,6 +30,8 @@ export interface LexicalRoot {
   verified: boolean;
   frequency: number;
   examples: string[];
+  /** Otros significados según el contexto (polisemia). `spanish` es el significado principal. */
+  senses?: WordSense[];
 }
 
 export interface SuffixRule {
@@ -39,6 +49,8 @@ export interface MorphToken {
   root: string;
   suffixes: string[];
   gloss: string;
+  /** Significado léxico de la raíz en español (solo la palabra, sin etiquetas). Lo devuelve la IA. */
+  meaning?: string;
   isRecognized: boolean;
   doubtFlag?: DoubtTrigger;
 }
@@ -89,6 +101,8 @@ export interface TranslationResult {
   tokens: MorphToken[];
   grammaticalExplanation: string;
   detectedDoubts: Omit<CriticalDoubt, 'id' | 'createdAt'>[];
+  /** De dónde salió el resultado: corpus guardado, IA o motor local de contingencia. */
+  source?: 'corpus' | 'ai' | 'fallback';
 }
 
 export interface ChatMessage {
