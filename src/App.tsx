@@ -16,7 +16,12 @@ function AppContent() {
       <Header />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {activeTab === 'bank' && <LexicalBankView />}
+        {activeTab === 'bank' && (
+          <div className="space-y-6">
+            <LexicalBankView />
+            <PersonalPronounsGuide />
+          </div>
+        )}
         {activeTab === 'doubts' && <CriticalTermsPanel />}
         {activeTab === 'consultation' && <QuechuistaConsultationView />}
         {activeTab === 'translator' && (
