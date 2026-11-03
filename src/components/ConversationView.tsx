@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuechua } from '../context/QuechuaContext';
-import { ChatMessage } from '../types/quechua';
+import { ChatMessage, CorpusPhrase } from '../types/quechua';
+import { findRelevantPhrases, findRelevantRoots, formatMeanings, normalizeText } from '../utils/retrieval';
 import { 
   Send, 
   MessageSquare, 
@@ -16,13 +17,19 @@ import {
 } from 'lucide-react';
 
 export const ConversationView: React.FC = () => {
-  const { grammarRules, phrases } = useQuechua();
+  const { grammarRules, phrases, roots } = useQuechua();
 
   const [userLevel, setUserLevel] = useState<'básico' | 'intermedio' | 'avanzado'>('intermedio');
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [revealedTranslations, setRevealedTranslations] = useState<Record<string, boolean>>({});
   const [expandedTokens, setExpandedTokens] = useState<Record<string, boolean>>({});
+
+  // Modo práctica sin IA: el tutor pregunta frases de tu corpus y corrige comparando con lo guardado
+  const [offlineMode, setOfflineMode] = useState(false);
+  const [drill, setDrill] = useState<{ phrase: CorpusPhrase; asking: 'es-qu' | 'qu-es' } | null>(null);
+  const [recentDrillIds, setRecentDrillIds] = useState<string[]>([]);
+  const [score, setScore] = useState({ ok: 0, total: 0 });
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -49,28 +56,111 @@ export const ConversationView: React.FC = () => {
     'Cochabamba llajtapi tiyakuni'
   ];
 
-  const handleSendMessage = async (customText?: string) => {
-    const textToSend = (customText || inputMessage).trim();
-    if (!textToSend || loading) return;
+  // ---------- Modo práctica sin IA ----------
+  const makeMsg = (sender: 'user' | 'model', text: string, extra: Partial<ChatMessage> = {}): ChatMessage => ({
+    id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    sender,
+    quechuaText: text,
+    spanishTranslation: '',
+    timestamp: 'Ahora',
+    ...extra,
+  });
 
-    const userMsg: ChatMessage = {
-      id: `msg-${Date.now()}`,
-      sender: 'user',
-      quechuaText: textToSend,
-      spanishTranslation: '',
-      timestamp: 'Ahora',
-    };
+  const pickNextDrill = (excludeIds: string[]) => {
+    const usable = phrases.filter((p) => p.quechua.trim() && p.spanish.trim());
+    if (!usable.length) return null;
+    const fresh = usable.filter((p) => !excludeIds.includes(p.id));
+    const pool = fresh.length ? fresh : usable;
+    const verified = pool.filter((p) => p.verified);
+    const source = verified.length && Math.random() < 0.7 ? verified : pool;
+    const phrase = source[Math.floor(Math.random() * source.length)];
+    return { phrase, asking: (Math.random() < 0.5 ? 'es-qu' : 'qu-es') as 'es-qu' | 'qu-es' };
+  };
 
-    const updatedHistory = [...messages, userMsg];
-    setMessages(updatedHistory);
-    setInputMessage('');
+  const questionText = (d: { phrase: CorpusPhrase; asking: 'es-qu' | 'qu-es' }) =>
+    d.asking === 'es-qu'
+      ? `Traduce al quechua:\n«${d.phrase.spanish}»`
+      : `Traduce al español:\n«${d.phrase.quechua}»`;
+
+  const startOfflineMode = () => {
+    const first = pickNextDrill([]);
+    const base = messages.filter((m) => !m.isError);
+    if (!first) {
+      setMessages([...base, makeMsg('model', 'No hay frases en tu corpus para practicar. Guarda algunas en el Traductor y vuelve.', { isError: true })]);
+      return;
+    }
+    setOfflineMode(true);
+    setDrill(first);
+    setRecentDrillIds([first.phrase.id]);
+    setScore({ ok: 0, total: 0 });
+    setMessages([
+      ...base,
+      makeMsg('model', 'Modo práctica sin IA: te pregunto frases de tu corpus. Escribe "pasar" si no la sabes.'),
+      makeMsg('model', questionText(first)),
+    ]);
+  };
+
+  const exitOfflineMode = () => {
+    setOfflineMode(false);
+    setDrill(null);
+  };
+
+  const answerDrill = (answer: string) => {
+    if (!drill) return;
+    const expected = drill.asking === 'es-qu' ? drill.phrase.quechua : drill.phrase.spanish;
+    const given = normalizeText(answer);
+    const want = normalizeText(expected);
+    const skipped = ['pasar', 'no se', 'paso', 'otra'].includes(given);
+
+    // Parecido = palabras en común sobre el total (permite pequeños descuidos)
+    const a = new Set(given.split(' ').filter(Boolean));
+    const b = new Set(want.split(' ').filter(Boolean));
+    const common = [...a].filter((w) => b.has(w)).length;
+    const similarity = a.size + b.size - common > 0 ? common / (a.size + b.size - common) : 0;
+
+    let feedback: string;
+    let gotIt = false;
+    if (skipped) {
+      feedback = `Era: «${expected}»`;
+    } else if (given === want) {
+      gotIt = true;
+      feedback = '¡Correcto! ✔';
+    } else if (similarity >= 0.6) {
+      feedback = `Casi. En tu corpus está así: «${expected}»`;
+    } else {
+      feedback = `No coincide con tu corpus. Está guardada como: «${expected}»`;
+    }
+
+    const notes = drill.phrase.grammaticalNotes && !gotIt ? drill.phrase.grammaticalNotes : '';
+    const nextRecent = [...recentDrillIds, drill.phrase.id].slice(-5);
+    const next = pickNextDrill(nextRecent);
+
+    const out: ChatMessage[] = [
+      makeMsg('user', answer),
+      makeMsg('model', feedback, notes ? { spanishTranslation: drill.asking === 'es-qu' ? drill.phrase.spanish : drill.phrase.quechua, pedagogicalNote: notes } : {}),
+    ];
+    if (next) out.push(makeMsg('model', questionText(next)));
+
+    setScore((prev) => ({ ok: prev.ok + (gotIt ? 1 : 0), total: prev.total + (skipped ? 0 : 1) }));
+    setRecentDrillIds(nextRecent.concat(next ? [next.phrase.id] : []).slice(-6));
+    setDrill(next);
+    setMessages((prev) => [...prev.filter((m) => !m.isError), ...out]);
+  };
+
+  // Pide la respuesta del tutor para un historial dado. Si falla, muestra un aviso (no una frase inventada).
+  const requestReply = async (history: ChatMessage[], lastText: string) => {
     setLoading(true);
-
     try {
-      const payloadMessages = updatedHistory.map((m) => ({
-        sender: m.sender,
-        text: m.quechuaText,
-      }));
+      const real = history.filter((m) => !m.isError);
+      const payloadMessages = real.slice(-12).map((m) => ({ sender: m.sender, text: m.quechuaText }));
+
+      const relevantPhrases = findRelevantPhrases(lastText, 'qu-es', phrases, 6);
+      const verifiedSample = phrases.filter((p) => p.verified).sort(() => Math.random() - 0.5).slice(0, 4);
+      const corpus = [...relevantPhrases, ...verifiedSample]
+        .filter((p, i, arr) => arr.findIndex((x) => x.id === p.id) === i)
+        .slice(0, 10)
+        .map((p) => ({ quechua: p.quechua, spanish: p.spanish }));
+      const relevantRoots = findRelevantRoots(lastText, 'qu-es', roots, relevantPhrases, 60);
 
       const res = await fetch('/api/quechua/chat', {
         method: 'POST',
@@ -78,15 +168,16 @@ export const ConversationView: React.FC = () => {
         body: JSON.stringify({
           messages: payloadMessages,
           userLevel,
+          customRules: grammarRules.map((r) => `${r.title}: ${r.cochabambaSpecificity}`).join('\n'),
+          corpus,
+          knownRoots: relevantRoots.map((r) => ({ quechua: r.quechua, spanish: formatMeanings(r) })),
         }),
       });
 
       const contentType = res.headers.get('content-type') || '';
-      if (!contentType.includes('application/json') || !res.ok) {
-        throw new Error('Servicio de conversación en reconexión');
-      }
-
+      if (!contentType.includes('application/json')) throw new Error('El servidor del tutor no está disponible.');
       const data = await res.json();
+      if (!res.ok || !data.quechuaResponse) throw new Error(data.error || 'El tutor no pudo responder.');
 
       const modelMsg: ChatMessage = {
         id: `msg-${Date.now() + 1}`,
@@ -97,22 +188,52 @@ export const ConversationView: React.FC = () => {
         pedagogicalNote: data.pedagogicalNote,
         timestamp: 'Ahora',
       };
-
-      setMessages((prev) => [...prev, modelMsg]);
+      setMessages([...real, modelMsg]);
     } catch (err) {
-      console.log('Conversación en modo local:', (err as Error)?.message || 'reconexión');
-      const fallbackMsg: ChatMessage = {
-        id: `msg-${Date.now() + 1}`,
+      const errorMsg: ChatMessage = {
+        id: `msg-err-${Date.now()}`,
         sender: 'model',
-        quechuaText: 'Wasiypi kashani, sumaqta parlariykusunchij. Allillanpuni kachun!',
-        spanishTranslation: 'Estoy en mi casa, conversemos con cariño. ¡Que esté todo definitivamente bien!',
-        pedagogicalNote: 'Recuerda usar "-puni" para confirmar certeza categórica y "-sha-" para el progresivo.',
+        quechuaText: (err as Error)?.message || 'El tutor no pudo responder.',
+        spanishTranslation: '',
         timestamp: 'Ahora',
+        isError: true,
       };
-      setMessages((prev) => [...prev, fallbackMsg]);
+      setMessages([...history.filter((m) => !m.isError), errorMsg]);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSendMessage = async (customText?: string) => {
+    const textToSend = (customText || inputMessage).trim();
+    if (!textToSend || loading) return;
+
+    if (offlineMode) {
+      answerDrill(textToSend);
+      setInputMessage('');
+      return;
+    }
+
+    const userMsg: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      sender: 'user',
+      quechuaText: textToSend,
+      spanishTranslation: '',
+      timestamp: 'Ahora',
+    };
+
+    const updatedHistory = [...messages.filter((m) => !m.isError), userMsg];
+    setMessages(updatedHistory);
+    setInputMessage('');
+    await requestReply(updatedHistory, textToSend);
+  };
+
+  const handleRetry = async () => {
+    if (loading) return;
+    const history = messages.filter((m) => !m.isError);
+    const lastUser = [...history].reverse().find((m) => m.sender === 'user');
+    if (!lastUser) return;
+    await requestReply(history, lastUser.quechuaText);
   };
 
   const toggleReveal = (id: string) => {
@@ -158,6 +279,7 @@ export const ConversationView: React.FC = () => {
               onClick={() => {
                 if (window.confirm('¿Reiniciar la conversación?')) {
                   setMessages([messages[0]]);
+                  exitOfflineMode();
                 }
               }}
               title="Reiniciar chat"
@@ -169,12 +291,50 @@ export const ConversationView: React.FC = () => {
         </div>
       </div>
 
+      {offlineMode && (
+        <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-900 dark:text-amber-200 flex flex-wrap items-center justify-between gap-2">
+          <span>
+            Modo práctica sin IA · Aciertos: <span className="font-mono font-semibold">{score.ok}/{score.total}</span>
+          </span>
+          <button
+            onClick={exitOfflineMode}
+            className="px-2.5 py-1 font-semibold bg-amber-800 hover:bg-amber-900 text-white rounded-md"
+          >
+            Volver a la conversación con IA
+          </button>
+        </div>
+      )}
+
       {/* Messages Feed */}
       <div className="space-y-4 max-h-[600px] overflow-y-auto p-1">
         {messages.map((msg) => {
           const isUser = msg.sender === 'user';
           const isRevealed = revealedTranslations[msg.id] ?? false;
           const isExpanded = expandedTokens[msg.id] ?? false;
+
+          if (msg.isError) {
+            return (
+              <div key={msg.id} className="flex flex-col items-start space-y-2">
+                <div className="max-w-2xl p-4 rounded-2xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 text-xs text-red-800 dark:text-red-300 space-y-2">
+                  <div>{msg.quechuaText}</div>
+                  <button
+                    onClick={handleRetry}
+                    disabled={loading}
+                    className="px-3 py-1 bg-white dark:bg-stone-900 text-amber-800 dark:text-amber-400 font-semibold rounded border border-red-300 dark:border-red-800"
+                  >
+                    Reintentar
+                  </button>
+                  <button
+                    onClick={startOfflineMode}
+                    disabled={loading}
+                    className="ml-2 px-3 py-1 bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-200 font-semibold rounded border border-stone-300 dark:border-stone-700"
+                  >
+                    Practicar con mi corpus (sin IA)
+                  </button>
+                </div>
+              </div>
+            );
+          }
 
           return (
             <div
@@ -197,7 +357,7 @@ export const ConversationView: React.FC = () => {
                 </div>
 
                 {/* Main Quechua text */}
-                <div className="text-base font-medium font-display leading-relaxed">
+                <div className="text-base font-medium font-display leading-relaxed whitespace-pre-line">
                   {msg.quechuaText}
                 </div>
 
@@ -276,7 +436,7 @@ export const ConversationView: React.FC = () => {
           <button
             key={idx}
             onClick={() => handleSendMessage(starter)}
-            disabled={loading}
+            disabled={loading || offlineMode}
             className="px-2.5 py-1 text-xs bg-white dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-md text-stone-700 dark:text-stone-300 hover:border-amber-500 transition-colors"
           >
             {starter}
@@ -296,7 +456,7 @@ export const ConversationView: React.FC = () => {
             }
           }}
           disabled={loading}
-          placeholder="Escribe en quechua o español para conversar (ej. 'Allinllachu kashanki, imatataj munanki?')..."
+          placeholder={offlineMode ? 'Escribe tu traducción (o "pasar")...' : "Escribe en quechua o español para conversar (ej. 'Allinllachu kashanki, imatataj munanki?')..."}
           className="flex-1 px-3 py-2 text-sm bg-transparent border-none text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none"
         />
 

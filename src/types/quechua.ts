@@ -113,4 +113,6 @@ export interface ChatMessage {
   tokens?: MorphToken[];
   pedagogicalNote?: string;
   timestamp: string;
+  /** Mensaje de sistema cuando el tutor no pudo responder (no es una respuesta real). */
+  isError?: boolean;
 }

@@ -864,68 +864,64 @@ app.post('/api/quechua/analyze', async (req, res) => {
 
 // 3. Conversación Pedagógica en Quechua Cochabambino
 app.post('/api/quechua/chat', async (req, res) => {
-  const { messages, userLevel = 'intermedio' } = req.body;
+  const { messages, userLevel = 'intermedio', customRules = '', corpus = [], knownRoots = [] } = req.body;
 
   if (!Array.isArray(messages) || messages.length === 0) {
     res.status(400).json({ error: 'Se requiere el historial de mensajes.' });
     return;
   }
 
+  // Sin IA no se inventan respuestas: antes se devolvía siempre la misma frase fija como si fuera el tutor.
   if (!hasGeminiApiKey || isQuotaExhausted()) {
-    const lastUserMsg = (messages[messages.length - 1]?.text || '').toLowerCase();
-    let quechuaResponse = 'Allinllamin kashani, sumaqta parlariykusunchij. Imatataj ruwashanki?';
-    let spanishTranslation = 'Estoy bien ciertamente, conversemos lindo. ¿Qué estás haciendo?';
-    let pedagogicalNote = 'En Cochabamba el aspecto progresivo continuativo se expresa siempre con "-sha-" (kashani).';
-    
-    if (lastUserMsg.includes('allin') || lastUserMsg.includes('hola') || lastUserMsg.includes('buenos')) {
-      quechuaResponse = 'Allin p\'unchay kachun, munasqa amigo! Allinllachu kashanki?';
-      spanishTranslation = '¡Que tengas buen día, querido amigo! ¿Estás bien nomás?';
-      pedagogicalNote = 'Usamos "Allinllachu" con el sufijo afectivo "-lla" y el interrogativo polar "-chu" para saludar con respeto y calidez.';
-    } else if (lastUserMsg.includes('wasi') || lastUserMsg.includes('casa')) {
-      quechuaResponse = 'Wasiypi kashani t\'antata mikhuspa. Jamuylla, sumaqta mikhurisunchij.';
-      spanishTranslation = 'Estoy en mi casa comiendo pan. Pasa nomás, comeremos rico.';
-      pedagogicalNote = 'La combinación de wasi-y-pi (raíz + posesivo + caso locativo) y el imperativo afectivo jamuylla.';
-    } else if (lastUserMsg.includes('chayqa') || lastUserMsg.includes('si ')) {
-      quechuaResponse = 'Sichus munanki chayqa, ashkha qhichwa palabrasmanta parlasun!';
-      spanishTranslation = '¡Si quieres, hablaremos de muchas palabras en quechua!';
-      pedagogicalNote = 'Estructura condicional (Sichus)... chayqa y el cuantitativo cochabambino "ashkha".';
-    }
-
-    res.json({
-      quechuaResponse,
-      spanishTranslation,
-      tokens: [
-        { surface: 'Allinllachu', root: 'allin', suffixes: ['-lla', '-chu'], gloss: 'bien-AFECT-INTERR', isRecognized: true },
-        { surface: 'kashanki', root: 'kay', suffixes: ['-sha-', '-nki'], gloss: 'ser/estar-PROG-2SG', isRecognized: true },
-      ],
-      pedagogicalNote,
-    });
+    res.status(503).json({ error: 'El tutor no está disponible ahora (sin conexión con la IA o cuota agotada).' });
     return;
   }
 
+  const history = messages.slice(-12) as Array<{ sender: string; text: string }>;
+  const previousTutorLines = history.filter((m) => m.sender !== 'user').map((m) => m.text).slice(-6);
+
+  const levelGuide: Record<string, string> = {
+    'básico': 'Oraciones muy cortas (una sola), vocabulario cotidiano del banco (saludos, familia, comida, casa, números). Una idea por turno y una pregunta sencilla.',
+    'intermedio': 'Una o dos oraciones. Introduce en cada turno UN sufijo o construcción nueva (-sha-, -rqa-, -taj, -raj, -puni, ama...-chu) y úsala de forma natural.',
+    'avanzado': 'Dos o tres oraciones con estructuras más ricas: condicionales (sichus...chayqa), evidenciales (-mi/-si/-chá), subordinación, expresiones idiomáticas cochabambinas.',
+  };
+
   const conversationPrompt = `
-Eres un interlocutor hablante nativo y tutor de Quechua Cochabambino. El nivel del usuario es "${userLevel}".
-Mantén un diálogo cálido, auténtico y propio del valle de Cochabamba (emplea la cortesía con -lla, el aspecto -sha-, las expresiones cochabambinas como Allinllachu, Arípuni, Imataj, etc.).
+Eres un interlocutor hablante nativo y tutor de Quechua Cochabambino. Nivel del usuario: "${userLevel}".
+NIVEL: ${levelGuide[userLevel] || levelGuide['intermedio']}
 
-Historial de la conversación:
-${messages.map((m: { sender: string; text: string }) => `${m.sender === 'user' ? 'Usuario' : 'Tutor'}: ${m.text}`).join('\n')}
+CÓMO CONVERSAR (importante):
+- Responde a lo que el usuario DIJO realmente (retoma su tema, su palabra o su pregunta); no sueltes una respuesta genérica.
+- Haz avanzar la conversación: cierra con UNA pregunta o invitación DISTINTA de las anteriores y cambia de tema con naturalidad cada pocos turnos (familia, comida, trabajo, clima, chacra, mercado, fiestas, viajes, estudios...).
+- NUNCA repitas una frase o pregunta que ya dijiste. Frases que ya dijiste (no las repitas ni las parafrasees):
+${previousTutorLines.length ? previousTutorLines.map((l) => `  · ${l}`).join('\n') : '  (ninguna todavía)'}
+- Si el usuario escribió en español, respóndele en quechua y dile en la nota cómo se diría su frase.
+- Si el usuario cometió un error (ortografía, sufijo, orden), respóndele con naturalidad y en pedagogicalNote muestra la forma correcta y por qué. Si no hubo errores, usa la nota para un dato gramatical o cultural breve sobre lo que dijiste.
+- Ortografía boliviana (RM 1032/84).
 
-Por favor responde al último mensaje del usuario devolviendo:
-- quechuaResponse: tu respuesta natural y fluida en Quechua Cochabambino (1-3 oraciones).
+${knownRoots.length ? `VOCABULARIO DEL USUARIO (úsalo con preferencia; los significados separados por ";" dependen del contexto):\n${knownRoots.map((r: { quechua: string; spanish: string }) => `${r.quechua} (${r.spanish})`).join(', ')}\n` : ''}
+${customRules ? `REGLAS GRAMATICALES VIGENTES:\n${customRules}\n` : ''}
+${corpus.length ? `FRASES DEL CORPUS DEL USUARIO (modelo de cómo habla; no las copies tal cual):\n${JSON.stringify(corpus.slice(0, 10))}\n` : ''}
+HISTORIAL (los últimos mensajes):
+${history.map((m) => `${m.sender === 'user' ? 'Usuario' : 'Tutor'}: ${m.text}`).join('\n')}
+
+Responde al último mensaje del usuario devolviendo:
+- quechuaResponse: tu respuesta en Quechua Cochabambino.
 - spanishTranslation: la traducción precisa al español.
-- tokens: desglose de las palabras principales con raíz, sufijos y glosa.
-- pedagogicalNote: un tip gramatical breve y revelador sobre por qué usaste cierta terminación o modismo cochabambino.
+- tokens: desglose de las palabras principales con raíz (infinitivo con -y para verbos), sufijos, glosa y meaning (solo el significado léxico de la raíz).
+- pedagogicalNote: la nota didáctica (ver arriba).
 `;
 
   try {
     const response = await runGeminiWithFallback(async (modelName) => {
-      const timeoutPromise = new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout de Gemini')), 7000));
+      const timeoutPromise = new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout de Gemini')), 25000));
       const responsePromise = callWithRetry(async () => {
         return await ai.models.generateContent({
           model: modelName,
           contents: conversationPrompt,
           config: {
             systemInstruction: QUECHUA_COCHABAMBA_SYSTEM_PROMPT,
+            temperature: 0.9,
             responseMimeType: 'application/json',
             responseSchema: {
               type: Type.OBJECT,
@@ -941,6 +937,7 @@ Por favor responde al último mensaje del usuario devolviendo:
                       root: { type: Type.STRING },
                       suffixes: { type: Type.ARRAY, items: { type: Type.STRING } },
                       gloss: { type: Type.STRING },
+                      meaning: { type: Type.STRING },
                       isRecognized: { type: Type.BOOLEAN },
                     },
                     required: ['surface', 'root', 'suffixes', 'gloss', 'isRecognized'],
@@ -957,19 +954,11 @@ Por favor responde al último mensaje del usuario devolviendo:
     });
 
     const parsed = JSON.parse(response.text || '{}');
+    if (!parsed.quechuaResponse) throw new Error('Respuesta vacía');
     res.json(parsed);
   } catch (_err: unknown) {
-    console.log('[Qhawana Chat] Contingencia conversacional Cochabambina activada.');
-    res.json({
-      quechuaResponse: 'Allinllamin kashani, qanwan parlarispa kusikuni. Imatataj ruwashanki?',
-      spanishTranslation: 'Estoy bien ciertamente, me alegro conversando contigo. ¿Qué estás haciendo?',
-      tokens: [
-        { surface: 'Allinllamin', root: 'allin', suffixes: ['-lla', '-min'], gloss: 'bien-AFECT-DIR', isRecognized: true },
-        { surface: 'kashani', root: 'kay', suffixes: ['-sha-', '-ni'], gloss: 'ser/estar-PROG-1SG', isRecognized: true },
-        { surface: 'parlarispa', root: 'parlay', suffixes: ['-ri-', '-spa'], gloss: 'hablar-INTENS-GER', isRecognized: true },
-      ],
-      pedagogicalNote: 'En Cochabamba el progresivo es exclusivamente "-sha-" (kashani) y "-min" expresa certeza directa.',
-    });
+    console.log('[Qhawana Chat] La IA no respondió:', String((_err as Error)?.message || _err));
+    res.status(503).json({ error: 'El tutor no pudo responder esta vez (la IA tardó demasiado o falló).' });
   }
 });
 
