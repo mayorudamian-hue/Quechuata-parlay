@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
   LexicalRoot,
   SuffixRule,
@@ -25,45 +25,32 @@ interface QuechuaContextType {
   setActiveTab: (tab: 'bank' | 'doubts' | 'consultation' | 'translator' | 'chat') => void;
   darkMode: boolean;
   setDarkMode: (val: boolean) => void;
-
-  // Raíces
   addRoot: (root: Omit<LexicalRoot, 'id' | 'frequency'>) => void;
   updateRoot: (id: string, updates: Partial<LexicalRoot>) => void;
   deleteRoot: (id: string) => void;
   toggleVerifyRoot: (id: string) => void;
-
-  // Sufijos
   addSuffix: (suffix: Omit<SuffixRule, 'id'>) => void;
   updateSuffix: (id: string, updates: Partial<SuffixRule>) => void;
   deleteSuffix: (id: string) => void;
-
-  // Frases
   addPhrase: (phrase: Omit<CorpusPhrase, 'id'>) => void;
   updatePhrase: (id: string, updates: Partial<CorpusPhrase>) => void;
   deletePhrase: (id: string) => void;
   toggleVerifyPhrase: (id: string) => void;
-
-  // Dudas / Términos Críticos
   addDoubt: (doubt: Omit<CriticalDoubt, 'id' | 'createdAt'>) => void;
   updateDoubt: (id: string, updates: Partial<CriticalDoubt>) => void;
   setDoubtStatus: (id: string, status: DoubtStatus, resolutionNote?: string) => void;
   deleteDoubt: (id: string) => void;
   applyCascadeCorrection: (oldTerm: string, newTerm: string, resolutionNote?: string) => number;
   autoScanCorpus: () => number;
-
-  // Reglas
   addGrammarRule: (rule: Omit<GrammarRule, 'id'>) => void;
   updateGrammarRule: (id: string, updates: Partial<GrammarRule>) => void;
   deleteGrammarRule: (id: string) => void;
-
-  // Export / Import
   exportDatasetJSON: () => void;
   importDatasetJSON: (jsonData: string) => boolean;
   resetToDefaults: () => void;
 }
 
 const QuechuaContext = createContext<QuechuaContextType | undefined>(undefined);
-
 const STORAGE_KEYS = {
   ROOTS: 'qhawana_roots_v2',
   SUFFIXES: 'qhawana_suffixes_v2',
@@ -73,420 +60,204 @@ const STORAGE_KEYS = {
   DARK_MODE: 'qhawana_dark_mode',
 };
 
+function readStorage<T>(key: string, fallback: T): T {
+  try {
+    if (typeof window === 'undefined') return fallback;
+    const saved = window.localStorage.getItem(key);
+    return saved ? (JSON.parse(saved) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function mergeSeeds<T extends { id: string }>(saved: T[], seeds: T[]): T[] {
+  const ids = new Set(saved.map((item) => item.id));
+  const missing = seeds.filter((item) => !ids.has(item.id));
+  return missing.length ? [...saved, ...missing] : saved;
+}
+
+const makeId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+type NewDoubt = Omit<CriticalDoubt, 'id' | 'createdAt'>;
+
 export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<'bank' | 'doubts' | 'consultation' | 'translator' | 'chat'>('bank');
-
-  const [darkMode, setDarkMode] = useState<boolean>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.DARK_MODE);
-      return saved ? JSON.parse(saved) : false;
-    } catch {
-      return false;
-    }
-  });
-
-  const [roots, setRoots] = useState<LexicalRoot[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.ROOTS);
-      if (saved) {
-        const parsed: LexicalRoot[] = JSON.parse(saved);
-        const existingIds = new Set(parsed.map((r) => r.id));
-        const missing = SEED_ROOTS.filter((r) => !existingIds.has(r.id));
-        return missing.length > 0 ? [...parsed, ...missing] : parsed;
-      }
-      return SEED_ROOTS;
-    } catch {
-      return SEED_ROOTS;
-    }
-  });
-
-  const [suffixes, setSuffixes] = useState<SuffixRule[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.SUFFIXES);
-      if (saved) {
-        const parsed: SuffixRule[] = JSON.parse(saved);
-        const existingIds = new Set(parsed.map((s) => s.id));
-        const missing = SEED_SUFFIXES.filter((s) => !existingIds.has(s.id));
-        return missing.length > 0 ? [...parsed, ...missing] : parsed;
-      }
-      return SEED_SUFFIXES;
-    } catch {
-      return SEED_SUFFIXES;
-    }
-  });
-
-  const [phrases, setPhrases] = useState<CorpusPhrase[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.PHRASES);
-      if (saved) {
-        const parsed: CorpusPhrase[] = JSON.parse(saved);
-        const existingIds = new Set(parsed.map((p) => p.id));
-        const missing = SEED_PHRASES.filter((p) => !existingIds.has(p.id));
-        return missing.length > 0 ? [...parsed, ...missing] : parsed;
-      }
-      return SEED_PHRASES;
-    } catch {
-      return SEED_PHRASES;
-    }
-  });
-
-  const [doubts, setDoubts] = useState<CriticalDoubt[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.DOUBTS);
-      return saved ? JSON.parse(saved) : SEED_DOUBTS;
-    } catch {
-      return SEED_DOUBTS;
-    }
-  });
-
-  const [grammarRules, setGrammarRules] = useState<GrammarRule[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.RULES);
-      if (saved) {
-        const parsed: GrammarRule[] = JSON.parse(saved);
-        const existingIds = new Set(parsed.map((r) => r.id));
-        const missing = SEED_GRAMMAR_RULES.filter((r) => !existingIds.has(r.id));
-        return missing.length > 0 ? [...parsed, ...missing] : parsed;
-      }
-      return SEED_GRAMMAR_RULES;
-    } catch {
-      return SEED_GRAMMAR_RULES;
-    }
-  });
-
-  // Sync to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.ROOTS, JSON.stringify(roots));
-    } catch (e) {
-      console.warn('Error saving roots', e);
-    }
-  }, [roots]);
+  const [activeTab, setActiveTab] = useState<QuechuaContextType['activeTab']>('bank');
+  const [darkMode, setDarkMode] = useState(() => readStorage(STORAGE_KEYS.DARK_MODE, false));
+  const [roots, setRoots] = useState<LexicalRoot[]>(() =>
+    mergeSeeds(readStorage(STORAGE_KEYS.ROOTS, SEED_ROOTS), SEED_ROOTS));
+  const [suffixes, setSuffixes] = useState<SuffixRule[]>(() =>
+    mergeSeeds(readStorage(STORAGE_KEYS.SUFFIXES, SEED_SUFFIXES), SEED_SUFFIXES));
+  const [phrases, setPhrases] = useState<CorpusPhrase[]>(() =>
+    mergeSeeds(readStorage(STORAGE_KEYS.PHRASES, SEED_PHRASES), SEED_PHRASES));
+  const [doubts, setDoubts] = useState<CriticalDoubt[]>(() =>
+    readStorage(STORAGE_KEYS.DOUBTS, SEED_DOUBTS));
+  const [grammarRules, setGrammarRules] = useState<GrammarRule[]>(() =>
+    mergeSeeds(readStorage(STORAGE_KEYS.RULES, SEED_GRAMMAR_RULES), SEED_GRAMMAR_RULES));
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.SUFFIXES, JSON.stringify(suffixes));
-    } catch (e) {
-      console.warn('Error saving suffixes', e);
-    }
-  }, [suffixes]);
+    if (typeof window === 'undefined') return;
+    const save = (key: string, value: unknown) => {
+      try { window.localStorage.setItem(key, JSON.stringify(value)); }
+      catch (error) { console.warn(`Error saving ${key}`, error); }
+    };
+    save(STORAGE_KEYS.ROOTS, roots);
+    save(STORAGE_KEYS.SUFFIXES, suffixes);
+    save(STORAGE_KEYS.PHRASES, phrases);
+    save(STORAGE_KEYS.DOUBTS, doubts);
+    save(STORAGE_KEYS.RULES, grammarRules);
+  }, [roots, suffixes, phrases, doubts, grammarRules]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.PHRASES, JSON.stringify(phrases));
-    } catch (e) {
-      console.warn('Error saving phrases', e);
-    }
-  }, [phrases]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.DOUBTS, JSON.stringify(doubts));
-    } catch (e) {
-      console.warn('Error saving doubts', e);
-    }
-  }, [doubts]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.RULES, JSON.stringify(grammarRules));
-    } catch (e) {
-      console.warn('Error saving grammarRules', e);
-    }
-  }, [grammarRules]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.DARK_MODE, JSON.stringify(darkMode));
-      if (darkMode) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    } catch (e) {
-      console.warn('Error saving dark mode', e);
+    if (typeof window === 'undefined') return;
+    try { window.localStorage.setItem(STORAGE_KEYS.DARK_MODE, JSON.stringify(darkMode)); }
+    catch (error) { console.warn('Error saving dark mode', error); }
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('dark', darkMode);
     }
   }, [darkMode]);
 
-  // Root operations
-  const addRoot = (newRoot: Omit<LexicalRoot, 'id' | 'frequency'>) => {
-    const item: LexicalRoot = {
-      ...newRoot,
-      id: `root-${Date.now()}`,
-      frequency: 1,
-    };
-    setRoots((prev) => [item, ...prev]);
-  };
+  const addRoot = (root: Omit<LexicalRoot, 'id' | 'frequency'>) =>
+    setRoots((prev) => [{ ...root, id: makeId('root'), frequency: 1 }, ...prev]);
+  const updateRoot = (id: string, updates: Partial<LexicalRoot>) =>
+    setRoots((prev) => prev.map((item) => item.id === id ? { ...item, ...updates } : item));
+  const deleteRoot = (id: string) => setRoots((prev) => prev.filter((item) => item.id !== id));
+  const toggleVerifyRoot = (id: string) =>
+    setRoots((prev) => prev.map((item) => item.id === id ? { ...item, verified: !item.verified } : item));
 
-  const updateRoot = (id: string, updates: Partial<LexicalRoot>) => {
-    setRoots((prev) => prev.map((r) => (r.id === id ? { ...r, ...updates } : r)));
-  };
+  const addSuffix = (suffix: Omit<SuffixRule, 'id'>) =>
+    setSuffixes((prev) => [...prev, { ...suffix, id: makeId('suf') }]);
+  const updateSuffix = (id: string, updates: Partial<SuffixRule>) =>
+    setSuffixes((prev) => prev.map((item) => item.id === id ? { ...item, ...updates } : item));
+  const deleteSuffix = (id: string) => setSuffixes((prev) => prev.filter((item) => item.id !== id));
 
-  const deleteRoot = (id: string) => {
-    setRoots((prev) => prev.filter((r) => r.id !== id));
-  };
+  const addPhrase = (phrase: Omit<CorpusPhrase, 'id'>) =>
+    setPhrases((prev) => [{ ...phrase, id: makeId('phrase') }, ...prev]);
+  const updatePhrase = (id: string, updates: Partial<CorpusPhrase>) =>
+    setPhrases((prev) => prev.map((item) => item.id === id ? { ...item, ...updates } : item));
+  const deletePhrase = (id: string) => setPhrases((prev) => prev.filter((item) => item.id !== id));
+  const toggleVerifyPhrase = (id: string) =>
+    setPhrases((prev) => prev.map((item) => item.id === id ? { ...item, verified: !item.verified } : item));
 
-  const toggleVerifyRoot = (id: string) => {
-    setRoots((prev) => prev.map((r) => (r.id === id ? { ...r, verified: !r.verified } : r)));
+  const addDoubt = (newDoubt: NewDoubt) => {
+    setDoubts((prev) => {
+      const existing = prev.find((item) => item.term.toLowerCase() === newDoubt.term.toLowerCase());
+      if (existing) return prev.map((item) => item.id === existing.id
+        ? { ...item, occurrences: item.occurrences + 1 } : item);
+      return [{ ...newDoubt, id: makeId('doubt'), createdAt: new Date().toISOString() }, ...prev];
+    });
   };
+  const updateDoubt = (id: string, updates: Partial<CriticalDoubt>) =>
+    setDoubts((prev) => prev.map((item) => item.id === id ? { ...item, ...updates } : item));
+  const setDoubtStatus = (id: string, status: DoubtStatus, resolutionNote?: string) =>
+    setDoubts((prev) => prev.map((item) => item.id === id
+      ? { ...item, status, resolutionNote: resolutionNote ?? item.resolutionNote } : item));
+  const deleteDoubt = (id: string) => setDoubts((prev) => prev.filter((item) => item.id !== id));
 
-  // Suffix operations
-  const addSuffix = (newSuffix: Omit<SuffixRule, 'id'>) => {
-    const item: SuffixRule = {
-      ...newSuffix,
-      id: `suf-${Date.now()}`,
-    };
-    setSuffixes((prev) => [...prev, item]);
-  };
-
-  const updateSuffix = (id: string, updates: Partial<SuffixRule>) => {
-    setSuffixes((prev) => prev.map((s) => (s.id === id ? { ...s, ...updates } : s)));
-  };
-
-  const deleteSuffix = (id: string) => {
-    setSuffixes((prev) => prev.filter((s) => s.id !== id));
-  };
-
-  // Phrase operations
-  const addPhrase = (newPhrase: Omit<CorpusPhrase, 'id'>) => {
-    const item: CorpusPhrase = {
-      ...newPhrase,
-      id: `phrase-${Date.now()}`,
-    };
-    setPhrases((prev) => [item, ...prev]);
-  };
-
-  const updatePhrase = (id: string, updates: Partial<CorpusPhrase>) => {
-    setPhrases((prev) => prev.map((p) => (p.id === id ? { ...p, ...updates } : p)));
-  };
-
-  const deletePhrase = (id: string) => {
-    setPhrases((prev) => prev.filter((p) => p.id !== id));
-  };
-
-  const toggleVerifyPhrase = (id: string) => {
-    setPhrases((prev) => prev.map((p) => (p.id === id ? { ...p, verified: !p.verified } : p)));
-  };
-
-  // Doubt operations
-  const addDoubt = (newDoubt: Omit<CriticalDoubt, 'id' | 'createdAt'>) => {
-    // Check if exists
-    const existing = doubts.find((d) => d.term.toLowerCase() === newDoubt.term.toLowerCase());
-    if (existing) {
-      setDoubts((prev) =>
-        prev.map((d) => (d.id === existing.id ? { ...d, occurrences: d.occurrences + 1 } : d))
-      );
-      return;
-    }
-    const item: CriticalDoubt = {
-      ...newDoubt,
-      id: `doubt-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-    };
-    setDoubts((prev) => [item, ...prev]);
-  };
-
-  const updateDoubt = (id: string, updates: Partial<CriticalDoubt>) => {
-    setDoubts((prev) => prev.map((d) => (d.id === id ? { ...d, ...updates } : d)));
-  };
-
-  const setDoubtStatus = (id: string, status: DoubtStatus, resolutionNote?: string) => {
-    setDoubts((prev) =>
-      prev.map((d) => (d.id === id ? { ...d, status, resolutionNote: resolutionNote ?? d.resolutionNote } : d))
-    );
-  };
-
-  const deleteDoubt = (id: string) => {
-    setDoubts((prev) => prev.filter((d) => d.id !== id));
-  };
-
-  // Sesión de Validación: Corrección en Cascada unificada a todo el corpus
   const applyCascadeCorrection = (oldTerm: string, newTerm: string, resolutionNote?: string): number => {
+    const term = oldTerm.trim();
+    if (!term) return 0;
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`(^|[^\\p{L}\\p{N}_])(${escaped})(?=$|[^\\p{L}\\p{N}_])`, 'giu');
+    const replace = (value: string) => value.replace(pattern, (_match, prefix: string) => `${prefix}${newTerm}`);
     let replacedCount = 0;
-    const regex = new RegExp(`\\b${oldTerm}\\b`, 'gi');
-
-    // 1. Reemplazar en Corpus de Frases
-    setPhrases((prev) =>
-      prev.map((p) => {
-        let changed = false;
-        let newQuechua = p.quechua;
-        let newMorph = p.morphologicalBreakdown;
-
-        if (regex.test(p.quechua)) {
-          newQuechua = p.quechua.replace(regex, newTerm);
-          changed = true;
-        }
-        if (regex.test(p.morphologicalBreakdown)) {
-          newMorph = p.morphologicalBreakdown.replace(regex, newTerm);
-          changed = true;
-        }
-
-        if (changed) {
-          replacedCount++;
-          return {
-            ...p,
-            quechua: newQuechua,
-            morphologicalBreakdown: newMorph,
-            grammaticalNotes: p.grammaticalNotes
-              ? `${p.grammaticalNotes} [Normalizado en cascada: ${oldTerm} -> ${newTerm}]`
-              : `[Normalizado en cascada: ${oldTerm} -> ${newTerm}]`,
-          };
-        }
-        return p;
-      })
-    );
-
-    // 2. Marcar la duda como resuelta
-    setDoubts((prev) =>
-      prev.map((d) => {
-        if (d.term.toLowerCase() === oldTerm.toLowerCase()) {
-          return {
-            ...d,
-            status: 'resolved' as DoubtStatus,
-            resolutionNote: resolutionNote || `Corregido en cascada a "${newTerm}".`,
-          };
-        }
-        return d;
-      })
-    );
-
+    setPhrases((prev) => prev.map((phrase) => {
+      const quechua = replace(phrase.quechua);
+      const morphologicalBreakdown = replace(phrase.morphologicalBreakdown);
+      if (quechua === phrase.quechua && morphologicalBreakdown === phrase.morphologicalBreakdown) return phrase;
+      replacedCount++;
+      return {
+        ...phrase,
+        quechua,
+        morphologicalBreakdown,
+        grammaticalNotes: phrase.grammaticalNotes
+          ? `${phrase.grammaticalNotes} [Normalizado en cascada: ${oldTerm} -> ${newTerm}]`
+          : `[Normalizado en cascada: ${oldTerm} -> ${newTerm}]`,
+      };
+    }));
+    setDoubts((prev) => prev.map((item) => item.term.toLowerCase() === term.toLowerCase()
+      ? { ...item, status: 'resolved' as DoubtStatus,
+          resolutionNote: resolutionNote || `Corregido en cascada a "${newTerm}".` }
+      : item));
     return replacedCount;
   };
 
-  // Escaneo automático del corpus según los 3 disparadores
   const autoScanCorpus = (): number => {
     let addedCount = 0;
+    const knownTerms = new Set(doubts.map((item) => item.term.toLowerCase()));
+    const knownContexts = new Set(doubts.map((item) => item.contextPhrase));
+    const addScannedDoubt = (doubt: NewDoubt) => {
+      const termKey = doubt.term.toLowerCase();
+      if (knownTerms.has(termKey) || knownContexts.has(doubt.contextPhrase)) return;
+      knownTerms.add(termKey);
+      knownContexts.add(doubt.contextPhrase);
+      addDoubt(doubt);
+      addedCount++;
+    };
 
     phrases.forEach((phrase) => {
       const qLower = phrase.quechua.toLowerCase();
-
-      // 1. Disparador 2: Variante Dialectal Peruana -chka- (prohibido en Cochabamba)
       if (qLower.includes('chka')) {
-        const words = phrase.quechua.split(/\s+/);
-        const badWord = words.find((w) => w.toLowerCase().includes('chka')) || 'chka';
+        const badWord = phrase.quechua.split(/\s+/).find((word) => word.toLowerCase().includes('chka')) || 'chka';
         const cleanWord = badWord.replace(/[.,!?;:]/g, '');
         const suggestedWord = cleanWord.replace(/chka/gi, 'sha');
-
-        const existing = doubts.find((d) => d.term.toLowerCase() === cleanWord.toLowerCase());
-        if (!existing) {
-          addDoubt({
-            term: cleanWord,
-            trigger: 'dialect_variant',
-            contextPhrase: phrase.quechua,
-            occurrences: 1,
-            aiHypothesis: `Variante cusqueña con sufijo progresivo -chka-. En Cochabamba se realiza obligatoriamente como -sha-.`,
-            quechuistaQuestion: `¿Confirma el reemplazo de "${cleanWord}" por "${suggestedWord}" para reflejar el quechua cochabambino auténtico?`,
-            suggestedAction: `Reemplazar por "${suggestedWord}" mediante corrección en cascada.`,
-            status: 'pending',
-          });
-          addedCount++;
-        }
+        addScannedDoubt({
+          term: cleanWord, trigger: 'dialect_variant', contextPhrase: phrase.quechua, occurrences: 1,
+          aiHypothesis: 'Variante cusqueña con sufijo progresivo -chka-. En Cochabamba se realiza obligatoriamente como -sha-.',
+          quechuistaQuestion: `¿Confirma el reemplazo de "${cleanWord}" por "${suggestedWord}" para reflejar el quechua cochabambino auténtico?`,
+          suggestedAction: `Reemplazar por "${suggestedWord}" mediante corrección en cascada.`, status: 'pending',
+        });
       }
-
-      // 2. Disparador 2: Variante Dialectal -chis en lugar de -nchij / -kichij
       if (qLower.includes('chis') && !qLower.includes('chish')) {
-        const words = phrase.quechua.split(/\s+/);
-        const badWord = words.find((w) => w.toLowerCase().includes('chis')) || 'chis';
+        const badWord = phrase.quechua.split(/\s+/).find((word) => word.toLowerCase().includes('chis')) || 'chis';
         const cleanWord = badWord.replace(/[.,!?;:]/g, '');
-        const suggestedWord = cleanWord.replace(/chis/gi, 'nchij');
-
-        const existing = doubts.find((d) => d.term.toLowerCase() === cleanWord.toLowerCase());
-        if (!existing) {
-          addDoubt({
-            term: cleanWord,
-            trigger: 'dialect_variant',
-            contextPhrase: phrase.quechua,
-            occurrences: 1,
-            aiHypothesis: `Variante de pluralizador (-chis). En Cochabamba rige -nchij (1PL.INCL) o -kichij (2PL).`,
-            quechuistaQuestion: `¿Debe sustituirse "${cleanWord}" por la forma cochabambina con terminación en "j"?`,
-            suggestedAction: `Normalizar con terminación boliviana en "j".`,
-            status: 'pending',
-          });
-          addedCount++;
-        }
+        addScannedDoubt({
+          term: cleanWord, trigger: 'dialect_variant', contextPhrase: phrase.quechua, occurrences: 1,
+          aiHypothesis: 'Variante de pluralizador (-chis). En Cochabamba rige -nchij (1PL.INCL) o -kichij (2PL).',
+          quechuistaQuestion: `¿Debe sustituirse "${cleanWord}" por la forma cochabambina con terminación en "j"?`,
+          suggestedAction: 'Normalizar con terminación boliviana en "j".', status: 'pending',
+        });
       }
-
-      // 3. Disparador 2: Grafía con "h" en lugar de "j" boliviana (RM 1032/84)
-      if (/\b(hatun|hallp'a|hamuy)\b/i.test(qLower)) {
-        const match = qLower.match(/\b(hatun|hallp'a|hamuy)\b/i);
-        if (match) {
-          const badWord = match[0];
-          const suggestedWord = badWord.replace(/^h/i, 'j');
-          const existing = doubts.find((d) => d.term.toLowerCase() === badWord.toLowerCase());
-          if (!existing) {
-            addDoubt({
-              term: badWord,
-              trigger: 'dialect_variant',
-              contextPhrase: phrase.quechua,
-              occurrences: 1,
-              aiHypothesis: `Grafía con "h" inicial propia de normas peruanas. En Bolivia rige la RM 1032/84 con "j" inicial ("${suggestedWord}").`,
-              quechuistaQuestion: `¿Estandarizar a "${suggestedWord}" según el alfabeto oficial boliviano?`,
-              suggestedAction: `Corregir en cascada a "${suggestedWord}".`,
-              status: 'pending',
-            });
-            addedCount++;
-          }
-        }
+      const spellingMatch = qLower.match(/\b(hatun|hallp'a|hamuy)\b/i);
+      if (spellingMatch) {
+        const badWord = spellingMatch[0];
+        const suggestedWord = badWord.replace(/^h/i, 'j');
+        addScannedDoubt({
+          term: badWord, trigger: 'dialect_variant', contextPhrase: phrase.quechua, occurrences: 1,
+          aiHypothesis: `Grafía con "h" inicial propia de normas peruanas. En Bolivia rige la RM 1032/84 con "j" inicial ("${suggestedWord}").`,
+          quechuistaQuestion: `¿Estandarizar a "${suggestedWord}" según el alfabeto oficial boliviano?`,
+          suggestedAction: `Corregir en cascada a "${suggestedWord}".`, status: 'pending',
+        });
       }
-
-      // 4. Disparador 1: Bajo Nivel de Confianza (Frases marcadas no verificadas)
       if (!phrase.verified) {
-        const existing = doubts.find((d) => d.contextPhrase === phrase.quechua);
-        if (!existing) {
-          const firstWord = phrase.quechua.split(/\s+/)[0].replace(/[.,!?;:]/g, '');
-          addDoubt({
-            term: firstWord,
-            trigger: 'low_confidence',
-            contextPhrase: phrase.quechua,
-            occurrences: 1,
-            aiHypothesis: `Frase registrada en el corpus pero clasificada como "En revisión / no verificada".`,
-            quechuistaQuestion: `¿La expresión "${phrase.quechua}" es natural y correcta en Cochabamba?`,
-            suggestedAction: `Revisar traducción ("${phrase.spanish}") con un hablante nativo.`,
-            status: 'pending',
-          });
-          addedCount++;
-        }
+        const firstWord = phrase.quechua.split(/\s+/)[0]?.replace(/[.,!?;:]/g, '') || phrase.quechua;
+        addScannedDoubt({
+          term: firstWord, trigger: 'low_confidence', contextPhrase: phrase.quechua, occurrences: 1,
+          aiHypothesis: 'Frase registrada en el corpus pero clasificada como "En revisión / no verificada".',
+          quechuistaQuestion: `¿La expresión "${phrase.quechua}" es natural y correcta en Cochabamba?`,
+          suggestedAction: `Revisar traducción ("${phrase.spanish}") con un hablante nativo.`, status: 'pending',
+        });
       }
     });
-
     return addedCount;
   };
 
-  // Grammar rule operations
-  const addGrammarRule = (newRule: Omit<GrammarRule, 'id'>) => {
-    const item: GrammarRule = {
-      ...newRule,
-      id: `rule-${Date.now()}`,
-    };
-    setGrammarRules((prev) => [...prev, item]);
-  };
+  const addGrammarRule = (rule: Omit<GrammarRule, 'id'>) =>
+    setGrammarRules((prev) => [...prev, { ...rule, id: makeId('rule') }]);
+  const updateGrammarRule = (id: string, updates: Partial<GrammarRule>) =>
+    setGrammarRules((prev) => prev.map((item) => item.id === id ? { ...item, ...updates } : item));
+  const deleteGrammarRule = (id: string) => setGrammarRules((prev) => prev.filter((item) => item.id !== id));
 
-  const updateGrammarRule = (id: string, updates: Partial<GrammarRule>) => {
-    setGrammarRules((prev) => prev.map((r) => (r.id === id ? { ...r, ...updates } : r)));
-  };
-
-  const deleteGrammarRule = (id: string) => {
-    setGrammarRules((prev) => prev.filter((r) => r.id !== id));
-  };
-
-  // Backup & Restore
   const exportDatasetJSON = () => {
     const payload = {
-      version: '2.0-cochabamba',
-      exportedAt: new Date().toISOString(),
-      dialect: 'Quechua Boliviano (Cochabamba)',
-      roots,
-      suffixes,
-      phrases,
-      doubts,
-      grammarRules,
+      version: '2.0-cochabamba', exportedAt: new Date().toISOString(),
+      dialect: 'Quechua Boliviano (Cochabamba)', roots, suffixes, phrases, doubts, grammarRules,
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `qhawana-corpus-cochabamba-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `qhawana-corpus-cochabamba-${new Date().toISOString().slice(0, 10)}.json`;
+    anchor.click();
     URL.revokeObjectURL(url);
   };
 
@@ -499,8 +270,8 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
       if (parsed.doubts && Array.isArray(parsed.doubts)) setDoubts(parsed.doubts);
       if (parsed.grammarRules && Array.isArray(parsed.grammarRules)) setGrammarRules(parsed.grammarRules);
       return true;
-    } catch (e) {
-      console.error('Error importing JSON data', e);
+    } catch (error) {
+      console.error('Error importing JSON data', error);
       return false;
     }
   };
@@ -514,42 +285,15 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   return (
-    <QuechuaContext.Provider
-      value={{
-        roots,
-        suffixes,
-        phrases,
-        doubts,
-        grammarRules,
-        activeTab,
-        setActiveTab,
-        darkMode,
-        setDarkMode,
-        addRoot,
-        updateRoot,
-        deleteRoot,
-        toggleVerifyRoot,
-        addSuffix,
-        updateSuffix,
-        deleteSuffix,
-        addPhrase,
-        updatePhrase,
-        deletePhrase,
-        toggleVerifyPhrase,
-        addDoubt,
-        updateDoubt,
-        setDoubtStatus,
-        deleteDoubt,
-        applyCascadeCorrection,
-        autoScanCorpus,
-        addGrammarRule,
-        updateGrammarRule,
-        deleteGrammarRule,
-        exportDatasetJSON,
-        importDatasetJSON,
-        resetToDefaults,
-      }}
-    >
+    <QuechuaContext.Provider value={{
+      roots, suffixes, phrases, doubts, grammarRules, activeTab, setActiveTab, darkMode, setDarkMode,
+      addRoot, updateRoot, deleteRoot, toggleVerifyRoot,
+      addSuffix, updateSuffix, deleteSuffix,
+      addPhrase, updatePhrase, deletePhrase, toggleVerifyPhrase,
+      addDoubt, updateDoubt, setDoubtStatus, deleteDoubt, applyCascadeCorrection, autoScanCorpus,
+      addGrammarRule, updateGrammarRule, deleteGrammarRule,
+      exportDatasetJSON, importDatasetJSON, resetToDefaults,
+    }}>
       {children}
     </QuechuaContext.Provider>
   );
@@ -557,8 +301,6 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
 export const useQuechua = () => {
   const context = useContext(QuechuaContext);
-  if (!context) {
-    throw new Error('useQuechua must be used within a QuechuaProvider');
-  }
+  if (!context) throw new Error('useQuechua must be used within a QuechuaProvider');
   return context;
 };
