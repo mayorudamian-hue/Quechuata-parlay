@@ -14,7 +14,11 @@ import {
   SEED_DOUBTS,
   SEED_GRAMMAR_RULES,
 } from '../data/seedData';
-import { PERSONAL_PRONOUNS_RULE, SEED_PERSONAL_PRONOUNS } from '../data/personalPronouns';
+import {
+  PERSONAL_PRONOUNS_PHRASES,
+  PERSONAL_PRONOUNS_RULE,
+  SEED_PERSONAL_PRONOUNS,
+} from '../data/personalPronouns';
 
 interface QuechuaContextType {
   roots: LexicalRoot[];
@@ -78,6 +82,7 @@ function mergeSeeds<T extends { id: string }>(saved: T[], seeds: T[]): T[] {
 }
 
 const DEFAULT_ROOTS = [...SEED_ROOTS, ...SEED_PERSONAL_PRONOUNS];
+const DEFAULT_PHRASES = [...SEED_PHRASES, ...PERSONAL_PRONOUNS_PHRASES];
 const DEFAULT_GRAMMAR_RULES = [...SEED_GRAMMAR_RULES, PERSONAL_PRONOUNS_RULE];
 const makeId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 type NewDoubt = Omit<CriticalDoubt, 'id' | 'createdAt'>;
@@ -87,7 +92,7 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [darkMode, setDarkMode] = useState(() => readStorage(STORAGE_KEYS.DARK_MODE, false));
   const [roots, setRoots] = useState<LexicalRoot[]>(() => mergeSeeds(readStorage(STORAGE_KEYS.ROOTS, DEFAULT_ROOTS), DEFAULT_ROOTS));
   const [suffixes, setSuffixes] = useState<SuffixRule[]>(() => mergeSeeds(readStorage(STORAGE_KEYS.SUFFIXES, SEED_SUFFIXES), SEED_SUFFIXES));
-  const [phrases, setPhrases] = useState<CorpusPhrase[]>(() => mergeSeeds(readStorage(STORAGE_KEYS.PHRASES, SEED_PHRASES), SEED_PHRASES));
+  const [phrases, setPhrases] = useState<CorpusPhrase[]>(() => mergeSeeds(readStorage(STORAGE_KEYS.PHRASES, DEFAULT_PHRASES), DEFAULT_PHRASES));
   const [doubts, setDoubts] = useState<CriticalDoubt[]>(() => readStorage(STORAGE_KEYS.DOUBTS, SEED_DOUBTS));
   const [grammarRules, setGrammarRules] = useState<GrammarRule[]>(() => mergeSeeds(readStorage(STORAGE_KEYS.RULES, DEFAULT_GRAMMAR_RULES), DEFAULT_GRAMMAR_RULES));
 
@@ -186,7 +191,7 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
     phrases.forEach((phrase) => {
       const qLower = phrase.quechua.toLowerCase();
       if (qLower.includes('chka')) {
-        const badWord = phrase.quechua.split(/\s+/).find((word) => word.toLowerCase().includes('chka')) || 'chka';
+        const badWord = phrase.quechua.split(/\\s+/).find((word) => word.toLowerCase().includes('chka')) || 'chka';
         const cleanWord = badWord.replace(/[.,!?;:]/g, '');
         const suggestedWord = cleanWord.replace(/chka/gi, 'sha');
         addScannedDoubt({ term: cleanWord, trigger: 'dialect_variant', contextPhrase: phrase.quechua, occurrences: 1,
@@ -195,14 +200,14 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
           suggestedAction: `Reemplazar por "${suggestedWord}" mediante corrección en cascada.`, status: 'pending' });
       }
       if (qLower.includes('chis') && !qLower.includes('chish')) {
-        const badWord = phrase.quechua.split(/\s+/).find((word) => word.toLowerCase().includes('chis')) || 'chis';
+        const badWord = phrase.quechua.split(/\\s+/).find((word) => word.toLowerCase().includes('chis')) || 'chis';
         const cleanWord = badWord.replace(/[.,!?;:]/g, '');
         addScannedDoubt({ term: cleanWord, trigger: 'dialect_variant', contextPhrase: phrase.quechua, occurrences: 1,
           aiHypothesis: 'Variante de pluralizador (-chis). En Cochabamba rige -nchij (1PL.INCL) o -kichij (2PL).',
           quechuistaQuestion: `¿Debe sustituirse "${cleanWord}" por la forma cochabambina con terminación en "j"?`,
           suggestedAction: 'Normalizar con terminación boliviana en "j".', status: 'pending' });
       }
-      const spellingMatch = qLower.match(/\b(hatun|hallp'a|hamuy)\b/i);
+      const spellingMatch = qLower.match(/\\b(hatun|hallp'a|hamuy)\\b/i);
       if (spellingMatch) {
         const badWord = spellingMatch[0];
         const suggestedWord = badWord.replace(/^h/i, 'j');
@@ -212,7 +217,7 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
           suggestedAction: `Corregir en cascada a "${suggestedWord}".`, status: 'pending' });
       }
       if (!phrase.verified) {
-        const firstWord = phrase.quechua.split(/\s+/)[0]?.replace(/[.,!?;:]/g, '') || phrase.quechua;
+        const firstWord = phrase.quechua.split(/\\s+/)[0]?.replace(/[.,!?;:]/g, '') || phrase.quechua;
         addScannedDoubt({ term: firstWord, trigger: 'low_confidence', contextPhrase: phrase.quechua, occurrences: 1,
           aiHypothesis: 'Frase registrada en el corpus pero clasificada como "En revisión / no verificada".',
           quechuistaQuestion: `¿La expresión "${phrase.quechua}" es natural y correcta en Cochabamba?`,
@@ -242,7 +247,7 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const parsed = JSON.parse(jsonData);
       if (parsed.roots && Array.isArray(parsed.roots)) setRoots(mergeSeeds(parsed.roots, DEFAULT_ROOTS));
       if (parsed.suffixes && Array.isArray(parsed.suffixes)) setSuffixes(mergeSeeds(parsed.suffixes, SEED_SUFFIXES));
-      if (parsed.phrases && Array.isArray(parsed.phrases)) setPhrases(mergeSeeds(parsed.phrases, SEED_PHRASES));
+      if (parsed.phrases && Array.isArray(parsed.phrases)) setPhrases(mergeSeeds(parsed.phrases, DEFAULT_PHRASES));
       if (parsed.doubts && Array.isArray(parsed.doubts)) setDoubts(parsed.doubts);
       if (parsed.grammarRules && Array.isArray(parsed.grammarRules)) setGrammarRules(mergeSeeds(parsed.grammarRules, DEFAULT_GRAMMAR_RULES));
       return true;
@@ -255,7 +260,7 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const resetToDefaults = () => {
     setRoots(DEFAULT_ROOTS);
     setSuffixes(SEED_SUFFIXES);
-    setPhrases(SEED_PHRASES);
+    setPhrases(DEFAULT_PHRASES);
     setDoubts(SEED_DOUBTS);
     setGrammarRules(DEFAULT_GRAMMAR_RULES);
   };
