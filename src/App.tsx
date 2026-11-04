@@ -7,6 +7,7 @@ import { QuechuistaConsultationView } from './components/QuechuistaConsultationV
 import { TranslatorView } from './components/TranslatorView';
 import { ConversationView } from './components/ConversationView';
 import { PersonalPronounsGuide } from './components/PersonalPronounsGuide';
+import { VerbTensesGuide } from './components/VerbTensesGuide';
 
 function AppContent() {
   const { activeTab } = useQuechua();
@@ -23,6 +24,7 @@ function AppContent() {
           <div className="space-y-6">
             <TranslatorView />
             <PersonalPronounsGuide />
+            <VerbTensesGuide />
           </div>
         )}
         {activeTab === 'chat' && <ConversationView />}

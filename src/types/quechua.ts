@@ -103,6 +103,8 @@ export interface TranslationResult {
   detectedDoubts: Omit<CriticalDoubt, 'id' | 'createdAt'>[];
   /** De dónde salió el resultado: corpus guardado, IA o motor local de contingencia. */
   source?: 'corpus' | 'ai' | 'fallback';
+  /** Solo en 'fallback': cuántas palabras pudo resolver el motor con el banco lingüístico. */
+  fallbackInfo?: { recognized: number; total: number; method: string };
 }
 
 export interface ChatMessage {

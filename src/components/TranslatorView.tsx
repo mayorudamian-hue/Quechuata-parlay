@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuechua } from '../context/QuechuaContext';
 import { TranslationResult, MorphToken } from '../types/quechua';
 import { parseMorphologicalBreakdown, analyzeWordWithKnownDatabase } from '../utils/morphology';
+import { translateWithBank, segmentWord } from '../utils/bankEngine';
 import { findExactMatch, findRelevantPhrases, findRelevantRoots, formatMeanings, normalizeText, rootExists } from '../utils/retrieval';
 import { 
   ArrowRightLeft, 
@@ -58,6 +59,10 @@ export const TranslatorView: React.FC = () => {
     'Imatataj ruwashanki qan?',
     'Paqarin jamusaqpuni llank\'aj'
   ];
+
+  /** Respaldo sin IA: traduce y glosa (Leipzig) buscando en el banco lingüístico completo. */
+  const bankTranslate = (text: string): TranslationResult =>
+    translateWithBank(text, direction, { roots, suffixes, phrases });
 
   const handleTranslate = async (textToTranslate?: string, forceAI = false) => {
     const text = (textToTranslate || inputText).trim();
@@ -126,18 +131,7 @@ export const TranslatorView: React.FC = () => {
       const contentType = res.headers.get('content-type') || '';
 
       if (!contentType.includes('application/json')) {
-        console.log('Aplicando motor morfológico local...');
-        const words = text.trim().split(/\s+/);
-        const localTokens = words.map((w) => analyzeWordWithKnownDatabase(w, roots, suffixes));
-        data = {
-          sourceText: text,
-          translatedText: 'Análisis morfológico con banco local',
-          direction,
-          tokens: localTokens,
-          grammaticalExplanation: 'Análisis morfológico generado directamente desde las raíces y reglas gramaticales del banco.',
-          detectedDoubts: [],
-          source: 'fallback',
-        };
+        data = bankTranslate(text);
       } else {
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}));
@@ -145,11 +139,13 @@ export const TranslatorView: React.FC = () => {
         }
         data = await res.json();
         data.source = data.source || 'ai';
+        // El servidor solo conoce unas pocas frases fijas: el banco completo del usuario traduce mejor.
+        if (data.source === 'fallback') data = bankTranslate(text);
       }
 
       // Refinar tokens asegurando raíces reales si el modelo dejó la palabra aglutinada
       const refinedTokens: MorphToken[] = data.tokens.map((token) => {
-        if (token.root.toLowerCase() === token.surface.toLowerCase() && token.suffixes.length === 0) {
+        if (data.source !== 'fallback' && token.root.toLowerCase() === token.surface.toLowerCase() && token.suffixes.length === 0) {
           return analyzeWordWithKnownDatabase(token.surface, roots, suffixes, token.gloss);
         }
         return token;
@@ -181,7 +177,8 @@ export const TranslatorView: React.FC = () => {
       }
 
       if (data.source === 'fallback') {
-        setErrorMsg('La IA no respondió a tiempo (o no hay cuota): este resultado es aproximado, armado con tu banco local. Vuelve a intentar o ingresa la traducción a mano.');
+        const info = data.fallbackInfo;
+        setErrorMsg(`La IA no respondió: traduje buscando en tu banco lingüístico${info ? ` (${info.recognized} de ${info.total} palabras reconocidas)` : ''}. Es una traducción aproximada; las palabras entre [corchetes] no están en el banco. Revísala antes de guardarla o vuelve a intentar con la IA.`);
       }
       setResult(data);
       setEditedTranslatedText(data.translatedText);
@@ -207,18 +204,13 @@ export const TranslatorView: React.FC = () => {
       }
     } catch (err: unknown) {
       const error = err as Error;
-      const words = text.trim().split(/\s+/);
-      const localTokens = words.map((w) => analyzeWordWithKnownDatabase(w, roots, suffixes));
-      setResult({
-        sourceText: text,
-        translatedText: 'Análisis morfológico local activo',
-        direction,
-        tokens: localTokens,
-        grammaticalExplanation: 'Se aplicó el desglosador morfológico local con las raíces y sufijos del banco léxico.',
-        detectedDoubts: [],
-        source: 'fallback',
-      });
-      setErrorMsg(`Aviso: ${error.message || 'Se aplicó análisis con el banco local.'}`);
+      const fb = bankTranslate(text);
+      setResult(fb);
+      setEditedTranslatedText(fb.translatedText);
+      setEditedExplanation(fb.grammaticalExplanation);
+      fb.detectedDoubts.forEach((d) => addDoubt(d));
+      const info = fb.fallbackInfo;
+      setErrorMsg(`No se pudo consultar a la IA (${error.message || 'sin conexión'}): traduje con tu banco lingüístico${info ? ` (${info.recognized} de ${info.total} palabras reconocidas)` : ''}. Es una traducción aproximada; revísala antes de guardarla.`);
     } finally {
       setLoading(false);
     }
@@ -294,8 +286,20 @@ export const TranslatorView: React.FC = () => {
           : t;
       });
     } catch {
-      setErrorMsg('No se pudo glosar con la IA: las palabras nuevas se guardaron como "pendiente de glosar" y puedes completarlas en el Banco Lingüístico.');
-      return tokens;
+      // Sin IA: se glosa con el banco (raíz + sufijos conocidos); lo que no se reconoce queda pendiente.
+      const target = new Set(indices);
+      let pending = 0;
+      const local = tokens.map((t, idx) => {
+        if (!target.has(idx)) return t;
+        const seg = segmentWord(t.surface, { roots, suffixes });
+        if (seg.token.isRecognized && seg.token.doubtFlag !== 'low_confidence') return { ...t, ...seg.token };
+        pending++;
+        return t;
+      });
+      setErrorMsg(pending
+        ? `La IA no está disponible: glosé con tu banco lo que pude; ${pending} palabra(s) quedan "pendientes de glosar" y puedes completarlas en el Banco Lingüístico.`
+        : 'La IA no está disponible: glosé las palabras nuevas con las raíces y sufijos de tu banco.');
+      return local;
     } finally {
       setLoading(false);
     }
@@ -617,6 +621,22 @@ export const TranslatorView: React.FC = () => {
             <div className="text-xs text-stone-500 italic">
               Texto origen: "{result.sourceText}"
             </div>
+
+            {result.source === 'fallback' && (
+              <div className="p-2.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-lg text-xs text-amber-800 dark:text-amber-300 flex flex-wrap items-center gap-2 justify-between">
+                <span className="flex items-center gap-2">
+                  <Info className="w-4 h-4 text-amber-600 shrink-0" />
+                  Traducido sin IA, buscando en tu banco lingüístico
+                  {result.fallbackInfo ? ` (${result.fallbackInfo.recognized} de ${result.fallbackInfo.total} palabras reconocidas)` : ''}.
+                </span>
+                <button
+                  onClick={() => handleTranslate(result.sourceText, true)}
+                  className="px-2.5 py-1 font-semibold bg-white dark:bg-stone-900 border border-amber-300 dark:border-amber-800 rounded-md"
+                >
+                  Reintentar con la IA
+                </button>
+              </div>
+            )}
 
             {result.source === 'corpus' && (
               <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs text-emerald-800 dark:text-emerald-300 flex flex-wrap items-center gap-2 justify-between">

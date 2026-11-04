@@ -21,6 +21,7 @@ import {
   PERSONAL_PRONOUNS_RULE,
   SEED_PERSONAL_PRONOUNS,
 } from '../data/personalPronouns';
+import { VERB_TENSES_RULE } from '../data/verbTenses';
 
 interface QuechuaContextType {
   roots: LexicalRoot[];
@@ -87,7 +88,7 @@ function mergeSeeds<T extends { id: string }>(saved: T[], seeds: T[]): T[] {
 
 const DEFAULT_ROOTS = [...SEED_ROOTS, ...SEED_PERSONAL_PRONOUNS];
 const DEFAULT_PHRASES = [...SEED_PHRASES, ...PERSONAL_PRONOUNS_PHRASES];
-const DEFAULT_GRAMMAR_RULES = [...SEED_GRAMMAR_RULES, PERSONAL_PRONOUNS_RULE];
+const DEFAULT_GRAMMAR_RULES = [...SEED_GRAMMAR_RULES, PERSONAL_PRONOUNS_RULE, VERB_TENSES_RULE];
 const makeId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 type NewDoubt = Omit<CriticalDoubt, 'id' | 'createdAt'>;
 
