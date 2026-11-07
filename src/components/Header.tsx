@@ -10,7 +10,8 @@ import {
   Moon, 
   Download, 
   Upload,
-  RotateCcw
+  RotateCcw,
+  Wand2
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -89,6 +90,18 @@ export const Header: React.FC = () => {
             >
               <BookOpen className="w-4 h-4 text-stone-500" />
               <span>Banco Lingüístico</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('generator')}
+              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md whitespace-nowrap shrink-0 transition-colors ${
+                activeTab === 'generator'
+                  ? 'bg-amber-100 dark:bg-amber-950/70 text-amber-950 dark:text-amber-200 font-semibold'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+              }`}
+            >
+              <Wand2 className="w-4 h-4 text-amber-600 dark:text-amber-500" />
+              <span>Generador de Corpus</span>
             </button>
 
             <button
@@ -206,6 +219,14 @@ export const Header: React.FC = () => {
             }`}
           >
             Banco
+          </button>
+          <button
+            onClick={() => setActiveTab('generator')}
+            className={`px-3 py-1 text-xs font-medium rounded whitespace-nowrap ${
+              activeTab === 'generator' ? 'bg-amber-600 text-white' : 'text-stone-600 dark:text-stone-400'
+            }`}
+          >
+            Generador
           </button>
           <button
             onClick={() => setActiveTab('doubts')}

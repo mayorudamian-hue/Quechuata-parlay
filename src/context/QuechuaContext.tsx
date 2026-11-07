@@ -22,6 +22,11 @@ import {
   SEED_PERSONAL_PRONOUNS,
 } from '../data/personalPronouns';
 import { VERB_TENSES_RULE } from '../data/verbTenses';
+import {
+  LESSON_4_PHRASES,
+  LESSON_4_ROOTS,
+  LESSON_4_GRAMMAR_RULE,
+} from '../data/lesson4Corpus';
 
 interface QuechuaContextType {
   roots: LexicalRoot[];
@@ -29,8 +34,8 @@ interface QuechuaContextType {
   phrases: CorpusPhrase[];
   doubts: CriticalDoubt[];
   grammarRules: GrammarRule[];
-  activeTab: 'bank' | 'doubts' | 'consultation' | 'translator' | 'chat';
-  setActiveTab: (tab: 'bank' | 'doubts' | 'consultation' | 'translator' | 'chat') => void;
+  activeTab: 'bank' | 'doubts' | 'consultation' | 'translator' | 'chat' | 'generator';
+  setActiveTab: (tab: 'bank' | 'doubts' | 'consultation' | 'translator' | 'chat' | 'generator') => void;
   darkMode: boolean;
   setDarkMode: (val: boolean) => void;
   addRoot: (root: Omit<LexicalRoot, 'id' | 'frequency'>) => void;
@@ -58,11 +63,18 @@ interface QuechuaContextType {
   exportDatasetJSON: () => void;
   importDatasetJSON: (jsonData: string) => boolean;
   resetToDefaults: () => void;
+  pendingTranslatorText: string | null;
+  pendingTranslatorDirection: 'qu-es' | 'es-qu' | null;
+  pendingChatPrompt: string | null;
+  sendToTranslator: (text: string, direction?: 'qu-es' | 'es-qu') => void;
+  sendToChat: (text: string) => void;
+  clearPendingTranslator: () => void;
+  clearPendingChat: () => void;
 }
 
 const QuechuaContext = createContext<QuechuaContextType | undefined>(undefined);
 const STORAGE_KEYS = {
-  ROOTS: 'qhawana_roots_v2',
+  ROOTS: 'qhawana_roots_v3',
   SUFFIXES: 'qhawana_suffixes_v2',
   PHRASES: 'qhawana_phrases_v2',
   DOUBTS: 'qhawana_doubts_v2',
@@ -81,25 +93,58 @@ function readStorage<T>(key: string, fallback: T): T {
 }
 
 function mergeSeeds<T extends { id: string }>(saved: T[], seeds: T[]): T[] {
-  const ids = new Set(saved.map((item) => item.id));
-  const missing = seeds.filter((item) => !ids.has(item.id));
-  return missing.length ? [...saved, ...missing] : saved;
+  const seedMap = new Map(seeds.map((s) => [s.id, s]));
+  const updatedSaved = saved.map((item) => {
+    const seed = seedMap.get(item.id);
+    return seed ? { ...item, ...seed } : item;
+  });
+  const savedIds = new Set(saved.map((item) => item.id));
+  const missing = seeds.filter((item) => !savedIds.has(item.id));
+  return missing.length ? [...updatedSaved, ...missing] : updatedSaved;
 }
 
-const DEFAULT_ROOTS = [...SEED_ROOTS, ...SEED_PERSONAL_PRONOUNS];
-const DEFAULT_PHRASES = [...SEED_PHRASES, ...PERSONAL_PRONOUNS_PHRASES];
-const DEFAULT_GRAMMAR_RULES = [...SEED_GRAMMAR_RULES, PERSONAL_PRONOUNS_RULE, VERB_TENSES_RULE];
+const DEFAULT_ROOTS = [...SEED_ROOTS, ...SEED_PERSONAL_PRONOUNS, ...LESSON_4_ROOTS];
+const DEFAULT_PHRASES = [...SEED_PHRASES, ...PERSONAL_PRONOUNS_PHRASES, ...LESSON_4_PHRASES];
+const DEFAULT_GRAMMAR_RULES = [...SEED_GRAMMAR_RULES, PERSONAL_PRONOUNS_RULE, VERB_TENSES_RULE, LESSON_4_GRAMMAR_RULE];
 const makeId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 type NewDoubt = Omit<CriticalDoubt, 'id' | 'createdAt'>;
 
 export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeTab, setActiveTab] = useState<QuechuaContextType['activeTab']>('bank');
   const [darkMode, setDarkMode] = useState(() => readStorage(STORAGE_KEYS.DARK_MODE, false));
-  const [roots, setRoots] = useState<LexicalRoot[]>(() => mergeSeeds(readStorage(STORAGE_KEYS.ROOTS, DEFAULT_ROOTS), DEFAULT_ROOTS));
+  const [roots, setRoots] = useState<LexicalRoot[]>(() => {
+    const saved = readStorage<LexicalRoot[] | null>(STORAGE_KEYS.ROOTS, null)
+      || readStorage<LexicalRoot[] | null>('qhawana_roots_v2', null)
+      || DEFAULT_ROOTS;
+    return mergeSeeds(saved, DEFAULT_ROOTS);
+  });
   const [suffixes, setSuffixes] = useState<SuffixRule[]>(() => mergeSeeds(readStorage(STORAGE_KEYS.SUFFIXES, SEED_SUFFIXES), SEED_SUFFIXES));
   const [phrases, setPhrases] = useState<CorpusPhrase[]>(() => mergeSeeds(readStorage(STORAGE_KEYS.PHRASES, DEFAULT_PHRASES), DEFAULT_PHRASES));
   const [doubts, setDoubts] = useState<CriticalDoubt[]>(() => readStorage(STORAGE_KEYS.DOUBTS, SEED_DOUBTS));
   const [grammarRules, setGrammarRules] = useState<GrammarRule[]>(() => mergeSeeds(readStorage(STORAGE_KEYS.RULES, DEFAULT_GRAMMAR_RULES), DEFAULT_GRAMMAR_RULES));
+  const [pendingTranslatorText, setPendingTranslatorText] = useState<string | null>(null);
+  const [pendingTranslatorDirection, setPendingTranslatorDirection] = useState<'qu-es' | 'es-qu' | null>(null);
+  const [pendingChatPrompt, setPendingChatPrompt] = useState<string | null>(null);
+
+  const sendToTranslator = (text: string, direction?: 'qu-es' | 'es-qu') => {
+    setPendingTranslatorText(text);
+    if (direction) setPendingTranslatorDirection(direction);
+    setActiveTab('translator');
+  };
+
+  const sendToChat = (text: string) => {
+    setPendingChatPrompt(text);
+    setActiveTab('chat');
+  };
+
+  const clearPendingTranslator = () => {
+    setPendingTranslatorText(null);
+    setPendingTranslatorDirection(null);
+  };
+
+  const clearPendingChat = () => {
+    setPendingChatPrompt(null);
+  };
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -396,6 +441,8 @@ export const QuechuaProvider: React.FC<{ children: React.ReactNode }> = ({ child
       addDoubt, updateDoubt, setDoubtStatus, deleteDoubt, applyCascadeCorrection, autoScanCorpus,
       addGrammarRule, updateGrammarRule, deleteGrammarRule,
       exportDatasetJSON, importDatasetJSON, resetToDefaults,
+      pendingTranslatorText, pendingTranslatorDirection, pendingChatPrompt,
+      sendToTranslator, sendToChat, clearPendingTranslator, clearPendingChat,
     }}>
       {children}
     </QuechuaContext.Provider>

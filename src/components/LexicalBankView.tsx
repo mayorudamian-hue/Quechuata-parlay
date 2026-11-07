@@ -59,6 +59,8 @@ export const LexicalBankView: React.FC = () => {
   const [selectedSuffixType, setSelectedSuffixType] = useState<string>('all');
   const [toastMessage, setToastMessage] = useState<string>('');
   const [deleteTarget, setDeleteTarget] = useState<{ type: 'root' | 'suffix' | 'phrase' | 'rule'; id: string; name: string } | null>(null);
+  const [rootPage, setRootPage] = useState(1);
+  const ROOTS_PER_PAGE = 50;
 
   // Modal States - Add
   const [isAddRootOpen, setIsAddRootOpen] = useState(false);
@@ -185,6 +187,10 @@ export const LexicalBankView: React.FC = () => {
     return matchesSearch && matchesCat;
   });
 
+  const totalRootPages = Math.max(1, Math.ceil(filteredRoots.length / ROOTS_PER_PAGE));
+  const safeRootPage = Math.min(rootPage, totalRootPages);
+  const paginatedRoots = filteredRoots.slice((safeRootPage - 1) * ROOTS_PER_PAGE, safeRootPage * ROOTS_PER_PAGE);
+
   const filteredRules = grammarRules.filter((r) => {
     const matchesSearch =
       r.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -204,11 +210,14 @@ export const LexicalBankView: React.FC = () => {
   }).sort((a, b) => a.slotOrder - b.slotOrder);
 
   const filteredPhrases = phrases.filter((p) => {
+    const term = searchTerm.toLowerCase();
     const matchesSearch = 
-      p.quechua.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.spanish.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.morphologicalBreakdown.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.gloss.toLowerCase().includes(searchTerm.toLowerCase());
+      p.quechua.toLowerCase().includes(term) ||
+      p.spanish.toLowerCase().includes(term) ||
+      p.morphologicalBreakdown.toLowerCase().includes(term) ||
+      p.gloss.toLowerCase().includes(term) ||
+      p.grammaticalNotes.toLowerCase().includes(term) ||
+      p.tags.some((t) => t.toLowerCase().includes(term));
     return matchesSearch;
   });
 
@@ -556,7 +565,10 @@ export const LexicalBankView: React.FC = () => {
             <input
               type="text"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setRootPage(1);
+              }}
               placeholder={`Buscar en ${
                 activeSubTab === 'roots'
                   ? 'raíces o traducción...'
@@ -574,7 +586,10 @@ export const LexicalBankView: React.FC = () => {
             <>
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => {
+                  setSelectedCategory(e.target.value);
+                  setRootPage(1);
+                }}
                 className="w-full sm:w-auto px-3 py-2 text-xs bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg text-stone-800 dark:text-stone-200"
               >
                 <option value="all">Todas las categorías</option>
@@ -647,7 +662,7 @@ export const LexicalBankView: React.FC = () => {
         <div className="bg-white dark:bg-stone-950 rounded-xl border border-stone-200 dark:border-stone-800 overflow-hidden">
           <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="text-xs text-stone-500 dark:text-stone-400">
-              Mostrando <span className="font-mono font-medium text-stone-800 dark:text-stone-200">{filteredRoots.length}</span> raíces léxicas.
+              Mostrando <span className="font-mono font-semibold text-stone-800 dark:text-stone-200">{filteredRoots.length === 0 ? 0 : (safeRootPage - 1) * ROOTS_PER_PAGE + 1} - {Math.min(safeRootPage * ROOTS_PER_PAGE, filteredRoots.length)}</span> de <span className="font-mono font-bold text-amber-800 dark:text-amber-400">{filteredRoots.length}</span> raíces léxicas (Pág. {safeRootPage}/{totalRootPages}).
               <span className="ml-2 text-amber-700 dark:text-amber-400 font-medium">
                 Tip: Haz clic en el estado o usa el lápiz para corregir una palabra no correcta y actualizarla en cascada.
               </span>
@@ -678,7 +693,7 @@ export const LexicalBankView: React.FC = () => {
                     </td>
                   </tr>
                 ) : (
-                  filteredRoots.map((root) => (
+                  paginatedRoots.map((root) => (
                     <tr key={root.id} className="hover:bg-stone-50 dark:hover:bg-stone-900/40 transition-colors">
                       <td className="py-3.5 px-6 font-mono font-semibold text-stone-900 dark:text-stone-100">
                         {root.quechua}
@@ -752,6 +767,50 @@ export const LexicalBankView: React.FC = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination Controls */}
+          {totalRootPages > 1 && (
+            <div className="px-6 py-3.5 border-t border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+              <div className="text-stone-500 dark:text-stone-400">
+                Página <span className="font-semibold text-stone-800 dark:text-stone-200">{safeRootPage}</span> de{' '}
+                <span className="font-semibold text-stone-800 dark:text-stone-200">{totalRootPages}</span> (50 raíces por página)
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setRootPage(1)}
+                  disabled={safeRootPage === 1}
+                  className="px-2.5 py-1 rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-stone-100 dark:hover:bg-stone-800 text-xs transition-colors"
+                >
+                  « Primera
+                </button>
+                <button
+                  onClick={() => setRootPage((p) => Math.max(1, p - 1))}
+                  disabled={safeRootPage === 1}
+                  className="px-2.5 py-1 rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-stone-100 dark:hover:bg-stone-800 text-xs transition-colors"
+                >
+                  ‹ Anterior
+                </button>
+                <span className="px-3 py-1 font-mono font-bold text-amber-900 dark:text-amber-300 bg-amber-100/60 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 rounded text-xs">
+                  {safeRootPage} / {totalRootPages}
+                </span>
+                <button
+                  onClick={() => setRootPage((p) => Math.min(totalRootPages, p + 1))}
+                  disabled={safeRootPage === totalRootPages}
+                  className="px-2.5 py-1 rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-stone-100 dark:hover:bg-stone-800 text-xs transition-colors"
+                >
+                  Siguiente ›
+                </button>
+                <button
+                  onClick={() => setRootPage(totalRootPages)}
+                  disabled={safeRootPage === totalRootPages}
+                  className="px-2.5 py-1 rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-stone-100 dark:hover:bg-stone-800 text-xs transition-colors"
+                >
+                  Última »
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

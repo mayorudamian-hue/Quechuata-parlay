@@ -64,33 +64,101 @@ function wordsRelated(a: string, b: string, direction: Direction): boolean {
   return min >= 5 && a.slice(0, 5) === b.slice(0, 5);
 }
 
+type Provenance = NonNullable<CorpusPhrase['provenance']>;
+
+/** Bonus de confianza por procedencia. Las frases con procedencia "ia" nunca se usan como ejemplo. */
+const PROVENANCE_BONUS: Partial<Record<Provenance, number>> = {
+  'segundo-hablante': 0.08,
+  fuente: 0.06,
+  'revisado-dem': 0.05,
+};
+
+/** Raíz aproximada para comparar palabras (mismo criterio que wordsRelated: 5 letras). */
+const stem = (w: string): string => (w.length >= 5 ? w.slice(0, 5) : w);
+
+export interface SimilarExample {
+  phrase: CorpusPhrase;
+  /** Puntaje de similitud (mayor = más parecida). */
+  score: number;
+  /** Palabras del texto de entrada que encontraron correspondencia en la frase. */
+  matched: string[];
+}
+
 /**
- * Devuelve las frases del corpus más parecidas al texto (no solo las 10 últimas).
- * Puntaje = proporción de palabras del texto cubiertas por la frase (+ bonus si está verificada).
+ * Busca en el corpus los pares más parecidos al texto, para usarlos como ejemplos al traducir.
+ * Puntaje = cobertura ponderada por rareza de las palabras (las comunes pesan menos)
+ *         + coincidencia de pares de palabras consecutivas (respeta el orden)
+ *         + parecido de longitud + bonus de confianza por procedencia.
+ * Excluye frases con procedencia "ia" y repeticiones exactas del mismo par.
  */
+export function findSimilarExamples(
+  text: string,
+  direction: Direction,
+  phrases: CorpusPhrase[],
+  limit = 8
+): SimilarExample[] {
+  const words = tokenize(text).filter((w) => direction === 'qu-es' || !STOP_ES.has(w));
+  if (!words.length) return [];
+  const queryStems = words.map(stem);
+
+  const docs = phrases
+    .filter((phrase) => phrase.provenance !== 'ia')
+    .map((phrase) => ({ phrase, stems: tokenize(sourceSide(phrase, direction)).map(stem) }));
+
+  // Frecuencia documental: las palabras raras identifican mejor una frase que las comunes
+  const df = new Map<string, number>();
+  for (const d of docs) for (const s of new Set(d.stems)) df.set(s, (df.get(s) || 0) + 1);
+  const idf = (s: string) => Math.log(1 + docs.length / (1 + (df.get(s) || 0)));
+
+  const totalWeight = queryStems.reduce((sum, s) => sum + idf(s), 0) || 1;
+  const queryBigrams = queryStems.slice(1).map((s, i) => queryStems[i] + ' ' + s);
+
+  const scored: SimilarExample[] = [];
+  for (const { phrase, stems } of docs) {
+    if (!stems.length) continue;
+    const present = new Set(stems);
+    let weighted = 0;
+    const matched: string[] = [];
+    queryStems.forEach((s, i) => {
+      if (present.has(s)) {
+        weighted += idf(s);
+        matched.push(words[i]);
+      }
+    });
+    const coverage = weighted / totalWeight;
+    if (coverage < 0.2) continue;
+
+    const bigrams = new Set(stems.slice(1).map((s, i) => stems[i] + ' ' + s));
+    const bigramHit = queryBigrams.length
+      ? queryBigrams.filter((b) => bigrams.has(b)).length / queryBigrams.length
+      : 0;
+    const lengthRatio = Math.min(stems.length, queryStems.length) / Math.max(stems.length, queryStems.length);
+    const trust = phrase.provenance ? PROVENANCE_BONUS[phrase.provenance] || 0 : phrase.verified ? 0.05 : 0;
+
+    scored.push({ phrase, matched, score: coverage * 0.65 + bigramHit * 0.2 + lengthRatio * 0.1 + trust });
+  }
+  scored.sort((a, b) => b.score - a.score);
+
+  const seen = new Set<string>();
+  const result: SimilarExample[] = [];
+  for (const item of scored) {
+    const key = normalizeText(item.phrase.spanish) + '|' + normalizeText(item.phrase.quechua);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    result.push(item);
+    if (result.length >= limit) break;
+  }
+  return result;
+}
+
+/** Misma firma de siempre: devuelve solo las frases (ahora con el puntaje mejorado). */
 export function findRelevantPhrases(
   text: string,
   direction: Direction,
   phrases: CorpusPhrase[],
   limit = 12
 ): CorpusPhrase[] {
-  const words = tokenize(text).filter((w) => direction === 'qu-es' || !STOP_ES.has(w));
-  if (!words.length) return [];
-
-  const scored = phrases
-    .map((phrase) => {
-      const phraseWords = tokenize(sourceSide(phrase, direction));
-      if (!phraseWords.length) return { phrase, score: 0 };
-      const covered = words.filter((w) => phraseWords.some((pw) => wordsRelated(w, pw, direction))).length;
-      const coverage = covered / words.length;
-      const density = covered / phraseWords.length;
-      const score = coverage * 0.75 + density * 0.25 + (phrase.verified ? 0.05 : 0);
-      return { phrase, score: covered === 0 ? 0 : score };
-    })
-    .filter((item) => item.score > 0)
-    .sort((a, b) => b.score - a.score);
-
-  return scored.slice(0, limit).map((item) => item.phrase);
+  return findSimilarExamples(text, direction, phrases, limit).map((item) => item.phrase);
 }
 
 /**

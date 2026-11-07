@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useQuechua } from '../context/QuechuaContext';
 import { ChatMessage, CorpusPhrase } from '../types/quechua';
 import { findRelevantPhrases, findRelevantRoots, formatMeanings, normalizeText } from '../utils/retrieval';
+import { IntegratedContentDrawer } from './IntegratedContentDrawer';
 import { 
   Send, 
   MessageSquare, 
@@ -10,22 +11,40 @@ import {
   Eye, 
   EyeOff, 
   RotateCcw,
-  Volume2,
   Loader2,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  ArrowRightLeft,
+  BookOpen,
+  Check,
+  Layers,
+  Flame,
+  CheckCircle2
 } from 'lucide-react';
 
+type PracticeTheme = 'general' | 'verbs' | 'negation' | 'conditional' | 'pronouns' | 'corpus';
+
 export const ConversationView: React.FC = () => {
-  const { grammarRules, phrases, roots } = useQuechua();
+  const { 
+    grammarRules, 
+    phrases, 
+    roots,
+    pendingChatPrompt,
+    clearPendingChat,
+    sendToTranslator,
+    upsertPhrase
+  } = useQuechua();
 
   const [userLevel, setUserLevel] = useState<'básico' | 'intermedio' | 'avanzado'>('intermedio');
+  const [practiceTheme, setPracticeTheme] = useState<PracticeTheme>('general');
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [revealedTranslations, setRevealedTranslations] = useState<Record<string, boolean>>({});
   const [expandedTokens, setExpandedTokens] = useState<Record<string, boolean>>({});
+  const [savedMessageIds, setSavedMessageIds] = useState<Record<string, boolean>>({});
+  const [isContentDrawerOpen, setIsContentDrawerOpen] = useState(false);
 
-  // Modo práctica sin IA: el tutor pregunta frases de tu corpus y corrige comparando con lo guardado
+  // Modo práctica sin IA
   const [offlineMode, setOfflineMode] = useState(false);
   const [drill, setDrill] = useState<{ phrase: CorpusPhrase; asking: 'es-qu' | 'qu-es' } | null>(null);
   const [recentDrillIds, setRecentDrillIds] = useState<string[]>([]);
@@ -48,15 +67,62 @@ export const ConversationView: React.FC = () => {
     },
   ]);
 
-  const quickStarters = [
-    'Allinllachu kashanki, tata?',
-    'Wasiypi kashani, qhichwata yachakushani',
-    'Imatataj mikhunki paqarin?',
-    'Paqarin jamusaqpuni llank\'aj',
-    'Cochabamba llajtapi tiyakuni'
-  ];
+  // Auto-consume pending chat prompt from Translator or Guides
+  useEffect(() => {
+    if (pendingChatPrompt) {
+      setInputMessage(pendingChatPrompt);
+      clearPendingChat();
+    }
+  }, [pendingChatPrompt]);
 
-  // ---------- Modo práctica sin IA ----------
+  // Dynamic starters according to selected practice theme
+  const dynamicStarters = useMemo(() => {
+    switch (practiceTheme) {
+      case 'verbs':
+        return [
+          'Mikhushani wasiypi',
+          'Paqarin jamusajku llank\'aj',
+          'Qanwan parlarqani qayna',
+          'Mikhuyman qanwan kuska',
+          'Ama waqaychu'
+        ];
+      case 'negation':
+        return [
+          'Mana qolqe kanchu',
+          'Mana kusisqachu kashani',
+          'Mana chayta ruwananchijchu tiyan',
+          'Ama phiñakuychu',
+          'Ama chayta ujyaychu'
+        ];
+      case 'conditional':
+        return [
+          'Jehová Diosta kasukunki chayqa, bendicionesta jap\'inki',
+          'Sichus jamunki chayqa, mikhusun',
+          'Sichus llank\'anki chayqa, qolqeta jap\'inki',
+          'Kusisqa kanki chayqa, takiy'
+        ];
+      case 'pronouns':
+        return [
+          'Payqa José',
+          'Noqayku jamusajku',
+          'Noqanchej risunchij',
+          'Wasiykiman jamuni',
+          'Paykuna wasiypi kashanku'
+        ];
+      case 'corpus':
+        return phrases.slice(0, 5).map(p => p.quechua);
+      default:
+        return [
+          'Allinllachu kashanki, tata?',
+          'Wasiypi kashani, qhichwata yachakushani',
+          'Imatataj mikhunki paqarin?',
+          'Paqarin jamusaqpuni llank\'aj',
+          'Cochabamba llajtapi tiyakuni'
+        ];
+    }
+  }, [practiceTheme, phrases]);
+
+  // Helper to create ChatMessage
   const makeMsg = (sender: 'user' | 'model', text: string, extra: Partial<ChatMessage> = {}): ChatMessage => ({
     id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     sender,
@@ -112,7 +178,6 @@ export const ConversationView: React.FC = () => {
     const want = normalizeText(expected);
     const skipped = ['pasar', 'no se', 'paso', 'otra'].includes(given);
 
-    // Parecido = palabras en común sobre el total (permite pequeños descuidos)
     const a = new Set(given.split(' ').filter(Boolean));
     const b = new Set(want.split(' ').filter(Boolean));
     const common = [...a].filter((w) => b.has(w)).length;
@@ -147,20 +212,34 @@ export const ConversationView: React.FC = () => {
     setMessages((prev) => [...prev.filter((m) => !m.isError), ...out]);
   };
 
-  // Pide la respuesta del tutor para un historial dado. Si falla, muestra un aviso (no una frase inventada).
   const requestReply = async (history: ChatMessage[], lastText: string) => {
     setLoading(true);
     try {
       const real = history.filter((m) => !m.isError);
       const payloadMessages = real.slice(-12).map((m) => ({ sender: m.sender, text: m.quechuaText }));
 
-      const relevantPhrases = findRelevantPhrases(lastText, 'qu-es', phrases, 6);
+      const relevantPhrases = findRelevantPhrases(lastText, 'qu-es', phrases, 8);
       const verifiedSample = phrases.filter((p) => p.verified).sort(() => Math.random() - 0.5).slice(0, 4);
       const corpus = [...relevantPhrases, ...verifiedSample]
         .filter((p, i, arr) => arr.findIndex((x) => x.id === p.id) === i)
-        .slice(0, 10)
+        .slice(0, 12)
         .map((p) => ({ quechua: p.quechua, spanish: p.spanish }));
-      const relevantRoots = findRelevantRoots(lastText, 'qu-es', roots, relevantPhrases, 60);
+      const relevantRoots = findRelevantRoots(lastText, 'qu-es', roots, relevantPhrases, 70);
+
+      // Add practice focus instructions to customRules
+      const themeNotes: Record<PracticeTheme, string> = {
+        general: 'Enfoque: conversación natural cotidiana cochabambina.',
+        verbs: 'Enfoque especial: enfatizar tiempos verbales cochabambinos (-sha- progresivo, -rqa- pasado testimonial, -sajku/-sqayku futuro excluido, -sunchij inclusivo).',
+        negation: 'Enfoque especial: ejercitar negación declarativa (mana...-chu, kanchu, kashani) e imperativa (ama...-chu).',
+        conditional: 'Enfoque especial: ejercitar oraciones condicionales ((sichus) ... chayqa).',
+        pronouns: 'Enfoque especial: ejercitar pronombres personales, distinción inclusivo/exclusivo, y cópula cero en 3.ª presente con kay.',
+        corpus: 'Enfoque especial: reutilizar y afianzar las frases guardadas en el corpus.',
+      };
+
+      const customRules = [
+        themeNotes[practiceTheme],
+        ...grammarRules.map((r) => `${r.title}: ${r.cochabambaSpecificity}`),
+      ].join('\n');
 
       const res = await fetch('/api/quechua/chat', {
         method: 'POST',
@@ -168,7 +247,7 @@ export const ConversationView: React.FC = () => {
         body: JSON.stringify({
           messages: payloadMessages,
           userLevel,
-          customRules: grammarRules.map((r) => `${r.title}: ${r.cochabambaSpecificity}`).join('\n'),
+          customRules,
           corpus,
           knownRoots: relevantRoots.map((r) => ({ quechua: r.quechua, spanish: formatMeanings(r) })),
         }),
@@ -236,6 +315,20 @@ export const ConversationView: React.FC = () => {
     await requestReply(history, lastUser.quechuaText);
   };
 
+  const handleSaveToCorpusFromChat = (msg: ChatMessage) => {
+    if (!msg.quechuaText || !msg.spanishTranslation) return;
+    upsertPhrase('qu-es', {
+      quechua: msg.quechuaText,
+      spanish: msg.spanishTranslation,
+      morphologicalBreakdown: (msg.tokens || []).map(t => t.surface).join(' ') || msg.quechuaText,
+      gloss: (msg.tokens || []).map(t => t.gloss).join(' ') || '',
+      grammaticalNotes: msg.pedagogicalNote || 'Frase generada por el tutor en conversación guiada.',
+      tags: ['conversacion', practiceTheme],
+      verified: true,
+    });
+    setSavedMessageIds(prev => ({ ...prev, [msg.id]: true }));
+  };
+
   const toggleReveal = (id: string) => {
     setRevealedTranslations((prev) => ({ ...prev, [id]: !prev[id] }));
   };
@@ -246,25 +339,40 @@ export const ConversationView: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header and Level Selector */}
-      <div className="bg-stone-50 dark:bg-stone-900/60 p-6 rounded-xl border border-stone-200 dark:border-stone-800">
+      {/* Header and Level / Topic Selector */}
+      <div className="bg-stone-50 dark:bg-stone-900/60 p-5 sm:p-6 rounded-xl border border-stone-200 dark:border-stone-800 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="font-display text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-100">
               Conversación Guiada en Quechua Cochabambino
             </h1>
             <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
-              Práctica conversacional inmersiva entrenada con tus reglas gramaticales y vocabulario cochabambino.
+              Práctica interactiva contextualizada con tus tiempos verbales, pronombres y reglas lingüísticas.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Quick Content Drawer Toggle */}
+            <button
+              onClick={() => setIsContentDrawerOpen(!isContentDrawerOpen)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors ${
+                isContentDrawerOpen
+                  ? 'bg-amber-700 text-white border-amber-800'
+                  : 'bg-white dark:bg-stone-950 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700 hover:border-amber-500'
+              }`}
+              title="Abrir conjugador de verbos, pronombres, posesivos y reglas mid-chat"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              <span>{isContentDrawerOpen ? 'Cerrar Banco' : 'Banco & Conjugador'}</span>
+            </button>
+
+            {/* Level Selector */}
             <div className="flex items-center gap-1 bg-white dark:bg-stone-950 p-1 rounded-lg border border-stone-200 dark:border-stone-800">
               {(['básico', 'intermedio', 'avanzado'] as const).map((lvl) => (
                 <button
                   key={lvl}
                   onClick={() => setUserLevel(lvl)}
-                  className={`px-3 py-1 text-xs font-semibold rounded capitalize transition-colors ${
+                  className={`px-2.5 py-1 text-xs font-semibold rounded capitalize transition-colors ${
                     userLevel === lvl
                       ? 'bg-amber-700 text-white'
                       : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
@@ -289,7 +397,44 @@ export const ConversationView: React.FC = () => {
             </button>
           </div>
         </div>
+
+        {/* Thematic Focus Pills */}
+        <div className="pt-2 border-t border-stone-200 dark:border-stone-800 flex flex-wrap items-center gap-1.5">
+          <span className="text-xs font-bold text-stone-500 uppercase tracking-wide mr-1 flex items-center gap-1">
+            <Flame className="w-3.5 h-3.5 text-amber-600" /> Enfoque didáctico:
+          </span>
+          {[
+            { id: 'general', label: 'General' },
+            { id: 'verbs', label: 'Tiempos Verbales (-sha-, -rqa-, -sajku...)' },
+            { id: 'negation', label: 'Negación (mana/ama...-chu, kanchu)' },
+            { id: 'conditional', label: 'Condicional ((Sichus)...chayqa)' },
+            { id: 'pronouns', label: 'Pronombres & Posesivos' },
+            { id: 'corpus', label: 'Corpus Guardado' },
+          ].map((theme) => (
+            <button
+              key={theme.id}
+              onClick={() => setPracticeTheme(theme.id as PracticeTheme)}
+              className={`px-2.5 py-1 text-xs rounded-md font-semibold transition-colors ${
+                practiceTheme === theme.id
+                  ? 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200 border border-amber-300 dark:border-amber-800'
+                  : 'bg-white dark:bg-stone-950 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-800 hover:border-amber-300'
+              }`}
+            >
+              {theme.label}
+            </button>
+          ))}
+        </div>
       </div>
+
+      {/* Integrated Content Drawer */}
+      <IntegratedContentDrawer
+        isOpen={isContentDrawerOpen}
+        onClose={() => setIsContentDrawerOpen(false)}
+        onInsertText={(text) => {
+          setInputMessage(text);
+        }}
+        contextMode="chat"
+      />
 
       {offlineMode && (
         <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-900 dark:text-amber-200 flex flex-wrap items-center justify-between gap-2">
@@ -311,6 +456,7 @@ export const ConversationView: React.FC = () => {
           const isUser = msg.sender === 'user';
           const isRevealed = revealedTranslations[msg.id] ?? false;
           const isExpanded = expandedTokens[msg.id] ?? false;
+          const isSaved = savedMessageIds[msg.id] ?? false;
 
           if (msg.isError) {
             return (
@@ -349,7 +495,7 @@ export const ConversationView: React.FC = () => {
                 }`}
               >
                 {/* Speaker indicator */}
-                <div className="flex items-center justify-between text-xs opacity-75 mb-2">
+                <div className="flex items-center justify-between text-xs opacity-75 mb-2 gap-4">
                   <span className="font-semibold uppercase tracking-wider">
                     {isUser ? 'Qan (Tú)' : 'Yachacheq (Tutor Cochabambino)'}
                   </span>
@@ -361,60 +507,109 @@ export const ConversationView: React.FC = () => {
                   {msg.quechuaText}
                 </div>
 
-                {/* Model response extras: Spanish translation, tokens and pedagogical tip */}
-                {!isUser && msg.spanishTranslation && (
-                  <div className="mt-3 pt-3 border-t border-stone-100 dark:border-stone-850 space-y-2">
-                    {/* Toggle Translation Button */}
-                    <div className="flex items-center justify-between">
+                {/* Cross-View Actions Bar on Every Message */}
+                <div className="mt-3 pt-2.5 border-t border-black/10 dark:border-white/10 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    {/* Send to Translator button */}
+                    <button
+                      onClick={() => sendToTranslator(msg.quechuaText, 'qu-es')}
+                      className={`flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded transition-colors ${
+                        isUser
+                          ? 'bg-amber-800 hover:bg-amber-900 text-amber-100'
+                          : 'bg-stone-100 hover:bg-stone-200 dark:bg-stone-900 text-stone-700 dark:text-stone-300'
+                      }`}
+                      title="Analizar morfología y glosa de esta frase en el Traductor"
+                    >
+                      <ArrowRightLeft className="w-3 h-3 text-amber-400" />
+                      <span>Analizar en Traductor</span>
+                    </button>
+
+                    {/* Save to Corpus button (for tutor replies) */}
+                    {!isUser && msg.spanishTranslation && (
+                      <button
+                        onClick={() => handleSaveToCorpusFromChat(msg)}
+                        disabled={isSaved}
+                        className={`flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded transition-colors ${
+                          isSaved
+                            ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400'
+                            : 'bg-stone-100 hover:bg-stone-200 dark:bg-stone-900 text-stone-700 dark:text-stone-300'
+                        }`}
+                        title="Guardar esta frase del tutor en tu corpus"
+                      >
+                        {isSaved ? (
+                          <>
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            <span>¡Guardada!</span>
+                          </>
+                        ) : (
+                          <>
+                            <BookOpen className="w-3 h-3 text-amber-600" />
+                            <span>Guardar en Corpus</span>
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Toggle translations and tokens for model messages */}
+                  {!isUser && msg.spanishTranslation && (
+                    <div className="flex items-center gap-2">
                       <button
                         onClick={() => toggleReveal(msg.id)}
-                        className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400 hover:underline"
+                        className="flex items-center gap-1 text-[11px] font-semibold text-amber-700 dark:text-amber-400 hover:underline"
                       >
-                        {isRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                        <span>{isRevealed ? 'Ocultar traducción' : 'Revelar traducción al español'}</span>
+                        {isRevealed ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                        <span>{isRevealed ? 'Ocultar' : 'Traducir'}</span>
                       </button>
 
                       {msg.tokens && msg.tokens.length > 0 && (
                         <button
                           onClick={() => toggleExpandTokens(msg.id)}
-                          className="flex items-center gap-1 text-xs text-stone-500 hover:text-stone-700 dark:hover:text-stone-300"
+                          className="flex items-center gap-1 text-[11px] text-stone-500 hover:text-stone-700 dark:hover:text-stone-300"
                         >
                           <span>Morfología</span>
-                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                         </button>
                       )}
                     </div>
+                  )}
+                </div>
 
-                    {isRevealed && (
-                      <p className="text-xs text-stone-600 dark:text-stone-400 italic bg-stone-50 dark:bg-stone-900 p-2.5 rounded-lg border border-stone-200 dark:border-stone-800">
+                {/* Model response extras: Spanish translation, tokens and pedagogical tip */}
+                {!isUser && (
+                  <>
+                    {isRevealed && msg.spanishTranslation && (
+                      <p className="mt-2 text-xs text-stone-600 dark:text-stone-400 italic bg-stone-50 dark:bg-stone-900 p-2.5 rounded-lg border border-stone-200 dark:border-stone-800">
                         "{msg.spanishTranslation}"
                       </p>
                     )}
 
                     {/* Morphological Breakdown Chips */}
                     {isExpanded && msg.tokens && (
-                      <div className="pt-2 flex flex-wrap gap-1.5">
+                      <div className="mt-2 pt-2 flex flex-wrap gap-1.5 border-t border-stone-100 dark:border-stone-850">
                         {msg.tokens.map((token, i) => (
-                          <div
+                          <button
                             key={i}
-                            className="p-1.5 bg-stone-100 dark:bg-stone-900 rounded text-xs font-mono border border-stone-200 dark:border-stone-800"
+                            onClick={() => sendToTranslator(token.surface, 'qu-es')}
+                            className="p-1.5 bg-stone-100 hover:bg-stone-200 dark:bg-stone-900 rounded text-xs font-mono border border-stone-200 dark:border-stone-800 text-left transition-colors"
+                            title="Haz clic para analizar esta palabra en el Traductor"
                           >
                             <span className="font-bold text-stone-900 dark:text-stone-100">{token.surface}</span>
                             <span className="text-amber-700 dark:text-amber-400 ml-1">[{token.root}]</span>
                             <div className="text-[10px] text-stone-500">{token.gloss}</div>
-                          </div>
+                          </button>
                         ))}
                       </div>
                     )}
 
                     {/* Pedagogical Tip */}
                     {msg.pedagogicalNote && (
-                      <div className="p-2.5 bg-amber-50/70 dark:bg-amber-950/30 rounded-lg text-xs text-amber-900 dark:text-amber-200 border border-amber-200/60 dark:border-amber-900/40">
+                      <div className="mt-2 p-2.5 bg-amber-50/70 dark:bg-amber-950/30 rounded-lg text-xs text-amber-900 dark:text-amber-200 border border-amber-200/60 dark:border-amber-900/40">
                         <span className="font-bold block mb-0.5">Nota didáctica:</span>
                         {msg.pedagogicalNote}
                       </div>
                     )}
-                  </div>
+                  </>
                 )}
               </div>
             </div>
@@ -429,19 +624,24 @@ export const ConversationView: React.FC = () => {
         )}
       </div>
 
-      {/* Quick response pills */}
-      <div className="flex flex-wrap items-center gap-1.5">
-        <span className="text-xs text-stone-500 mr-1">Frases sugeridas:</span>
-        {quickStarters.map((starter, idx) => (
-          <button
-            key={idx}
-            onClick={() => handleSendMessage(starter)}
-            disabled={loading || offlineMode}
-            className="px-2.5 py-1 text-xs bg-white dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-md text-stone-700 dark:text-stone-300 hover:border-amber-500 transition-colors"
-          >
-            {starter}
-          </button>
-        ))}
+      {/* Dynamic Starters based on theme */}
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between text-xs text-stone-500">
+          <span>Frases sugeridas para practicar ({practiceTheme}):</span>
+          <span className="text-[11px] italic">Clic para enviar al tutor</span>
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {dynamicStarters.map((starter, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSendMessage(starter)}
+              disabled={loading || offlineMode}
+              className="px-2.5 py-1 text-xs bg-white dark:bg-stone-950 border border-stone-200 dark:border-stone-800 rounded-md text-stone-700 dark:text-stone-300 hover:border-amber-500 hover:text-amber-700 dark:hover:text-amber-400 transition-colors"
+            >
+              {starter}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Input Bar */}

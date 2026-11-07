@@ -1,6 +1,7 @@
 import { LexicalRoot, SuffixRule, CorpusPhrase, CriticalDoubt, GrammarRule } from '../types/quechua';
+import { ANKI_ROOTS } from './ankiRoots';
 
-export const SEED_ROOTS: LexicalRoot[] = [
+const CORE_SEED_ROOTS: LexicalRoot[] = [
   // Verbos
   {
     id: 'root-1',
@@ -81,6 +82,36 @@ export const SEED_ROOTS: LexicalRoot[] = [
     verified: true,
     frequency: 18,
     examples: ['Chajrapi llank\'ashani', 'Paqarin llank\'aj jamusaq']
+  },
+  {
+    id: 'root-trabajay',
+    quechua: 'trabajay',
+    spanish: 'trabajar',
+    category: 'verbo',
+    dialectNote: 'Castellanismo plenamente asimilado y conjugado según las reglas morfológicas quechuas (trabajashani, trabajanki). Coexiste con llank\'ay.',
+    verified: true,
+    frequency: 24,
+    examples: ['Trabajashani', 'Wasiypi trabajani', 'Paqarin trabajasunchij']
+  },
+  {
+    id: 'root-estudiay',
+    quechua: 'estudiay',
+    spanish: 'estudiar',
+    category: 'verbo',
+    dialectNote: 'Castellanismo verbal adaptado con terminación en -y. Coexiste con yachakuy.',
+    verified: true,
+    frequency: 20,
+    examples: ['Necesitanchej estudiay', 'Qhichwata estudiashani', 'Paqarin estudiasajku']
+  },
+  {
+    id: 'root-necesitay',
+    quechua: 'necesitay',
+    spanish: 'necesitar',
+    category: 'verbo',
+    dialectNote: 'Préstamo verbal español asimilado en -y (necesitanchej = necesitamos).',
+    verified: true,
+    frequency: 22,
+    examples: ['Necesitanchej estudiay', 'Yanapata necesitani', 'Imatataj necesitasnki?']
   },
   {
     id: 'root-9',
@@ -400,6 +431,8 @@ export const SEED_ROOTS: LexicalRoot[] = [
   }
 ];
 
+export const SEED_ROOTS: LexicalRoot[] = [...CORE_SEED_ROOTS, ...ANKI_ROOTS];
+
 export const SEED_SUFFIXES: SuffixRule[] = [
   // 1. Aspecto verbal progresivo (CLAVE COCHABAMBINA)
   {
@@ -677,8 +710,17 @@ export const SEED_SUFFIXES: SuffixRule[] = [
     type: 'verbal',
     slotOrder: 3,
     function: 'Presente 3ra persona singular: él / ella (ej. mikhun = él come)',
-    cochabambaUsage: 'Desinencia verbal de sujeto él/ella.',
+    cochabambaUsage: 'Desinencia verbal de sujeto él/ella. NOTA CRÍTICA: En el verbo kay (ser/estar) en 3ra persona presente atributiva/identidad NO se usa "-n" ni "kan"; hay elisión obligatoria (cópula cero: "Payqa José", nunca "Payqa José kan"). "Kan" solo se usa para existencia ("hay").',
     examples: ['ka-sha-n (está)', 'mikhu-n (come)', 'jamu-n (viene)']
+  },
+  {
+    id: 'suf-copula-cero',
+    suffix: 'Ø (cópula cero)',
+    type: 'verbal',
+    slotOrder: 3,
+    function: 'Elisión de kay en presente 3ra persona singular atributiva (Payqa José, no "kan")',
+    cochabambaUsage: 'En oraciones de identidad o cualidad en presente, el verbo kay se elide por completo. No se dice "Payqa José kan" sino "Payqa José". La forma "kan" se reserva exclusivamente para existencia ("hay").',
+    examples: ['Payqa José (Él es José)', 'Payqa yachachej (Él es profesor)', 'Payqa allin runa (Él es buena persona)']
   },
   {
     id: 'suf-21',
@@ -769,12 +811,12 @@ export const SEED_SUFFIXES: SuffixRule[] = [
   },
   {
     id: 'suf-fut-1pl-excl',
-    suffix: '-saqku',
+    suffix: '-sajku / -sqayku',
     type: 'verbal',
     slotOrder: 3,
-    function: 'Futuro 1ra persona plural exclusiva: nosotros haremos (sin ti)',
-    cochabambaUsage: 'Desinencia de futuro exclusivo (nosotros iremos sin ti).',
-    examples: ['ri-saqku (iremos nosotros)', 'ruwa-saqku (haremos nosotros)']
+    function: 'Futuro 1ra persona plural exclusiva: nosotros haremos / vendremos (sin ti)',
+    cochabambaUsage: 'En el quechua cochabambino se usa sistemáticamente "-sajku" (con grafía boliviana "j") o "-sqayku" para el futuro excluido de nosotros (noqayku jamusajku / jamusqayku). Coexiste con la variante fonética -saqku.',
+    examples: ['jamu-sajku (vendremos nosotros sin ti)', 'jamu-sqayku (vendremos nosotros sin ti)', 'ri-sajku (iremos nosotros sin ti)', 'ri-sqayku (iremos nosotros sin ti)']
   },
   {
     id: 'suf-fut-3pl',
@@ -932,6 +974,36 @@ export const SEED_SUFFIXES: SuffixRule[] = [
 
 export const SEED_PHRASES: CorpusPhrase[] = [
   {
+    id: 'phrase-necesitanchej-estudiay',
+    quechua: 'Necesitanchej estudiay.',
+    spanish: 'Necesitamos estudiar.',
+    morphologicalBreakdown: 'necesita-nchej estudia-y',
+    gloss: 'necesitar-1PL.INCL estudiar-INF',
+    grammaticalNotes: 'Regla de integración de castellanismos: el préstamo hispano "necesitar" se conjuga con la persona quechua (-nchej 1PL.INCL) y el verbo subordinado "estudiar" adopta la terminación de infinitivo en -y.',
+    tags: ['castellanismo', 'educación', 'obligación', 'gramática'],
+    verified: true
+  },
+  {
+    id: 'phrase-sichus-chayta-ruwanchej',
+    quechua: 'Sichus chayta ruwanchej chayqa, allin riwasunchej.',
+    spanish: 'Si hacemos eso, nos irá bien.',
+    morphologicalBreakdown: 'sichus chay-ta ruwa-nchej chay-qa allin ri-wa-sunchej',
+    gloss: 'COND eso-ACUS hacer-1PL.INCL COND.TOP bien ir-1OBJ-1PL.INCL.FUT',
+    grammaticalNotes: 'Oración condicional estructurada con (sichus) ... chayqa. En la apódosis, el verbo "riy" lleva el objeto directo de 1ra persona "-wa-" y el futuro inclusivo "-sunchej" (nos irá a nosotros).',
+    tags: ['condicional', 'futuro', 'gramática', 'sabiduría'],
+    verified: true
+  },
+  {
+    id: 'phrase-trabajashani',
+    quechua: 'Trabajashani.',
+    spanish: 'Estoy trabajando.',
+    morphologicalBreakdown: 'trabaja-sha-ni',
+    gloss: 'trabajar-PROG-1SG',
+    grammaticalNotes: 'Castellanismo asimilado: la raíz "trabaja-" recibe el sufijo de aspecto progresivo cochabambino -sha- y la marca de 1ra persona singular -ni.',
+    tags: ['castellanismo', 'trabajo', 'progresivo'],
+    verified: true
+  },
+  {
     id: 'phrase-1',
     quechua: 'Wasiypi kashani, jamuylla.',
     spanish: 'Estoy en mi casa, pasa nomás.',
@@ -1019,6 +1091,36 @@ export const SEED_PHRASES: CorpusPhrase[] = [
     gloss: 'Jehová Dios-ACUS obedecer-REFL-2SG COND.TOP , venir-AG tiempo-LOC mucho bendición.PL-ACUS recibir-2SG',
     grammaticalNotes: 'Condicional con omisión natural de "sichus" y marca "chayqa". Léxico cochabambino: ashkha (mucho), jamoj (-j boliviano), verbo japʼiy (recibir).',
     tags: ['condicional', 'chayqa', 'cochabambino', 'oraciones-complejas'],
+    verified: true
+  },
+  {
+    id: 'phrase-copula-cero',
+    quechua: 'Payqa José.',
+    spanish: 'Él es José.',
+    morphologicalBreakdown: 'pay-qa José [Ø-cópula]',
+    gloss: 'él/ella-TOP José [SER.PRES.3SG.CERO]',
+    grammaticalNotes: 'En presente atributivo y de identidad de 3ra persona, el verbo kay se elide por completo (cópula cero). Es un error grave decir "Payqa José kan". La forma "kan" queda reservada para función existencial ("hay").',
+    tags: ['presente', 'cópula-cero', 'verbo-kay', 'identidad'],
+    verified: true
+  },
+  {
+    id: 'phrase-futuro-excl-sajku',
+    quechua: 'Noqayku paqarin jamusajku.',
+    spanish: 'Nosotros (sin ti) vendremos mañana.',
+    morphologicalBreakdown: 'noqa-yku paqarin jamu-sajku',
+    gloss: 'yo-EXCL mañana venir-1PL.EXCL.FUT',
+    grammaticalNotes: 'Futuro de 1ra persona plural exclusiva de nosotros con el sufijo cochabambino canónico -sajku (con "j").',
+    tags: ['futuro', 'exclusivo', 'cochabambino', '-sajku'],
+    verified: true
+  },
+  {
+    id: 'phrase-futuro-excl-sqayku',
+    quechua: 'Noqayku llajtaman risqayku.',
+    spanish: 'Nosotros (sin ti) iremos a la ciudad.',
+    morphologicalBreakdown: 'noqa-yku llajta-man ri-sqayku',
+    gloss: 'yo-EXCL ciudad-DIR ir-1PL.EXCL.FUT',
+    grammaticalNotes: 'Futuro de 1ra persona plural exclusiva de nosotros con el sufijo alternante cochabambino -sqayku.',
+    tags: ['futuro', 'exclusivo', 'cochabambino', '-sqayku'],
     verified: true
   }
 ];
@@ -1210,14 +1312,27 @@ export const SEED_GRAMMAR_RULES: GrammarRule[] = [
     id: 'rule-tiempos-verbales',
     title: '5. Paradigma de Tiempos Verbales: Presente, Pasados (-rqa- / -sqa-) y Futuro',
     category: 'Morfología Verbal (Tiempos)',
-    description: 'La flexión temporal y de persona en el quechua cochabambino distingue cuatro tiempos cardinales:\n\n1. PRESENTE:\n• 1SG: -ni (mikhuni = yo como)\n• 2SG: -nki (mikhunki = tú comes)\n• 3SG: -n (mikhun = él come)\n• 1PL.INCL: -nchij (mikhunchij = comemos juntos)\n• 1PL.EXCL: -yku (mikhuyku = comemos nosotros solos)\n• 2PL: -nkichij (mikhunkichij = ustedes comen)\n• 3PL: -nku (mikhunku = ellos comen)\n\n2. PASADO TESTIMONIAL DIRECTO (-rqa-):\nAcción presenciada o experimentada personalmente.\n• 1SG: -rqani (ruwarqani = hice)\n• 2SG: -rqanki (ruwarqanki = hiciste)\n• 3SG: -rqa (ruwarqa = hizo)\n• 1PL.INCL: -rqanchij (ruwarqanchij = hicimos juntos)\n• 1PL.EXCL: -rqayku (ruwarqayku = hicimos nosotros)\n• 2PL: -rqankichij (ruwarqankichij = hicieron ustedes)\n• 3PL: -rqanku (ruwarqanku = hicieron ellos)\n\n3. PASADO NO TESTIMONIAL / NARRATIVO (-sqa-):\nAcción no vista directamente, deducida o reportada (\"había sido/hecho\").\n• 1SG: -sqani (puñusqani = me había dormido)\n• 2SG: -sqanki (jamusqanki = habías venido)\n• 3SG: -sqa (jamusqa = había venido / dicen que vino)\n• 1PL.INCL: -sqanchij\n• 1PL.EXCL: -sqayku\n• 2PL: -sqankichij\n• 3PL: -sqanku\n\n4. FUTURO:\n• 1SG: -saq (jamusaq = vendré)\n• 2SG: -nki (jamunki = vendrás)\n• 3SG: -nqa (jamunqa = vendrá)\n• 1PL.INCL (Exhortativo): -sunchij (parlasunchij = hablaremos/hablemos)\n• 1PL.EXCL: -saqku (risaqku = iremos sin ti)\n• 2PL: -nkichij (jamunkichij = vendrán ustedes)\n• 3PL: -nqanku (jamunqanku = vendrán ellos)',
-    cochabambaSpecificity: 'El futuro inclusivo en Cochabamba se realiza obligatoriamente como -sunchij con "j" (nunca -sunchis). El pasado testimonial -rqa- se distingue rígidamente del evidencial -sqa- en la narración andina.',
+    description: 'La flexión temporal y de persona en el quechua cochabambino distingue cuatro tiempos cardinales:\n\n1. PRESENTE:\n• 1SG: -ni (mikhuni = yo como; Noqa José kani = yo soy José)\n• 2SG: -nki (mikhunki = tú comes; Qan José kanki = tú eres José)\n• 3SG: -n (mikhun = él/ella come)\n  ⚠️ REGLA CRÍTICA DEL VERBO KAY (CÓPULA CERO): En presente de tercera persona atributivo y de identidad, al verbo NO se le pone -n. Hay elisión obligatoria (cópula cero Ø). No se dice "Payqa José kan", sino "Payqa José". La forma "kan" se reserva exclusivamente para existencia ("hay / existe", ej. "qolqe kan", "mana qolqe kanchu").\n• 1PL.INCL: -nchij (mikhunchij = comemos juntos)\n• 1PL.EXCL: -yku (mikhuyku = comemos nosotros solos sin ti)\n• 2PL: -nkichij (mikhunkichij = ustedes comen)\n• 3PL: -nku (mikhunku = ellos comen)\n\n2. PASADO TESTIMONIAL DIRECTO (-rqa-):\nAcción presenciada o experimentada personalmente.\n• 1SG: -rqani (ruwarqani = hice)\n• 2SG: -rqanki (ruwarqanki = hiciste)\n• 3SG: -rqa (ruwarqa = hizo)\n• 1PL.INCL: -rqanchij (ruwarqanchij = hicimos juntos)\n• 1PL.EXCL: -rqayku (ruwarqayku = hicimos nosotros)\n• 2PL: -rqankichij (ruwarqankichij = hicieron ustedes)\n• 3PL: -rqanku (ruwarqanku = hicieron ellos)\n\n3. PASADO NO TESTIMONIAL / NARRATIVO (-sqa-):\nAcción no vista directamente, deducida o reportada (\"había sido/hecho\").\n• 1SG: -sqani (puñusqani = me había dormido)\n• 2SG: -sqanki (jamusqanki = habías venido)\n• 3SG: -sqa (jamusqa = había venido / dicen que vino)\n• 1PL.INCL: -sqanchij\n• 1PL.EXCL: -sqayku\n• 2PL: -sqankichij\n• 3PL: -sqanku\n\n4. FUTURO:\n• 1SG: -saq (jamusaq = vendré, risaq = iré)\n• 2SG: -nki (jamunki = vendrás)\n• 3SG: -nqa (jamunqa = vendrá)\n• 1PL.INCL (Exhortativo): -sunchij (parlasunchij = hablaremos/hablemos juntos tú y yo)\n• 1PL.EXCL (Nosotros excluido): -sajku o -sqayku (noqayku jamusajku / jamusqayku = vendremos nosotros sin ti; risajku / risqayku = iremos sin ti)\n• 2PL: -nkichij (jamunkichij = vendrán ustedes)\n• 3PL: -nqanku (jamunqanku = vendrán ellos)',
+    cochabambaSpecificity: 'En presente 3SG atributivo se aplica cópula cero ("Payqa José", nunca *Payqa José kan). Para el futuro excluido de nosotros se usa sistemáticamente -sajku (con "j" boliviana) o -sqayku (noqayku jamusajku / jamusqayku). El futuro inclusivo obligatorio es -sunchij.',
     examples: [
       { quechua: 'Ruwani', spanish: 'Hago (presente 1sg)', morphology: 'ruwa-ni', gloss: 'hacer-1SG' },
-      { quechua: 'Ruwarqani', spanish: 'Hice (pasado testimonial 1sg, lo viví)', morphology: 'ruwa-rqa-ni', gloss: 'hacer-PAS.TEST-1SG' },
-      { quechua: 'Ruwasqa', spanish: 'Había hecho (pasado no testimonial 3sg, deducido)', morphology: 'ruwa-sqa', gloss: 'hacer-PAS.NARR.3SG' },
-      { quechua: 'Ruwasaq', spanish: 'Haré (futuro 1sg)', morphology: 'ruwa-saq', gloss: 'hacer-1SG.FUT' },
-      { quechua: 'Parlasunchij', spanish: 'Hablaremos / Conversemos juntos (futuro inclusivo)', morphology: 'parla-sunchij', gloss: 'hablar-1PL.INCL.FUT' }
+      { quechua: 'Payqa José', spanish: 'Él es José (cópula cero en presente 3sg de kay: no se usa "kan")', morphology: 'pay-qa José [Ø]', gloss: 'él/ella-TOP José [SER.PRES.3SG.CERO]' },
+      { quechua: 'Noqayku jamusajku', spanish: 'Nosotros (sin ti) vendremos (futuro exclusivo con -sajku)', morphology: 'noqa-yku jamu-sajku', gloss: 'yo-EXCL venir-1PL.EXCL.FUT' },
+      { quechua: 'Noqayku risqayku', spanish: 'Nosotros (sin ti) iremos (futuro exclusivo alternante con -sqayku)', morphology: 'noqa-yku ri-sqayku', gloss: 'yo-EXCL ir-1PL.EXCL.FUT' },
+      { quechua: 'Parlasunchij', spanish: 'Hablaremos / Conversemos juntos (futuro inclusivo tú y yo)', morphology: 'parla-sunchij', gloss: 'hablar-1PL.INCL.FUT' },
+      { quechua: 'Ruwarqani', spanish: 'Hice (pasado testimonial 1sg, lo viví)', morphology: 'ruwa-rqa-ni', gloss: 'hacer-PAS.TEST-1SG' }
+    ]
+  },
+  {
+    id: 'rule-kay-copula-cero',
+    title: '5b. Cópula Cero con el Verbo Kay (Presente 3ra Persona: "Payqa José")',
+    category: 'Sintaxis Atributiva y Verbo Kay',
+    description: 'En el tiempo presente en tercera persona (singular y plural copulativo atributivo), al verbo kay NO se le pone -n en oraciones de identidad o atribución de cualidad. No se dice: "Payqa José kan". Se dice obligatoriamente: "Payqa José" (o con clítico testimonial "Payqa Josémin").\n\nDIFERENCIACIÓN VITAL ENTRE SER (ATRIBUCIÓN) Y HABER (EXISTENCIA):\n• Identidad / Cualidad (Cópula Cero): "Payqa José" (Él es José), "Payqa yachachej" (Él es profesor).\n• Existencia ("Hay / Existe"): Se usa obligatoriamente "kan": "Qolqe kan" (Hay dinero), "Mana qolqe kanchu" (No hay dinero).',
+    cochabambaSpecificity: 'El empleo de "Payqa ... kan" para decir "Él es..." constituye un calco hispánico agramatical en el quechua cochabambino. El hablante nativo siempre elide la cópula en 3ra persona presente.',
+    examples: [
+      { quechua: 'Payqa José', spanish: 'Él es José (correcto: cópula cero)', morphology: 'pay-qa José', gloss: 'él-TOP José' },
+      { quechua: 'Payqa yachachej', spanish: 'Ella es profesora / Él es profesor', morphology: 'pay-qa yachachi-j', gloss: 'él/ella-TOP enseñar-AG' },
+      { quechua: 'Mana qolqe kanchu', spanish: 'No hay dinero (existencia: aquí sí se usa kan)', morphology: 'mana qolqe ka-n-chu', gloss: 'NEG dinero haber-3SG-NEG' }
     ]
   },
   {
@@ -1247,6 +1362,33 @@ export const SEED_GRAMMAR_RULES: GrammarRule[] = [
       { quechua: 'Parlarispamin kusikuni', spanish: 'Conversando ciertamente me alegro (sujeto idéntico con -spa)', morphology: 'parla-ri-spa-min kusi-ku-ni', gloss: 'hablar-INTENS-GER-DIR alegrar-REFL-1SG' },
       { quechua: 'Para jamujtin', spanish: 'Cuando la lluvia venga (cambio de sujeto con -jtin)', morphology: 'para jamu-jtin', gloss: 'lluvia venir-SUBORD.DIF' },
       { quechua: 'Llank\'aj runas', spanish: 'Gente trabajadora (participio activo/agentivo con -j)', morphology: 'llank\'a-j runa-s', gloss: 'trabajar-AG persona-PL' }
+    ]
+  },
+  {
+    id: 'rule-castellanismos-cochabamba',
+    title: '8. Integración de Castellanismos en la Gramática Quechua',
+    category: 'Morfología y Préstamos Léxicos (Castellanismos)',
+    description: 'En el quechua de Cochabamba, los préstamos del español (castellanismos) se adaptan fonética y morfológicamente integrándose por completo al sistema de sufijos quechua. La regla establece que se deben utilizar los términos en quechua siempre que existan en el vocabulario estándar; sin embargo, si una palabra o verbo no tiene un equivalente directo o se opta por el castellanismo, este se somete a todas las reglas gramaticales y de conjugación correspondientes, como la terminación verbal en -y para los infinitivos de origen español antes de recibir otros sufijos.\n\n• Verbos prestados: la raíz verbal española toma la terminación verbal en -y para formar el infinitivo (estudiay, trabajay, necesitay, pensay, parlay).\n• Conjugación y sufijación: la base recibe con total regularidad todos los sufijos quechuas:\n  - Progresivo: trabaja-sha-ni (estoy trabajando).\n  - Persona: necesita-nchej (necesitamos), estudia-sunchej (estudiaremos), trabaja-rqa-ni (trabajé).\n• Sintaxis oracional y perífrasis:\n  - Necesitanchej estudiay (necesita-nchej estudia-y = Necesitamos estudiar).\n  - Sichus chayta ruwanchej chayqa, allin riwasunchej (sichus chay-ta ruwa-nchej chay-qa allin ri-wa-sunchej = Si hacemos eso, nos irá bien).',
+    cochabambaSpecificity: 'En el valle de Cochabamba el uso de castellanismos morfológicamente quechuizados es una seña lingüística viva y sistemática. Siempre que se adopte un verbo del español se le aplica el infinitivo en -y (estudiay, trabajay, necesitay) y se conjuga con la ortografía boliviana RM 1032/84: progresivo estricto con -sha- (trabajashani, nunca -chka-), 1PL inclusivo en -nchej / -nchij (necesitanchej), y oraciones condicionales estructuradas con (sichus) ... chayqa.',
+    examples: [
+      {
+        quechua: 'Necesitanchej estudiay',
+        spanish: 'Necesitamos estudiar',
+        morphology: 'necesita-nchej estudia-y',
+        gloss: 'necesitar-1PL.INCL estudiar-INF'
+      },
+      {
+        quechua: 'Sichus chayta ruwanchej chayqa, allin riwasunchej',
+        spanish: 'Si hacemos eso, nos irá bien',
+        morphology: 'sichus chay-ta ruwa-nchej chay-qa allin ri-wa-sunchej',
+        gloss: 'COND eso-ACUS hacer-1PL.INCL COND.TOP bien ir-1OBJ-1PL.INCL.FUT'
+      },
+      {
+        quechua: 'Trabajashani',
+        spanish: 'Estoy trabajando',
+        morphology: 'trabaja-sha-ni',
+        gloss: 'trabajar-PROG-1SG'
+      }
     ]
   }
 ];

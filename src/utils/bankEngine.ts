@@ -78,14 +78,14 @@ function getSufForms(suffixes: SuffixRule[]): SufForm[] {
 
 const NOM_LAB: Record<string, string> = {
   s: 'PL', kuna: 'PL', pi: 'LOC', manta: 'ABL', man: 'ALL', wan: 'COM', ta: 'ACC', pa: 'GEN', rayku: 'CAUS',
-  y: '1SG.POSS', yki: '2SG.POSS', n: '3SG.POSS', nchij: '1PL.INCL.POSS', yku: '1PL.EXCL.POSS', ykichij: '2PL.POSS', nku: '3PL.POSS', ni: 'EUF',
+  y: '1SG.POSS', yki: '2SG.POSS', n: '3SG.POSS', nchij: '1PL.INCL.POSS', nchej: '1PL.INCL.POSS', yku: '1PL.EXCL.POSS', ykichij: '2PL.POSS', ykichej: '2PL.POSS', nku: '3PL.POSS', ni: 'EUF',
 };
 const VERB_LAB: Record<string, string> = {
-  sha: 'PROG', ni: '1SG', nki: '2SG', n: '3SG', nchij: '1PL.INCL', yku: '1PL.EXCL', nkichij: '2PL', nku: '3PL',
-  rqa: 'PST.EXP', saq: 'FUT.1SG', nqa: 'FUT.3SG', sunchij: 'FUT.1PL.INCL', saqku: 'FUT.1PL.EXCL', nqanku: 'FUT.3PL',
-  y: 'IMP.2SG', chun: 'IMP.3SG', ychij: 'IMP.2PL', chunku: 'IMP.3PL',
-  yman: 'POT.1SG', waq: 'POT.2SG', nman: 'POT.3SG', swanchij: 'POT.1PL.INCL', nmanku: 'POT.3PL',
-  na: 'OBLIG', spa: 'SS', jtin: 'DS', j: 'AG',
+  sha: 'PROG', ni: '1SG', nki: '2SG', n: '3SG', nchij: '1PL.INCL', nchej: '1PL.INCL', yku: '1PL.EXCL', nkichij: '2PL', nkichej: '2PL', nku: '3PL',
+  rqa: 'PST.EXP', saq: 'FUT.1SG', nqa: 'FUT.3SG', sunchij: 'FUT.1PL.INCL', sunchej: 'FUT.1PL.INCL', saqku: 'FUT.1PL.EXCL', sajku: 'FUT.1PL.EXCL', sqayku: 'FUT.1PL.EXCL', nqanku: 'FUT.3PL',
+  y: 'IMP.2SG', chun: 'IMP.3SG', ychij: 'IMP.2PL', ychej: 'IMP.2PL', chunku: 'IMP.3PL',
+  yman: 'POT.1SG', waq: 'POT.2SG', nman: 'POT.3SG', swanchij: 'POT.1PL.INCL', swanchej: 'POT.1PL.INCL', nmanku: 'POT.3PL',
+  na: 'OBLIG', spa: 'SS', jtin: 'DS', j: 'AG', wa: '1OBJ', ri: 'INTENS',
 };
 const IND_LAB: Record<string, string> = {
   min: 'EVID.DIR', sina: 'EVID.CONJ', 'chá': 'DUB', raj: 'CONT', taj: 'CONTR', puni: 'ASEV', lla: 'LIM', qa: 'TOP',
@@ -569,7 +569,54 @@ function esToQu(text: string, bank: LinguisticBank) {
     }
     return null;
   };
-  const findVerb = (k: number) => idx.verbs.get(raw[k]) || idx.verbsNorm.get(nw[k]);
+
+  /** Adaptación morfológica de verbos en español (castellanismos) con infinitivo en -y */
+  const createLoanRoot = (stem: string, quechua: string, spanish: string): LexicalRoot => ({
+    id: `loan-${stem}`,
+    quechua,
+    spanish,
+    category: 'verbo',
+    dialectNote: 'Castellanismo verbal adaptado morfológicamente en -y',
+    verified: true,
+    frequency: 10,
+    examples: [quechua],
+  });
+
+  const adaptCastellanismoVerb = (rawWord: string): { root: LexicalRoot; tense: 'inf' | 'ger' | EsTense; p: number; lemma: string } | null => {
+    if (!rawWord || rawWord.length < 3) return null;
+    const w = rawWord.toLowerCase();
+    // 1. Infinitivos: -ar, -er, -ir -> tema verbal en -a-/-i- + terminación en -y
+    if (/(ar|er|ir)$/.test(w)) {
+      const stem = w.endsWith('ar') ? w.slice(0, -2) + 'a' : w.slice(0, -2) + 'i';
+      const quechua = `${stem}y`;
+      return { root: createLoanRoot(stem, quechua, w), tense: 'inf', p: -1, lemma: w };
+    }
+    // 2. Gerundios: -ando, -iendo
+    if (w.endsWith('ando') && w.length > 5) {
+      const stem = w.slice(0, -4) + 'a';
+      const lemma = w.slice(0, -4) + 'ar';
+      return { root: createLoanRoot(stem, `${stem}y`, lemma), tense: 'ger', p: -1, lemma };
+    }
+    if (w.endsWith('iendo') && w.length > 6) {
+      const stem = w.slice(0, -5) + 'i';
+      const lemma = w.slice(0, -5) + 'er';
+      return { root: createLoanRoot(stem, `${stem}y`, lemma), tense: 'ger', p: -1, lemma };
+    }
+    // 3. Formas conjugadas frecuentes: 1PL (-amos, -emos, -imos)
+    if (w.endsWith('amos') && w.length > 5) {
+      const stem = w.slice(0, -4) + 'a';
+      const lemma = w.slice(0, -4) + 'ar';
+      return { root: createLoanRoot(stem, `${stem}y`, lemma), tense: 'pres', p: 3, lemma }; // 1PL.INCL
+    }
+    if ((w.endsWith('emos') || w.endsWith('imos')) && w.length > 5) {
+      const stem = w.slice(0, -4) + 'i';
+      const lemma = w.endsWith('emos') ? w.slice(0, -4) + 'er' : w.slice(0, -4) + 'ir';
+      return { root: createLoanRoot(stem, `${stem}y`, lemma), tense: 'pres', p: 3, lemma };
+    }
+    return null;
+  };
+
+  const findVerb = (k: number) => idx.verbs.get(raw[k]) || idx.verbsNorm.get(nw[k]) || adaptCastellanismoVerb(raw[k]);
 
   const chunks: Array<{ pieces: QPiece[]; literal?: { text: string; tokens: MorphToken[] } }> = [];
   const doubts: DoubtDraft[] = [];

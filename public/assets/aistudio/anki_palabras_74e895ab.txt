@@ -1,0 +1,909 @@
+Mazo	Frente	Reverso	Etiquetas
+Otras palabras	�No es asi? �No es verdad?	�Ichar�?	
+Sustantivos	Excusa	Achaki	
+Sustantivos	Majt'a	Adolescente	
+Otras palabras	Chaypi, chayman	Ah�	
+Verbos	Jeq'eqakuy	Ahogarse	
+Otras palabras	As�	Ajina	
+Otras palabras	De esa manera	Ajinamanta	
+Verbos	Elegir	Ajllay	
+Verbos	Escoger, elegir	Ajllay	
+Sustantivos	Excremento	Aka	
+Sustantivos	Escarabajo	Aka tanqa	
+Sustantivos	Nieto, nieta	Alchhi	
+Otras palabras	Wakin	Alg�n	
+Verbos	Llosq'ochay	Alisar	
+Verbos	Cavar	Allay	
+Otras palabras	Bueno	Allin	
+Verbos	Arreglar	Allinchay	
+Otras palabras	Bien	Allinta	
+Verbos	Arreglarse con alguien	Allinyakuy	
+Sustantivos	Perro	Alqo	
+Otras palabras	No (prohibitivo)	Ama	
+Verbos	Practicar	Ama�ay	
+Verbos	Empalagarse	Amichikuy	
+Otras palabras	Uywa	Animal	
+Sustantivos	Aguila	Anka	
+Sustantivos	Nervio	Anku	
+Verbos	Enviar algo	Apachiy	
+Verbos	"Mandar algo&nbsp;"	Apachiy	
+Verbos	Traer	Apamuy	
+Verbos	Llevar	Apay	
+Verbos	Usar, manejar	Apaykachay	
+Verbos	Transportar adentro	Apaykuy	
+Otras palabras	Kaypi, kayman	Aqu�	
+Sustantivos	Lagartija	Ararankha	
+Otras palabras	Si	Ar�	
+Verbos	K'usuyay	Arrugarse	
+Otras palabras	Mucho (cantidad)	Ashkha	
+Verbos	Hacerse mucho	Ashkhayay	
+Sustantivos	Risa	Asina	
+Verbos	Burlarse	Asipayay	
+Verbos	"Reir&nbsp;"	Asiy	
+Verbos	Re�r	Asiy	
+Otras palabras	Apestoso, maloliente	Asna	
+Verbos	Despedir mal olor	Asnay	
+Verbos	Oler mal	Asnay	
+Verbos	Mudarse, trasladarse	Astakuy	
+Otras palabras	"&nbsp;Adem�s, tambi�n, sino, m�s bien"	Astawanpis	
+Verbos	Acarrear	Astay	leech
+Otras palabras	M�s	Aswan, Astawan	
+Verbos	Confiar	Atienekuy	
+Sustantivos	Competencia	Atipanaku	
+Sustantivos	Triunfo	Atipay	
+Verbos	Ganar	Atipay	
+Verbos	Vencer, ganar	Atipay	
+Verbos	Poder	Atiy	
+Sustantivos	Zorro	Atoj	
+Verbos	"Tejer&nbsp;"	Away	
+Sustantivos	Cadaver	Aya	
+Sustantivos	Carne	Aycha	
+Sustantivos	Familia, tribu	Ayllu	
+Sustantivos	Ladrido	Ay�ay	
+Verbos	Ladrar	Ay�ay	
+Verbos	Huir, escapar	Ayqey	
+Verbos	Tirar de algo	Aysay	leech
+Verbos	Enjuagar	Aytiy	leech
+Otras palabras	Wallej	Bien	
+Sustantivos	Larq'a	Canal, acequia	
+Sustantivos	Jank'a	Cereal tostado	
+Verbos	Rociar	Ch'ajchuy	
+Verbos	Rebuscar	Chajmay	
+Sustantivos	Mezcla	Chajru	
+Verbos	Mezclar	Chajruy	
+Sustantivos	Lio, ruido	Ch'ajwa	
+Sustantivos	Puente	Chaka	
+Sustantivos	Pie	Chaki	
+Otras palabras	Seco	Ch'aki	
+Sustantivos	Sed	Ch'aki	
+Verbos	Tener sed	Ch'akichikuy	
+Verbos	Secar	Ch'akiy	
+Otras palabras	Liviano, de poco peso	Challa	
+Verbos	Estrellar, estrellarse	Ch'allpay, ch'allpakuy	
+Sustantivos	Pez, pescado	Challwa	
+Sustantivos	Pescador	Challwa jap'ej	
+Sustantivos	Problema	Ch'ampay	
+Verbos	Arrojar algo a alguien	Ch'anqay	
+Otras palabras	Despu�s, entonces, y	Chant�, chanta	
+Otras palabras	Tambien, adem�s	Chantapis	
+Sustantivos	Estrella	Ch'aska	
+Sustantivos	Enga�o	Ch'auka	
+Verbos	Enga�ar	Ch'aukiyay	
+Sustantivos	Medio, centro	Chaupi	
+Verbos	Cocer una comida	Chayachiy	
+Verbos	Llegar	Chayay	
+Otras palabras	Despu�s de eso	Chaymanta	
+Otras palabras	O (Conjunci�n)	Chayri	
+Otras palabras	Sin embargo, pero	Chaywanpis	
+Sustantivos	Granizo	Chejchi	
+Otras palabras	Gris, manchado	Ch'ejchi	
+Verbos	Sonreir	Chejchiy	
+Sustantivos	Odio	Chejniy	
+Verbos	Odiar	Chejniy	
+Sustantivos	Verdad, certeza	Cheqa	
+Sustantivos	Verdad	Cheqa, cheqa kaj	
+Otras palabras	De verdad	Cheqamanta	
+Otras palabras	Recto, justo	Cheqan	
+Verbos	Enderezar, rectificar, corregir	Cheqanchay	
+Verbos	Labrar	Ch'eqoy	
+Sustantivos	Roca	Chhanka	
+Verbos	Mezclarse	Chhapukuy	
+Verbos	Sumergir, mezclar	Chhapuy	
+Verbos	Perder la vista, ver borroso, no ver con claridad	Chharpuy, ayphuy	
+Otras palabras	Tanto, mucho	Chhika	
+Sustantivos	Roc�o	Chhulla	
+Sustantivos	Hielo	Chhullunka	
+Otras palabras	Sucio	Ch'ichi	
+Verbos	Ensuciar	Ch'ichichay	
+Sustantivos	Tu�tano	Chilina	
+Sustantivos	Polluelo	Chillwi	
+Otras palabras	Al otro lado, en la otra orilla.	Chimpa	
+Verbos	Contagiarse	Chimpachikuy	
+Verbos	Cruzar, pasar a la otra orilla	Chimpay	
+Otras palabras	Silencioso	Ch'in	
+Sustantivos	Silencio	Ch'in	
+Sustantivos	Hembra del animal	China	
+Verbos	Perder	Chinkachiy	
+Verbos	Sujetarse	Ch'ipakuy	
+Verbos	Enredar	Ch'ipaykuy	
+Otras palabras	Frio	Chiri	
+Sustantivos	Frio	Chiri	
+Verbos	Enfriarse	Chiriyapuy	
+Sustantivos	Parpadeo, gui�o	Ch'irmi	
+Verbos	Parpadear	Ch'irmiy	
+Verbos	Exprimir	Ch'irway	
+Sustantivos	Noche	Ch'isi	
+Verbos	Anochecer	Ch'isiyay	
+Sustantivos	Pasto	Ch'iski	
+Sustantivos	Tos	Ch'ojo	
+Verbos	Arrojar, lanzar	Choqay	
+Sustantivos	Cabello, pelo	Chujcha	
+Sustantivos	Choza	Ch'ujlla	
+Verbos	Sentarse	Chukukuy	
+Otras palabras	Impar	Ch'ulla	
+Sustantivos	Gorro	Ch'ullu	
+Sustantivos	Faja para ce�ir la cintura	Chumpi	
+Sustantivos	Intestino	Ch'unchula	
+Otras palabras	Diez	Chunka	
+Sustantivos	Rabo	Chupa	
+Sustantivos	Oposici�n	Churanakuy	
+Verbos	Oponerse	Churanakuy	
+Verbos	Poner, colocar	Churay	
+Sustantivos	Hijo	Churi, qhari wawa	
+Otras palabras	Vacio	Ch'usaj	
+Sustantivos	Lechuza	Ch'usi	
+Sustantivos	Mosca	Ch'uspi	
+Otras palabras	Claro, cristalino	Ch'uwa	
+Sustantivos	T'iri	Cicatriz	
+Verbos	Khuyay	Compadecer	leech
+Sustantivos	Jucha	Culpa, pecado	
+Verbos	Mayt'uy	Envolver algo para protegerlo	
+Verbos	Wanay	Escarmentar	
+Otras palabras	Chay	Eso	
+Otras palabras	P'oqosqa	Fermentado	
+Sustantivos	Paja	Ichhu	
+Verbos	Llevar en brazos	Ichuy	
+Otras palabras	Qu�	Ima	
+Sustantivos	Cosa	Ima	
+Otras palabras	Por qu�	Imarayku, Imajtin	
+Sustantivos	Adivinanza	Imasmari	
+Otras palabras	C�mo	Imayna	
+Sustantivos	Ni�a	Imilla	
+Sustantivos	Sol	Inti	
+Sustantivos	Pich�n	Irpa	
+Otras palabras	Dos, par	Iskay	
+Otras palabras	Vacilante, indeciso	Iskay sonqo	
+Verbos	Vacilar, titubear	Iskaychakuy	
+Verbos	Dudar	Iskayrayay	
+Sustantivos	Harina	Jak'u	
+Verbos	Guardar, preservar	Jallch'ay	
+Sustantivos	Tierra, terreno	Jallp'a	
+Sustantivos	Sapo	Jamp'atu	
+Sustantivos	Medicina	Jampi	
+Verbos	Curar	Jampiy	
+Verbos	Venir	Jamuy	
+Sustantivos	Cielo	Janajpacha	
+Verbos	Agarrar, capturar, recibir	Jap'iy	
+Otras palabras	Aquel	Jaqay	
+Otras palabras	All�	Jaqaypi	
+Sustantivos	Campamento	Jara	
+Verbos	Acampar	Jarakuy	
+Verbos	Protegerse	Jark'akuy	
+Sustantivos	Impedimento, Obst�culo	Jark'ay	
+Verbos	Atajar, proteger, impedir, detener	Jark'ay	
+Verbos	Levantarse	Jatariy, jatarikuy	
+Otras palabras	Grande	Jatun	
+Verbos	Agrandarse, ser arrogante u orgulloso	Jatunchakuy	
+Verbos	Engrandecer o dar gloria, exaltar a alguien	Jatunchay	
+Verbos	Hacerse grande	Jatunyay	
+Otras palabras	Afuera	Jawa	
+Verbos	Aplicar aceite, untar	Jawiy	
+Verbos	Patear	Jayt'ay	
+Verbos	Entregar	Jayway	
+Verbos	Derramar	Jich'ay	
+Sustantivos	Hipo	Jik'u	
+Otras palabras	As�, como	Jina	
+Otras palabras	Si es as�	Jina kajtin	
+Otras palabras	De repente	Jinallapi	
+Verbos	A�n as�, pero	Jinapis	
+Otras palabras	Nueve	Jisq'on	
+Otras palabras	Sordo	Joq'ara, Lojt'u	
+Otras palabras	Humedo, mojado	Joq'o	
+Sustantivos	Pecado	Jucha	
+Verbos	Perdonar	Jucha pampachay	
+Verbos	Condenar, culpar	Juchachay	
+Otras palabras	Imperfecto	Juchasapa	
+Otras palabras	Peque�o	Juch'uy	
+Sustantivos	B�ho	Juku	
+Sustantivos	Rat�n	Juk'ucha	
+Sustantivos	Oso	Jukumari	
+Sustantivos	Sudor	Jump'i	
+Verbos	Transpirar	Jump'iy	
+Otras palabras	Lleno, completo	Junt'a	
+Verbos	Llenar o completar algo	Junt'achiy	
+Verbos	Llenar, cumplir, completar	Junt'ay	
+Otras palabras	Mill�n	Junu	
+Sustantivos	Agujero	Jusk'u	
+Verbos	Agujerear, perforar	Jusk'uy	
+Sustantivos	Manantial	Juturi	
+Otras palabras	Bueno, bondadoso	K'acha	
+Otras palabras	Adorno	K'achancha	
+Verbos	Liberar	Kacharichiy	
+Verbos	Despedir, mandar a alguien que se vaya	Kacharpay	
+Verbos	Enviar, mandar a alguien a hacer algo	Kachay	
+Sustantivos	Sal	Kachi	
+Otras palabras	Bonito, lindo	K'achitu	
+Sustantivos	Calor, temperatura elevada	K'aja	
+Sustantivos	Barbilla	K'aki	
+Verbos	Permanecer, estarse	Kakuy	
+Sustantivos	Hongo	K'allampa	
+Otras palabras	Agrio, amargo	K'allku	
+Sustantivos	Fuerza, potencia	Kallpa	
+Verbos	Esforzarse	Kallpachakuy	
+Verbos	Animar, fortalecer	Kallpachay	
+Sustantivos	Mandamiento, ley	Kamachiy	
+Verbos	Gobernar	Kamachiy	
+Verbos	Mandar, ordenar	Kamachiy	
+Verbos	Retar, reprender	K'amiy	
+Sustantivos	Luz	K'anchay	
+Verbos	Alumbrar	K'anchay	
+Sustantivos	Borde, l�mite	Kantu	
+Verbos	Tener	Kapuy, tiyapuy	
+Otras palabras	Lejos	Karu	
+Verbos	Alejarse	Karunchakuy	
+Verbos	Alejar	Karunchay	
+Verbos	Unir, arrimar, pegar	K'askachiy	leech
+Verbos	Adherirse, apegarse	K'askakuy	leech
+Sustantivos	Palo	K'aspi	
+Sustantivos	Obediencia	Kasukuy	
+Verbos	Obedecer	Kasuy	
+Otras palabras	�nico	K'ata	
+Sustantivos	Serpiente	Katari	
+Sustantivos	Resurrecci�n	Kausariy, kausarimuy	
+Sustantivos	Vida	Kausay	
+Verbos	Vivir	Kausay	
+Otras palabras	Esto	Kay	
+Verbos	Ser, haber	Kay	
+Verbos	Morder	Khaniy	
+Verbos	Temblar, tiritar	Kharkatiy	
+Sustantivos	Espina	Khiska	
+Otras palabras	Sucio, asqueroso	Khuchi	
+Sustantivos	Cerdo	Khuchi	
+Sustantivos	Inmoralidad, fornicaci�n	Khuchichakuy	
+Verbos	Cortar	Khuchuy	
+Sustantivos	Gusano	Khuru	
+Otras palabras	Juntos	Khuska	
+Verbos	Relacionar una cosa con otra	Khuskachay	
+Sustantivos	Mitad, medio	Khuskan	
+Sustantivos	Compasi�n	Khuyakuy	
+Verbos	Abrir	Kichay	
+Otras palabras	Igual	Kikin	
+Verbos	Comparar	Kikinchay	
+Sustantivos	Luna, mes	Killa	
+Otras palabras	Tres	Kinsa	
+Otras palabras	Hijo ileg�timo	K'ipa wawa	
+Sustantivos	Ladera de monta�a, pendiente, cuesta	Kiray	
+Sustantivos	Tapa	Kirpana	
+Sustantivos	Diente	Kiru	
+Otras palabras	Salvaje, silvestre	K'ita	
+Sustantivos	Higado	K'iwicha	
+Otras palabras	Diligente	K'uchi	
+Sustantivos	Rinc�n	K'uchu	
+Verbos	Arrinconar (Ordenar)	K'uchunchay	
+Sustantivos	Fruto inmaduro	K'uku	
+Otras palabras	Morado	Kulli	
+Otras palabras	Angosto, estrecho	K'ullku	
+Sustantivos	Tronco de �rbol cortado, madera	K'ullu, kurku	
+Verbos	Agacharse, humillarse	K'umuykukuy	
+Otras palabras	Hace poco, reci�n	Kunallan	
+Otras palabras	Ahora	Kunan	
+Sustantivos	Cuello	Kunka	
+Otras palabras	Mayor	Kuraj	
+Sustantivos	Ara�a	Kusi kusi	
+Verbos	Alegrar a otro, causar alegria	Kusichiy	
+Verbos	Alegrarse	Kusikuy	
+Verbos	Divertirse	Kusirikuy	
+Sustantivos	Alegria, felicidad	Kusiy	
+Otras palabras	Arrugado	K'usu	
+Sustantivos	Vez	Kuti	
+Verbos	Devolver, responder	Kutichiy	
+Verbos	Regresar	Kutiy	
+Sustantivos	Arcoiris	K'uychi	
+Sustantivos	Rollo	K'uyuna	
+Verbos	Mover	Kuyuy	
+Sustantivos	Abeja, avispa	Lachiwana	
+Verbos	Rajar, agrietar	Lajray	
+Sustantivos	Idolo, imagen	Lanti	
+Otras palabras	Desabrido, sin sabor	Laq'a	
+Verbos	Dar una bofetada, cachetada	Laq'ay	
+Sustantivos	Ruinas	Laqaya	
+Otras palabras	Oscuro, sombrio	Laqha	
+Verbos	Oscurecerse	Laqhayay	
+Verbos	"Arder&nbsp;"	Larway, Lauray	
+Otras palabras	Lento	Lat'u	
+Sustantivos	Llama de fuego	Lauray, larway	
+Otras palabras	Clase	Laya	
+Sustantivos	Brujo, hechicero	Layqa	
+Sustantivos	"Mantilla&nbsp;"	Lijlla	
+Sustantivos	Ala, hombro	Lijra	
+Verbos	Llevar algo encima del hombro	Lijrariykuy	
+Verbos	Caerse por debilidad	Liwiykuy	
+Sustantivos	Ciudad, pueblo	Llajta	
+Sustantivos	Paisano	Llajta masi	
+Verbos	Preocuparse, apenarse	Llakikuy	
+Sustantivos	Tristeza	Llakiy	
+Verbos	Probar, gustar	Llamiy	
+Otras palabras	Suave, blando	Llamp'u	
+Verbos	Ablandar	Llamp'uyachiy	
+Sustantivos	Trabajo	Llank'ay	
+Verbos	"Trabajar&nbsp;"	Llank'ay	
+Verbos	Palpar, tocar	Llankhay	
+Sustantivos	Le�a	Llant'a	
+Verbos	Cortar le�a	Llant'ata ch'ejtay	
+Sustantivos	Sombra	Llanthu	
+Sustantivos	Hoja, lamina	Llaqhe	
+Otras palabras	Pesado	Llasa	
+Otras palabras	D�bil	Llauch'i	
+Verbos	Debilitarse	Llauch'iyay	
+Sustantivos	�lcera	Llejti	
+Verbos	Rasgar, romper	Llik'iy	
+Otras palabras	Limpio	Llimphu	
+Verbos	Limpiar	Llimphuchay	
+Verbos	Salir	Llojsiy	
+Sustantivos	Ni�o	Lloqalla	
+Verbos	Montar	Lloq'ay	
+Sustantivos	Izquierda	Lloq'e	
+Verbos	Untar, embadurnar	Lluch'iy	
+Verbos	Sacar la ropa u otra prenda de vestir	Lluch'uy	
+Sustantivos	Soborno, Sobaco	Lluk'i	
+Sustantivos	Mentira, enga�o	Llulla	
+Verbos	Mentir	Llullakuy	
+Verbos	Escabullirse, escaparse sigilosamente	Llusp'iy	
+Verbos	Cubrir, recubrir	Llut'ay	
+Verbos	Emborracharse	Machaykuy	
+Otras palabras	Viejo	Machu	
+Verbos	Envejecer	Machuyay	
+Sustantivos	Mano	Maki	
+Otras palabras	Machu machu	Mal educado, burl�n	
+Sustantivos	Mam�	Mama	
+Sustantivos	Mar	Mama qocha	
+Otras palabras	No	Mana	
+Otras palabras	Nunca, jam�s	Mana/Ni jayk'aj	
+Otras palabras	Sino	Manachayqa, manaqa	
+Otras palabras	O sino	Manachayr�	
+Otras palabras	Tampoco	Manallataj, Nillataj, Amallataj	
+Sustantivos	Miedo	Manchachikuy	
+Verbos	Asustarse	Manchachikuy	
+Verbos	"Asustar&nbsp;"	Manchachiy, Mancharichiy	
+Otras palabras	T�mido	Manchali	
+Otras palabras	Sumamente, demasiado	Manchay	
+Sustantivos	Susto	Manchay	
+Sustantivos	Alfarero	Mania llut'aj	
+Sustantivos	Olla	Manka	
+Sustantivos	Deuda	Manu	
+Verbos	Deber una deuda	Manuy	
+Sustantivos	Oraci�n	Ma�akuy	
+Verbos	Pedir la mano	Ma�aqay	
+Verbos	Prestar	Ma�ariy	
+Verbos	Pedir	Ma�ay	
+Sustantivos	Guerra	Maqanakuy	
+Verbos	Golpear, pegar	Maqay	
+Verbos	Alzar en brazos	Marq'ay	
+Otras palabras	Cu�nto	Mashkha	
+Sustantivos	Amigo, pr�jimo	Masi	
+Verbos	Hacerse amigo	Masichakuy	
+Verbos	Buscar	Mask'ay	
+Verbos	Extender, tender	Mast'ay	
+Verbos	Apretar	Mat'iy	
+Otras palabras	Usado, antiguo	Mauk'a	
+Otras palabras	D�nde	May	
+Otras palabras	Muy	May	
+Otras palabras	Cuando	Mayk'aj	
+Verbos	Lavar	Mayllay	
+Otras palabras	Cu�l	Mayqen	
+Sustantivos	Envoltura	Mayt'una	
+Sustantivos	Rio	Mayu	
+Otras palabras	Mezquino, taca�o	Mich'a	
+Sustantivos	Pastor	Michej	
+Verbos	Pastorear	Michiy	
+Sustantivos	Comida	Mikhuna	
+Verbos	Comer	Mikhuy	
+Verbos	Sentir desagrado, repugnancia	Millachikuy	
+Otras palabras	Feo, desagradable	Millay	
+Sustantivos	Lana	Millma	
+Otras palabras	Pasado ma�ana	Minchha	
+Verbos	Contratar a alguien para un trabajo	Mink'akuy	
+Verbos	Multiplicar, aumentar	Miray	
+Sustantivos	Gato	Misi	
+Verbos	Tropezar	Misk'ay	
+Otras palabras	Dulce	Misk'i	
+Sustantivos	Generaci�n, de un mismo tiempo o edad	Mita	
+Verbos	Maltratar, estropear, deteriorar	Mithay	
+Verbos	Desear, antojar	Moq'ey	
+Sustantivos	Rodilla	Moqo	
+Otras palabras	Nuevo	Mosoj	
+Verbos	Hacer nuevo, renovar	Mosojyachiy	
+Sustantivos	Sue�o	Mosqoy	
+Verbos	"So�ar&nbsp;"	Mosqoy	
+Verbos	Besar	Much'ay	
+Otras palabras	Ancha	Mucho	
+Verbos	Aguantar	Muchuy	leech
+Sustantivos	Semilla	Muju	
+Otras palabras	Sembrador	Mujuta t'akaj	
+Sustantivos	Amor	Munakuy	
+Verbos	Amar	Munakuy	
+Sustantivos	Voluntad	Munay	
+Verbos	"Querer&nbsp;"	Munay	
+Verbos	Cortar una parte del cuerpo, decapitar	Muruy	
+Verbos	Oler, percibir olores	Muskhiy	
+Verbos	Olfatear	Muskhiy	
+Verbos	So�ar despierto, desorientarse	Musphay	
+Sustantivos	Redondo, circulo	Muyu	
+Sustantivos	Vuelta, alrededor	Muyuy	
+Verbos	Girar, dar vueltas alrededor	Muyuy	
+Sustantivos	Dolor	Nanay	
+Verbos	Doler	Nanay	
+Sustantivos	Saludo	Napay	
+Verbos	Saludar	Napaykuy	
+Sustantivos	Fuego	Nina	
+Sustantivos	Oreja, Oido	Ninri	
+Verbos	Decir	Niy	
+Sustantivos	Peine	�ajch'a	
+Sustantivos	Sufrimiento	�ak'ariy	
+Verbos	"Sufrir&nbsp;"	�ak'ariy	
+Sustantivos	Camino	�an	
+Sustantivos	Hermana de la mujer	�a�a	
+Otras palabras	Delgado	�a�u	
+Otras palabras	Zona lumbar	�a�u wasa	
+Otras palabras	Hace un momento	�aqha	
+Otras palabras	Adelante, primero	�aupaj	
+Verbos	Progresar	�aupariy	
+Sustantivos	Ojo, vista	�awi	
+Verbos	Leer	�awiriy	
+Verbos	Apretar, presionar	�it'iy	
+Sustantivos	Nuera	�ojch'a	
+Sustantivos	Cerebro	�ojtu	
+Sustantivos	Pecho, seno	�u�u	
+Sustantivos	Polvo	�ut'u	
+Verbos	Abrazar	Ojllaykuy	
+Sustantivos	Enfermedad	Onqoy	
+Verbos	Enfermar	Onqoy	
+Verbos	"Enfermarse&nbsp;"	Onqoykuy	
+Otras palabras	Mudo	Opa	
+Otras palabras	Plomo, pardo, gris	Oqe	
+Verbos	Levantar algo	Oqhariy	
+Verbos	Tragar	Oqoy	
+Verbos	Sacar, extraer	Orqhoy	
+Sustantivos	Cerro, monta�a	Orqo	
+Sustantivos	Laqha	Oscuridad	
+Sustantivos	Tierra, mundo	Pacha	
+Sustantivos	Ropa	P'acha	
+Otras palabras	Cien	Pachaj	
+Verbos	Cortar el pelo al raz, afeitar la cabeza	P'ajlakuy	
+Sustantivos	Escondite	Pakakuna	
+Verbos	Esconderse	Pakakuy	
+Verbos	Esconder	Pakay	
+Verbos	Romper, quebrar	P'akiy	
+Verbos	Pronunciar	Palabrata t'ojyachiy	
+Verbos	Aplastar	P'altay	
+Sustantivos	Llanura	Pampa	
+Verbos	Allanar, aplanar	Pampachay	
+Verbos	"Enterrar&nbsp;"	P'ampay	
+Sustantivos	Hermana del var�n	Pana	
+Sustantivos	Error, equivocaci�n	Pantay	
+Verbos	Equivocarse	Pantay	
+Sustantivos	Derecha	Pa�a	
+Verbos	Nacer	Paqarikuy	
+Sustantivos	Ma�ana, momento del dia	Paqarin	
+Sustantivos	Lluvia	Para	
+Verbos	Llover	Paray	
+Otras palabras	Calentado, muy caliente	Parisqa	
+Verbos	Hablar	Parlay	
+Sustantivos	K'isa	Pasas, fruta seca	
+Otras palabras	Arriba	Pata	
+Verbos	Avergonzarse	P'enqakuy	
+Sustantivos	Veg�enza	P'enqay	
+Sustantivos	Pared	Perqa	
+Sustantivos	Pajaro	P'esqo	
+Sustantivos	Pajaro	P'esqo	
+Verbos	Aletear	Pharaqeyay	
+Verbos	Desatar, desarmar	Phaskay	
+Verbos	Reventar, explotar	Phatay	
+Otras palabras	Grueso	Phatu, rakhu	
+Sustantivos	Vuelo	Phaway	
+Verbos	Volar	Phaway	
+Verbos	Saltar	Phinkiy	
+Verbos	Echarse encima de alguien	Phinkiykuy	
+Sustantivos	Enojo	Phi�a	
+Verbos	Enojarse	Phi�akuy	
+Verbos	Destrozar	Phiriy	
+Otras palabras	Cinco	Phisqa	
+Verbos	Soplar	Phukuy	
+Sustantivos	Pluma	Phuru	
+Verbos	Entristecerse, apenarse	Phutikuy	
+Sustantivos	Nube	Phuyu	
+Otras palabras	Qui�n	Pi	
+Verbos	Barrer	Pichay	
+Sustantivos	Pato	Pili	
+Sustantivos	Mariposa	Pilpintu	
+Sustantivos	Granero	Pirwa	
+Otras palabras	Poco	Pisi	
+Verbos	Arrancar	P'itiy	
+Verbos	Ismuy	Podrirse	
+Sustantivos	Fruto	Poqoy	
+Verbos	Dar fruto	Poqoy	
+Verbos	Dar fruto	Poqoy	
+Sustantivos	Sobra	Puchu	
+Verbos	Sobrar	Puchuy	
+Verbos	Jugar	Pujllay	
+Sustantivos	Pozo, pozo de agua, cisterna	Pujyu	
+Otras palabras	Rojo	Puka	
+Sustantivos	D�a	P'unchay	
+Verbos	Hincharse	Punkiy	
+Sustantivos	Puerta	Punku	
+Otras palabras	Aplastado	Pu�asqa, �at'usqa	
+Sustantivos	C�ntaro	P'u�u	
+Verbos	Dormir	Pu�uy	
+Sustantivos	Ombligo	Pupu	
+Otras palabras	Ambos	Puraj	
+Verbos	Caminar	Puriy	
+Otras palabras	Ocho	Pusaj	
+Verbos	Guiar, llevar a un persona	Pusay	
+Verbos	Brotar	P'utumuy	
+Sustantivos	Cuerno para hacer sonido	Pututu	
+Otras palabras	Desnudo	Q'ala	
+Sustantivos	Comienzo	Qallariy	
+Verbos	"Empezar&nbsp;"	Qallariy	
+Sustantivos	Lengua	Qallu	
+Otras palabras	Siete	Qanchis	
+Otras palabras	La otra vez	Qaninpa	
+Sustantivos	Olor, fragancia	Q'apay	
+Verbos	Despedir olor (agradable o desagradable)	Q'apay	
+Verbos	Apretar con la mano	Q'apiy	
+Sustantivos	Cuero, piel	Qara	
+Verbos	Regar	Qarpay	
+Otras palabras	Ma�ana	Q'aya	
+Sustantivos	Ma�ana, dia despu�s de hoy	Q'aya	
+Otras palabras	Cerca	Qaylla	
+Verbos	Acercarse	Qayllaykuy	
+Otras palabras	Desabrido por falta de sal o azucar	Q'ayma	
+Otras palabras	Ayer	Qayna	
+Sustantivos	Hilo	Q'aytu	
+Sustantivos	Diarrea	Q'echalera	
+Otras palabras	Amarillo	Q'ellu	
+Sustantivos	Bulto	Q'epi	
+Otras palabras	Cobarde, afeminado	Q'ewa	
+Verbos	Torcer	Q'ewiy	
+Verbos	Esparcir	Qhallay, qhalliy	
+Otras palabras	Rico, acaudalado	Qhapaj	
+Verbos	Gritar	Qhapariy	
+Sustantivos	Hombre	Qhari	
+Verbos	Cuervo	Qharqa�a	
+Verbos	Expulsar	Qharqoy	
+Otras palabras	Helado	Qhasa	
+Sustantivos	Helada	Qhasa	
+Otras palabras	En vano, sin raz�n	Qhasimanta	
+Otras palabras	�spero	Qhasqa, qhashqa	
+Sustantivos	Frazada, colcha, algo para cubrir o tapar	Qhatana	
+Verbos	Arrastrar	Qhatatay	
+Verbos	Cubrir, tapar	Qhatay	
+Verbos	Seguir	Qhatiy	
+Sustantivos	Mercado	Qhatu	
+Verbos	Criticar	Qhawaray	
+Verbos	Mirar, observar	Qhaway	
+Verbos	Quitar	Qhechuy	
+Otras palabras	Flojo	Qhella	
+Verbos	Escribir	Qhelqay	
+Otras palabras	Atr�s	Qhepa	
+Verbos	Hacer quedar, retrasar	Qhepachiy	
+Verbos	Quedarse	Qhepakuy	
+Otras palabras	Siguiente, porterior	Qhepan	
+Verbos	Rechazar	Qhesachay	
+Verbos	Decapitar, amputar	Qholuy	
+Sustantivos	Hierba	Qhora	
+Verbos	Sacar las malas hierbas, deshierbar	Qhoray	
+Sustantivos	Lago	Qocha	
+Sustantivos	Dinero, plata	Qolqe	
+Otras palabras	Verde	Q'omer	
+Sustantivos	Olvido	Qonqay	
+Verbos	Olvidar	Qonqay	
+Verbos	Arrodillarse	Qonqorikuy	
+Otras palabras	Caliente	Q'o�i	
+Sustantivos	Basura	Q'opa	
+Sustantivos	Oro	Qori	
+Sustantivos	Colibr�	Qori q'enti	
+Sustantivos	Esposo	Qosa	
+Sustantivos	Humo	Q'os�i	
+Sustantivos	Grupo	Qotu	
+Sustantivos	Conejo	Qowi	
+Verbos	Dar	Qoy	
+Verbos	Q'olachiy	Quemar, incinerar	
+Verbos	Dividir	Rak'iy	
+Verbos	Comprar	Rantiy	
+Sustantivos	"Fiesta&nbsp;"	Raymi	
+Sustantivos	Pakana	Refugio	
+Verbos	Hacer conocer	Rejsichiy	
+Verbos	Reconocer	Rejsikapuy	
+Verbos	Conocer	Rejsiy	
+Verbos	Darse cuenta	Reparay	
+Verbos	Parecerse	Rijch'akuy	
+Verbos	Despertar	Rijch'ariy	
+Sustantivos	Imagen	Rijch'ay	
+Verbos	Aparecer	Rikhuriy	
+Verbos	Mostrar, demostrar	Rikuchiy	
+Verbos	Ver	Rikuy	
+Sustantivos	Palabra	Rimay	
+Verbos	Hablar mal, en contra de alguien, retar	Rimay	
+Verbos	Irse	Ripuy	
+Sustantivos	Nieve	Rit'i	
+Verbos	Ir	Riy	
+Otras palabras	Weq'oj	Ruido al vomitar o al tener n�useas, acompa�ado del verbo niy	
+Sustantivos	Piedra	Rumi	
+Verbos	Apedrear	Rumiswan ch'anqay	
+Sustantivos	Gente, persona	Runa	
+Verbos	Crecer, hacerse adulto	Runayaykuy	
+Sustantivos	Huevo	Runtu	
+Otras palabras	Quemante, ardiente	Rupha	
+Verbos	Quemar	Ruphay	
+Verbos	Hacer, realizar	Ruway	
+Sustantivos	�rbol	Sach'a	
+Verbos	�ak'ay	Sacrificar un animal	
+Verbos	Thalay	Sacudir, retemblar	
+Otras palabras	Malo	Sajra	
+Verbos	Saciarse, llenarse	Sajsay	
+Verbos	Descansar	Samariy	
+Sustantivos	Aliento, respiraci�n	Samay	
+Verbos	Respirar	Samay	
+Otras palabras	Espeso	Sankhu	
+Otras palabras	Cada	Sapa	
+Otras palabras	Solo, solitario, aislado	Sapa (Con terminaci�n de persona)	
+Sustantivos	Ra�z	Saphi	
+Verbos	Abandonar	Saqerpariy	
+Verbos	Dejar	Saqey	
+Sustantivos	Maiz	Sara	
+Verbos	Pisar	Saruy	
+Verbos	Pararse, ponerse en pie	Sayarikuy	
+Verbos	Detenerse, para	Sayay	
+Verbos	Cansarse	Sayk'uy	
+Sustantivos	Nariz	Senqa	
+Verbos	Azotar	Seq'oy	
+Sustantivos	Hormiga	Sik'imira	
+Verbos	Sacar, Arrancar de ra�z	Sik'iy	
+Otras palabras	Delgado, de poco grosor	Sillp'a	
+Sustantivos	U�a, garra	Sillu	
+Sustantivos	Lombriz de tierra	Silwikhuru	
+Sustantivos	Boca	Simi	
+Verbos	Discutir	Siminakuy	
+Sustantivos	Trenza	Simp'a, samp'ana	
+Verbos	Trenzar	Simp'ay	
+Otras palabras	Fuerte	Sinch'i	
+Sustantivos	Mujer joven	Sipas	
+Verbos	Coser	Siray	
+Verbos	Acostarse	Siriy, siriykuy	
+Otras palabras	Seis	Sojta	
+Sustantivos	Coraz�n	Sonqo	
+Sustantivos	Consuelo	Sonqochay	
+Verbos	Consolar	Sonqochay	
+Verbos	Correrse	Suchuriy	
+Verbos	Alinear	Suk'ay	
+Otras palabras	Menor	Sullk'a	
+Otras palabras	De buena calidad	Sumachaj	
+Otras palabras	Excelente	Sumaj	
+Sustantivos	Barba	Sunkha	leech
+Sustantivos	Demonio	Supay	
+Sustantivos	�andu, avestruz	Suri	
+Verbos	Chorrear	Suruy	
+Sustantivos	Nombre	Suti	
+Otras palabras	Claro	Sut'i	
+Verbos	Lllamarse, nombrarse	Sutikuy	
+Verbos	Aclarar, Explicar	Sut'inchay	
+Verbos	Amanecer	Sut'iyay	
+Sustantivos	Gota	Sut'u	leech
+Verbos	Gotear	Sut'uy	
+Sustantivos	Ladr�n	Suwa	
+Verbos	Robar	Suway	
+Sustantivos	Buitre	Suwintu	
+Sustantivos	Esperanza	Suyakuy	
+Verbos	Esperar	Suyay	
+Sustantivos	Regi�n, pa�s	Suyu	
+Sustantivos	Palma de la mano	T'ajlla	
+Verbos	Aplaudir	T'ajllay	
+Verbos	Lavar ropa	T'ajsay	
+Verbos	Golpear la puerta	Takay	
+Sustantivos	Canci�n	Takiy	
+Verbos	Cantar	Takiy	
+Verbos	Empujar	Tanqay	
+Sustantivos	Pan	T'anta	
+Sustantivos	Reuni�n	Tantakuy	
+Verbos	"Reunirse,&nbsp; juntarse"	Tantakuy	
+Verbos	Reunir, juntar	Tantay	
+Verbos	Anidar, hacerse un nido	Tapachakuy	
+Sustantivos	Pregunta	Tapuy	
+Verbos	"Preguntar&nbsp;"	Tapuy	
+Verbos	Divisi�n	T'aqanakuy	
+Verbos	Separar	T'aqay	
+Verbos	Alcanzar, encontrar a alguien	Taripay	
+Verbos	Encontrar, hallar	Tariy	
+Sustantivos	Siembra	Tarpuy	
+Verbos	Sembrar	Tarpuy	
+Sustantivos	Ciervo	Taruka	
+Sustantivos	Pap�	Tata	
+Verbos	Amontonar	Tauqay	
+Otras palabras	Cuatro	Tawa	
+Verbos	Sacudir	Thalay	
+Verbos	Vaciar el contenido	Thalliy	
+Otras palabras	Gastado	Thanta	
+Verbos	Desgastarse, deteriorarse	Thantakuy	
+Verbos	Parar un dolor, calmar un fenomeno atmosferico	Tha�iy	
+Sustantivos	Nido de ave	Thapa	
+Verbos	Dar pasos	Thaskiy	
+Verbos	Extinguir, apagar	Thasnuy	
+Sustantivos	Saliva	Thoqay	
+Verbos	Escupir	Thoqay	leech
+Verbos	Derribar, demoler, destruir	Thu�iy	
+Sustantivos	Polilla	Thuta	
+Verbos	Murmurar, refunfu�ar	Thutuy	
+Verbos	Cambiar, traducir	Tijray	
+Sustantivos	Flor	T'ika	
+Verbos	Hervir	T'impuy	
+Sustantivos	Recompensa, propina	T'inka	
+Sustantivos	Encuentro	Tinku	
+Verbos	Mezclar, hacer encontrar	Tinkuchiy	
+Verbos	Encontrarse con alguien	Tinkuy	
+Sustantivos	Prendedor	T'ipana	
+Verbos	Habitar, morar, sentarse	Tiyakuy	
+Verbos	Haber	Tiyan	
+Sustantivos	Asiento, silla	Tiyana	
+Verbos	Calmar	Tiyaykuchiy	
+Sustantivos	Arena	T'iyu	
+Otras palabras	Imaymana	Toda clase de	
+Sustantivos	Trampa	Tojlla	
+Sustantivos	Bast�n	Tojnu	
+Verbos	Toquetear, molestar	T'ojpiy	
+Verbos	Punzar, apu�alar	T'ojsiy	
+Verbos	Explotar	T'ojyay	
+Sustantivos	Garganta	Tonqori	
+Sustantivos	Hoyo, hueco	T'oqo	
+Sustantivos	Epilepsia, par�lisis	T'uku onqoy	
+Verbos	Terminar	Tukuchay	
+Verbos	Terminarse definitivamente	Tukukapuy	
+Sustantivos	Fin	Tukukuy	
+Verbos	Terminarse	Tukukuy	
+Verbos	Pensar profundamente, meditar	T'ukuriy	
+Otras palabras	Todo	Tukuy	
+Verbos	Convertir, convertirse, terminar	Tukuy	
+Otras palabras	Flaco	Tullu	
+Sustantivos	Hueso	Tullu	
+Verbos	Adelgazar hasta los huesos	Tulluyay	
+Verbos	Acusar, culpar	Tumpay	
+Verbos	Desmenuzar, destrozar, triturar	T'unay	
+Sustantivos	Hermano de la mujer	Tura	
+Sustantivos	Uma mayt'una	Turbante	
+Sustantivos	Barro, lodo	T'uru	
+Otras palabras	Desordenado	T'usti	
+Verbos	Desordenar, arruinar, dejar hecho un desastre	T'ustiykuy	
+Sustantivos	Baile	Tusuna	
+Verbos	Bailar	Tusuy	
+Sustantivos	Noche oscura, madrugada	Tuta	
+Otras palabras	Diferente, distinto	Uj jina	
+Otras palabras	Uno	Uj, Juk	
+Otras palabras	Unido	Ujchasqa	
+Otras palabras	Uno de ellos, otro	Ujnin	
+Verbos	Beber	Ujyay	
+Otras palabras	Adentro	Ukhu	
+Verbos	Profundizar, analizar profundamente	Ukhunchay	
+Sustantivos	Cabeza	Uma	
+Verbos	Discursar	Umallirichiy	
+Otras palabras	Decaido, d�bil, (deprimido)	Umphu	
+Sustantivos	Antiguo, hace mucho tiempo	Unay	
+Verbos	Licuarse, derretirse	Unuyay	
+Sustantivos	Cr�a de una animal	U�a	
+Otras palabras	Abajo	Ura	
+Verbos	Caer	Urmay	
+Sustantivos	Paloma	Urpi	
+Sustantivos	Piojo	Usa	
+Sustantivos	Ceniza	Uspha	
+Otras palabras	R�pido	Usqhay	
+Verbos	Desperdiciar	Usuchiy	
+Sustantivos	Hija	Ususi	
+Sustantivos	Cara, rostro	Uya	
+Verbos	O�r, escuchar	Uyariy	
+Verbos	Criar, proveer a la familia.	Uyway	
+Sustantivos	Vapor	Vausi, wawsi	
+Sustantivos	Aguij�n	Wach'ina	
+Otras palabras	Otro	Waj	
+Otras palabras	De otra forma o manera	Waj jinamanta	
+Sustantivos	Pobre	Wajcha	
+Verbos	Empobrecerse	Wajchayay	
+Sustantivos	Costilla	Wajta	
+Verbos	Golpear con algo	Wajtay	
+Verbos	Invitar	Wajyariy, wajyarikuy	
+Verbos	Llamar	Wajyay	
+Sustantivos	Vaca	Waka	
+Verbos	Prepararse	Wakichikuy	
+Verbos	Preparar	Wakichiy	
+Sustantivos	Gallina	Wallpa	
+Sustantivos	Collar	Walqa	
+Otras palabras	Tonto	Wampu	
+Sustantivos	Camilla	Wantuna	
+Sustantivos	Abono	Wanu	
+Verbos	Matar	Wa�uchiy	
+Sustantivos	Muerte	Wa�uy	
+Verbos	Morir	Wa�uy	
+Sustantivos	L�grima	Waqay	
+Verbos	Llorar	Waqay	
+Sustantivos	Honda	Warak'a	
+Otras palabras	Mil	Waranqa	
+Verbos	Colgar	Warkhuy	
+Sustantivos	Mujer, esposa	Warmi	
+Sustantivos	Espalda	Wasa	
+Verbos	"Traicionar&nbsp;"	Wasanchay	
+Verbos	Traicionar, dar la espalda	Wasanchay	
+Verbos	Rebalsar	Wasariy	
+Sustantivos	Casa	Wasi	
+Sustantivos	Cuerda trenzada	Waskha	
+Otras palabras	Grosero, mal educado	Wasu	
+Sustantivos	A�o	Wata	
+Sustantivos	Cuerda	Watana	
+Verbos	Amarrar, atar	Wataykuy	
+Otras palabras	De nuevo, nuevamente	Watejmanta	
+Verbos	Espiar	Wateqay	
+Sustantivos	Hermano del var�n	Wauqe	
+Sustantivos	Beb�, Ni�o peque�o	Wawa	
+Verbos	Evaporarse	Wawsiy, vausiy	
+Sustantivos	Bolsa, saco	Wayaqa	
+Verbos	Cocinar	Wayk'uy	
+Sustantivos	Hombre joven	Wayna	
+Sustantivos	Quebrada. ca�on	Wayq'o	
+Sustantivos	Viento	Wayra	
+Sustantivos	Abejorro	Wayronqo	
+Verbos	Subir	Wichariy	
+Verbos	Tirar, arrojar	Wijch'uy	
+Verbos	Embarasarze	Wijsallikuy	
+Sustantivos	Anuncio	Willana	
+Sustantivos	Noticia	Willay	
+Verbos	Anunciar, avisar, contar	Willay	
+Verbos	Recostarse	Winkuy	
+Verbos	Tumbarse, recostarse	Winkuy	
+Verbos	Crecer	Wi�ay	
+Otras palabras	Para siempre	Wi�aypaj	
+Otras palabras	Gordo	Wira	
+Sustantivos	Grasa	Wira	
+Verbos	Engordar	Wirayay	
+Sustantivos	Estomago, vientre, panza	Wisa, wijsa	
+Verbos	Cerrar, Encerrar	Wisq'ay	
+Otras palabras	Torcido, chueco	Wist'u	
+Verbos	Torcerse	Wist'uyay	
+Sustantivos	Maestro, profesor	Yachachej	
+Sustantivos	Ense�anza	Yachachiy	
+Verbos	Ense�ar	Yachachiy	
+Verbos	Aprender	Yachakuy	
+Verbos	Imitar	Yachapayay	
+Sustantivos	Conocimiento	Yachay	
+Verbos	Saber	Yachay	
+Verbos	Acostumbrarse	Yachaykukuy	
+Verbos	Acostumbrarse, tener la costumbre	Yachaykukuy	
+Sustantivos	Escuela	Yachaywasi	
+Sustantivos	Agua	Yaku	
+Otras palabras	Negro	Yana	
+Sustantivos	Ayuda	Yanapa	
+Verbos	Colaborar	Yanapakuy	
+Verbos	Ayudar	Yanapay	
+Sustantivos	Aumento	Yapa	
+Verbos	Aumentar	Yapay	
+Otras palabras	Casi	Yaqha	
+Verbos	Tener hambre	Yarqhachikuy	
+Sustantivos	Hambre	Yarqhay	
+Sustantivos	Sangre	Yawar	
+Verbos	Entrar	Yaykuy	
+Sustantivos	Censo	Yupay	
+Verbos	Contar	Yupay	
+Sustantivos	Adoraci�n	Yupaychay	
+Verbos	Adorar	Yupaychay	
+Otras palabras	Blanco	Yuraj	
+Sustantivos	Vasija, jarra	Yuru	
+Sustantivos	Perdiz	Yuthu	
+Verbos	Hacer recordar	Yuyarichiy	
+Sustantivos	Mente	Yuyay	
+Verbos	Pensar	Yuyay	
+Sustantivos	Consejo	Yuyaychay	

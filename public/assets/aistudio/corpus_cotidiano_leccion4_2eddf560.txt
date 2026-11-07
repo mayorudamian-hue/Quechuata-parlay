@@ -1,0 +1,243 @@
+CORPUS COTIDIANO - LECCIÓN 4 (Manual de Quechua)
+Quechua cochabambino - Presente singular, sufijos -man / -manta, orden de palabras
+
+RAÍCES Y PALABRAS DE LA LECCIÓN 4 USADAS
+sapa (cada), p'unchay (día), ch'isi (noche; en el vocabulario del manual aparece "chis"),
+chayamuy (llegar de allí), chayay (llegar), may (dónde), rikuy (ver, conocer un lugar),
+riy (ir), puriy (caminar, andar), kunan (ahora, hoy), kunitan (ahora mismo),
+jamuy (venir), mayk'aj (cuándo), tutamanta (por la mañana), noqa (yo), ñan (camino),
+karu (lejos), qayna (ayer), -man (a, hacia), -manta (de, desde).
+Apoyo de lecciones anteriores: qan, pay, kay, chay, wasi, llajta, escuela, -qa, -chu, mana.
+
+CLAVE DE GLOSAS
+1SG = 1.ª persona singular (-ni) | 2SG = 2.ª persona singular (-nki, "tú" y "usted") | 3SG = 3.ª persona singular (-n)
+ALL = direccional "a, hacia" (-man) | ABL = procedencia "de, desde" (-manta)
+TOP = tema/énfasis (-qa) | INT = interrogativo (-chu) | NEG = negación (mana)
+CHU = enclítico -chu que acompaña a mana en la negación | VEN = movimiento hacia el hablante (-mu)
+Nota: en el manual el presente expresa también el pasado cercano, por eso muchas traducciones admiten "voy/fui", "vengo/vine".
+
+==================================================
+
+FICHA 1
+Frase en Quechua Cochabambino: Sapa p'unchay rini.
+Traducción al Español: Voy cada día.
+Descomposición de Morfemas: sapa p'unchay ri-ni
+Glosa Gramatical: cada día ir-1SG
+Explicación o Nota Gramatical: El presente indica una acción habitual. "Sapa" (cada) va antes del sustantivo. El pronombre "noqa" no se usa salvo para dar énfasis. (Basada en el manual.)
+Etiquetas: lección 4, verbo, riy, presente, habitual, sapa, p'unchay, rutina
+
+FICHA 2
+Frase en Quechua Cochabambino: Sapa p'unchay escuelaman rini.
+Traducción al Español: Voy a la escuela cada día.
+Descomposición de Morfemas: sapa p'unchay escuela-man ri-ni
+Glosa Gramatical: cada día escuela-ALL ir-1SG
+Explicación o Nota Gramatical: "-man" marca la dirección (a, hacia). El adverbio de tiempo ("sapa p'unchay") va al principio, luego el complemento y al final el verbo. (Ejemplo del manual.)
+Etiquetas: lección 4, verbo, riy, -man, dirección, orden de palabras, escuela, rutina
+
+FICHA 3
+Frase en Quechua Cochabambino: ¿Mayk'aj rinki?
+Traducción al Español: ¿Cuándo vas?
+Descomposición de Morfemas: mayk'aj ri-nki
+Glosa Gramatical: cuándo ir-2SG
+Explicación o Nota Gramatical: "-nki" sirve tanto para "tú" como para "usted"; el quechua no distingue entre ambos. Con pronombres interrogativos (mayk'aj, may, ima) no se usa "-chu".
+Etiquetas: lección 4, pregunta, mayk'aj, riy, 2SG, tiempo
+
+FICHA 4
+Frase en Quechua Cochabambino: ¿Mayman rinki?
+Traducción al Español: ¿A dónde vas?
+Descomposición de Morfemas: may-man ri-nki
+Glosa Gramatical: dónde-ALL ir-2SG
+Explicación o Nota Gramatical: "may" (dónde) recibe "-man" para preguntar por el destino. Es la pregunta natural al encontrarse con alguien en el camino.
+Etiquetas: lección 4, pregunta, may, -man, riy, destino, saludo cotidiano
+
+FICHA 5
+Frase en Quechua Cochabambino: ¿Maymanta jamunki?
+Traducción al Español: ¿De dónde vienes?
+Descomposición de Morfemas: may-manta jamu-nki
+Glosa Gramatical: dónde-ABL venir-2SG
+Explicación o Nota Gramatical: "-manta" marca el origen (de, desde). Es el contrapar de "¿Mayman rinki?" (destino). Sin "-chu" porque lleva pronombre interrogativo.
+Etiquetas: lección 4, pregunta, may, -manta, jamuy, origen
+
+FICHA 6
+Frase en Quechua Cochabambino: Oruroman rini.
+Traducción al Español: Voy a Oruro. / Fui a Oruro.
+Descomposición de Morfemas: Oruro-man ri-ni
+Glosa Gramatical: Oruro-ALL ir-1SG
+Explicación o Nota Gramatical: Respuesta a "¿Mayman rinki?". El presente cubre también el pasado cercano o con relación al momento presente. (Basada en el manual.)
+Etiquetas: lección 4, verbo, riy, -man, lugar, respuesta, Oruro
+
+FICHA 7
+Frase en Quechua Cochabambino: Oruromanta jamuni.
+Traducción al Español: Vengo de Oruro. / Vine de Oruro.
+Descomposición de Morfemas: Oruro-manta jamu-ni
+Glosa Gramatical: Oruro-ABL venir-1SG
+Explicación o Nota Gramatical: "-manta" se pega al nombre del lugar de origen. "Jamuy" (venir) implica movimiento hacia donde está el hablante. (Ejemplo del manual.)
+Etiquetas: lección 4, verbo, jamuy, -manta, origen, respuesta, Oruro
+
+FICHA 8
+Frase en Quechua Cochabambino: Kunan tutamanta chayamuni.
+Traducción al Español: Llegué esta mañana.
+Descomposición de Morfemas: kunan tuta-manta chaya-mu-ni
+Glosa Gramatical: ahora noche-ABL llegar-VEN-1SG
+Explicación o Nota Gramatical: "Tutamanta" funciona como expresión fija: "por la mañana" (literalmente "desde la madrugada"). "Chayamuy" (llegar de allí) el manual lo da como una sola palabra de vocabulario; "-mu" se muestra aquí solo como apoyo analítico. (Diálogo del manual.)
+Etiquetas: lección 4, verbo, chayamuy, tutamanta, kunan, mañana, llegada
+
+FICHA 9
+Frase en Quechua Cochabambino: Qayna llajtaman jamuni.
+Traducción al Español: Ayer vine al pueblo.
+Descomposición de Morfemas: qayna llajta-man jamu-ni
+Glosa Gramatical: ayer pueblo-ALL venir-1SG
+Explicación o Nota Gramatical: "Qayna" (ayer) va al comienzo, antes del complemento. El presente "jamuni" se traduce como pasado porque el hecho tiene relación con el presente. (Basada en el manual.)
+Etiquetas: lección 4, verbo, jamuy, qayna, ayer, -man, pueblo, tiempo
+
+FICHA 10
+Frase en Quechua Cochabambino: Kunitan chayamuni.
+Traducción al Español: Acabo de llegar. / Llegué ahora mismo.
+Descomposición de Morfemas: kunitan chaya-mu-ni
+Glosa Gramatical: ahora.mismo llegar-VEN-1SG
+Explicación o Nota Gramatical: "Kunitan" (ahora mismo, este momento) es más inmediato que "kunan" (ahora, hoy). Se trata como una sola palabra.
+Etiquetas: lección 4, verbo, chayamuy, kunitan, tiempo, inmediato, llegada
+
+FICHA 11
+Frase en Quechua Cochabambino: Kunan wasiman rini.
+Traducción al Español: Ahora voy a casa.
+Descomposición de Morfemas: kunan wasi-man ri-ni
+Glosa Gramatical: ahora casa-ALL ir-1SG
+Explicación o Nota Gramatical: Orden: adverbio + complemento de dirección + verbo al final. "Kunan" puede significar "ahora" u "hoy" según el contexto.
+Etiquetas: lección 4, verbo, riy, kunan, -man, casa, orden de palabras
+
+FICHA 12
+Frase en Quechua Cochabambino: ¿Llallaguaqa karuchu?
+Traducción al Español: ¿Está lejos Llallagua?
+Descomposición de Morfemas: Llallagua-qa karu-chu
+Glosa Gramatical: Llallagua-TOP lejos-INT
+Explicación o Nota Gramatical: No hay verbo "ser/estar" en la frase: el adjetivo "karu" funciona como predicado. "-chu" se pega a la palabra con más énfasis, y "-qa" marca el tema de la pregunta. (Diálogo del manual.)
+Etiquetas: lección 4, pregunta, karu, -chu, -qa, distancia, sin cópula
+
+FICHA 13
+Frase en Quechua Cochabambino: Mana karuchu.
+Traducción al Español: No está lejos.
+Descomposición de Morfemas: mana karu-chu
+Glosa Gramatical: NEG lejos-CHU
+Explicación o Nota Gramatical: La negación se forma con "mana" antes de la parte negada y "-chu" en la palabra que lleva el énfasis. (Respuesta del manual.)
+Etiquetas: lección 4, negación, mana, -chu, karu, distancia, respuesta
+
+FICHA 14
+Frase en Quechua Cochabambino: Kay ñanmanta jamuni.
+Traducción al Español: Vengo por este camino. / Vengo de este camino.
+Descomposición de Morfemas: kay ñan-manta jamu-ni
+Glosa Gramatical: este camino-ABL venir-1SG
+Explicación o Nota Gramatical: "Ñan" (camino) con "-manta" indica el camino de donde se viene. El demostrativo "kay" va antes del sustantivo. (Basada en los ejercicios del manual.)
+Etiquetas: lección 4, verbo, jamuy, ñan, -manta, camino, demostrativo
+
+FICHA 15
+Frase en Quechua Cochabambino: Chay ñanqa karu.
+Traducción al Español: Ese camino queda lejos.
+Descomposición de Morfemas: chay ñan-qa karu
+Glosa Gramatical: ese camino-TOP lejos
+Explicación o Nota Gramatical: Oración nominal sin verbo "ser". "-qa" resalta "ese camino" como tema de lo que se dice.
+Etiquetas: lección 4, ñan, karu, -qa, sin cópula, descripción, camino
+
+FICHA 16
+Frase en Quechua Cochabambino: Kunan llajtaman purini.
+Traducción al Español: Ahora camino hacia el pueblo.
+Descomposición de Morfemas: kunan llajta-man puri-ni
+Glosa Gramatical: ahora pueblo-ALL caminar-1SG
+Explicación o Nota Gramatical: "Puriy" (caminar, andar) se conjuga igual que "riy". Con "-man" indica hacia dónde se camina.
+Etiquetas: lección 4, verbo, puriy, kunan, -man, pueblo, caminar
+
+FICHA 17
+Frase en Quechua Cochabambino: Sapa ch'isi purini.
+Traducción al Español: Camino cada noche.
+Descomposición de Morfemas: sapa ch'isi puri-ni
+Glosa Gramatical: cada noche caminar-1SG
+Explicación o Nota Gramatical: "Ch'isi" (noche, anochecer) aparece como "chis" en el vocabulario del manual y como "ch'isi" en los ejercicios. "Sapa" + momento del día da el sentido habitual.
+Etiquetas: lección 4, verbo, puriy, sapa, ch'isi, noche, habitual
+
+FICHA 18
+Frase en Quechua Cochabambino: ¿Rejsinkichu?
+Traducción al Español: ¿Conoces? / ¿Conoce usted (el lugar)?
+Descomposición de Morfemas: rejsi-nki-chu
+Glosa Gramatical: conocer-2SG-INT
+Explicación o Nota Gramatical: "Rikuy" significa ver y también conocer un lugar. Pregunta de sí/no: "-chu" se añade al verbo, que es la palabra enfatizada. (Diálogo del manual.)
+Etiquetas: lección 4, pregunta, rejsiy, -chu, 2SG, conocer
+
+FICHA 19
+Frase en Quechua Cochabambino: Mana rejsinichu.
+Traducción al Español: No conozco.
+Descomposición de Morfemas: mana rejsi-ni-chu
+Glosa Gramatical: NEG conocer-1SG-CHU
+Explicación o Nota Gramatical: Negación del verbo: "mana" antes y "-chu" al final del verbo. (Respuesta del manual.)
+Etiquetas: lección 4, verbo, rejsiy, negación, mana, -chu, 1SG, respuesta
+
+FICHA 20
+Frase en Quechua Cochabambino: Noqaqa sapa p'unchay rini.
+Traducción al Español: Yo voy cada día.
+Descomposición de Morfemas: noqa-qa sapa p'unchay ri-ni
+Glosa Gramatical: 1SG-TOP cada día ir-1SG
+Explicación o Nota Gramatical: El pronombre "noqa" solo se usa cuando se quiere insistir en la persona. La terminación verbal "-ni" ya indica "yo". (Ejemplo del manual.)
+Etiquetas: lección 4, verbo, riy, noqa, énfasis, pronombre, -qa
+
+FICHA 21
+Frase en Quechua Cochabambino: Pay sapa p'unchay rin.
+Traducción al Español: Él va cada día. / Ella va cada día.
+Descomposición de Morfemas: pay sapa p'unchay ri-n
+Glosa Gramatical: 3SG cada día ir-3SG
+Explicación o Nota Gramatical: La 3.ª persona lleva "-n". "Pay" no distingue género: significa "él" y "ella". Se usa aquí solo por énfasis. (Ejemplo del manual.)
+Etiquetas: lección 4, verbo, riy, pay, 3SG, -n, habitual
+
+FICHA 22
+Frase en Quechua Cochabambino: ¿Mayk'aj chayamunki?
+Traducción al Español: ¿Cuándo llegaste?
+Descomposición de Morfemas: mayk'aj chaya-mu-nki
+Glosa Gramatical: cuándo llegar-VEN-2SG
+Explicación o Nota Gramatical: Pregunta con "mayk'aj" (cuándo), sin "-chu". El presente se traduce como pasado cercano. (Diálogo del manual.)
+Etiquetas: lección 4, pregunta, mayk'aj, chayamuy, 2SG, llegada, tiempo
+
+FICHA 23
+Frase en Quechua Cochabambino: Cochabambaman chayani.
+Traducción al Español: Llego a Cochabamba.
+Descomposición de Morfemas: Cochabamba-man chaya-ni
+Glosa Gramatical: Cochabamba-ALL llegar-1SG
+Explicación o Nota Gramatical: "Chayay" (llegar) sin "-mu" indica llegada a un destino. Con "chayamuy" se destaca que se llega hacia el hablante.
+Etiquetas: lección 4, verbo, chayay, -man, destino, Cochabamba, llegada
+
+FICHA 24
+Frase en Quechua Cochabambino: Qayna Oruromanta chayamuni.
+Traducción al Español: Ayer llegué de Oruro.
+Descomposición de Morfemas: qayna Oruro-manta chaya-mu-ni
+Glosa Gramatical: ayer Oruro-ABL llegar-VEN-1SG
+Explicación o Nota Gramatical: Orden: adverbio de tiempo + origen + verbo. Combina "qayna", "-manta" y "chayamuy".
+Etiquetas: lección 4, verbo, chayamuy, qayna, -manta, origen, orden de palabras
+
+FICHA 25
+Frase en Quechua Cochabambino: Tutamanta Oruroman rini.
+Traducción al Español: Por la mañana voy a Oruro.
+Descomposición de Morfemas: tuta-manta Oruro-man ri-ni
+Glosa Gramatical: noche-ABL Oruro-ALL ir-1SG
+Explicación o Nota Gramatical: "Tutamanta" ocupa el lugar del adverbio, al inicio. Muestra "-manta" y "-man" en la misma frase: desde la madrugada, hacia Oruro.
+Etiquetas: lección 4, verbo, riy, tutamanta, -man, -manta, mañana, orden de palabras
+
+FICHA 26
+Frase en Quechua Cochabambino: Kunan pay Oruroman rin.
+Traducción al Español: Ahora él va a Oruro.
+Descomposición de Morfemas: kunan pay Oruro-man ri-n
+Glosa Gramatical: ahora 3SG Oruro-ALL ir-3SG
+Explicación o Nota Gramatical: Esquema del manual: ADVERBIO + SUJETO + COMPLEMENTO + VERBO. El adverbio va antes del sujeto y el verbo cierra la frase.
+Etiquetas: lección 4, orden de palabras, riy, kunan, pay, 3SG, -man
+
+FICHA 27
+Frase en Quechua Cochabambino: Sapa ch'isi Cochabambamanta jamunki.
+Traducción al Español: Vienes de Cochabamba cada noche.
+Descomposición de Morfemas: sapa ch'isi Cochabamba-manta jamu-nki
+Glosa Gramatical: cada noche Cochabamba-ABL venir-2SG
+Explicación o Nota Gramatical: "-nki" cubre "tú" y "usted". Frase habitual con origen marcado por "-manta". (Ejercicio del manual.)
+Etiquetas: lección 4, verbo, jamuy, sapa, ch'isi, -manta, 2SG, habitual
+
+FICHA 28
+Frase en Quechua Cochabambino: ¿Mayk'aj qan rinki?
+Traducción al Español: ¿Cuándo vas TÚ?
+Descomposición de Morfemas: mayk'aj qan ri-nki
+Glosa Gramatical: cuándo 2SG ir-2SG
+Explicación o Nota Gramatical: El pronombre "qan" se agrega solo para enfatizar al sujeto. Sin él, "¿Mayk'aj rinki?" ya significa lo mismo. (Ejemplo del manual.)
+Etiquetas: lección 4, pregunta, mayk'aj, qan, énfasis, pronombre, riy

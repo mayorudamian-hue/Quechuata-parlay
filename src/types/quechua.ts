@@ -64,6 +64,8 @@ export interface CorpusPhrase {
   grammaticalNotes: string;
   tags: string[];
   verified: boolean;
+  /** Quién respalda la frase. Si falta, se usa `verified`. 'ia' = borrador sin revisar (no se usa como ejemplo). */
+  provenance?: 'segundo-hablante' | 'fuente' | 'revisado-dem' | 'ia';
 }
 
 export interface CriticalDoubt {
