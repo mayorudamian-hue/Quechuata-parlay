@@ -1,17 +1,17 @@
 Mazo	Frente	Reverso	Etiquetas
-Otras palabras	ï¿½No es asi? ï¿½No es verdad?	ï¿½Icharï¿½?	
+Otras palabras	¿No es asi? ¿No es verdad?	¿Icharí?	
 Sustantivos	Excusa	Achaki	
 Sustantivos	Majt'a	Adolescente	
-Otras palabras	Chaypi, chayman	Ahï¿½	
+Otras palabras	Chaypi, chayman	Ahí	
 Verbos	Jeq'eqakuy	Ahogarse	
-Otras palabras	Asï¿½	Ajina	
+Otras palabras	Así	Ajina	
 Otras palabras	De esa manera	Ajinamanta	
 Verbos	Elegir	Ajllay	
 Verbos	Escoger, elegir	Ajllay	
 Sustantivos	Excremento	Aka	
 Sustantivos	Escarabajo	Aka tanqa	
 Sustantivos	Nieto, nieta	Alchhi	
-Otras palabras	Wakin	Algï¿½n	
+Otras palabras	Wakin	Algún	
 Verbos	Llosq'ochay	Alisar	
 Verbos	Cavar	Allay	
 Otras palabras	Bueno	Allin	
@@ -20,7 +20,7 @@ Otras palabras	Bien	Allinta
 Verbos	Arreglarse con alguien	Allinyakuy	
 Sustantivos	Perro	Alqo	
 Otras palabras	No (prohibitivo)	Ama	
-Verbos	Practicar	Amaï¿½ay	
+Verbos	Practicar	Amañay	
 Verbos	Empalagarse	Amichikuy	
 Otras palabras	Uywa	Animal	
 Sustantivos	Aguila	Anka	
@@ -31,23 +31,23 @@ Verbos	Traer	Apamuy
 Verbos	Llevar	Apay	
 Verbos	Usar, manejar	Apaykachay	
 Verbos	Transportar adentro	Apaykuy	
-Otras palabras	Kaypi, kayman	Aquï¿½	
+Otras palabras	Kaypi, kayman	Aquí	
 Sustantivos	Lagartija	Ararankha	
-Otras palabras	Si	Arï¿½	
+Otras palabras	Si	Arí	
 Verbos	K'usuyay	Arrugarse	
 Otras palabras	Mucho (cantidad)	Ashkha	
 Verbos	Hacerse mucho	Ashkhayay	
 Sustantivos	Risa	Asina	
 Verbos	Burlarse	Asipayay	
 Verbos	"Reir&nbsp;"	Asiy	
-Verbos	Reï¿½r	Asiy	
+Verbos	Reír	Asiy	
 Otras palabras	Apestoso, maloliente	Asna	
 Verbos	Despedir mal olor	Asnay	
 Verbos	Oler mal	Asnay	
 Verbos	Mudarse, trasladarse	Astakuy	
-Otras palabras	"&nbsp;Ademï¿½s, tambiï¿½n, sino, mï¿½s bien"	Astawanpis	
+Otras palabras	"&nbsp;Además, también, sino, más bien"	Astawanpis	
 Verbos	Acarrear	Astay	leech
-Otras palabras	Mï¿½s	Aswan, Astawan	
+Otras palabras	Más	Aswan, Astawan	
 Verbos	Confiar	Atienekuy	
 Sustantivos	Competencia	Atipanaku	
 Sustantivos	Triunfo	Atipay	
@@ -59,8 +59,8 @@ Verbos	"Tejer&nbsp;"	Away
 Sustantivos	Cadaver	Aya	
 Sustantivos	Carne	Aycha	
 Sustantivos	Familia, tribu	Ayllu	
-Sustantivos	Ladrido	Ayï¿½ay	
-Verbos	Ladrar	Ayï¿½ay	
+Sustantivos	Ladrido	Ayñay	
+Verbos	Ladrar	Ayñay	
 Verbos	Huir, escapar	Ayqey	
 Verbos	Tirar de algo	Aysay	leech
 Verbos	Enjuagar	Aytiy	leech
@@ -84,16 +84,16 @@ Sustantivos	Pez, pescado	Challwa
 Sustantivos	Pescador	Challwa jap'ej	
 Sustantivos	Problema	Ch'ampay	
 Verbos	Arrojar algo a alguien	Ch'anqay	
-Otras palabras	Despuï¿½s, entonces, y	Chantï¿½, chanta	
-Otras palabras	Tambien, ademï¿½s	Chantapis	
+Otras palabras	Después, entonces, y	Chantá, chanta	
+Otras palabras	Tambien, además	Chantapis	
 Sustantivos	Estrella	Ch'aska	
-Sustantivos	Engaï¿½o	Ch'auka	
-Verbos	Engaï¿½ar	Ch'aukiyay	
+Sustantivos	Engaño	Ch'auka	
+Verbos	Engañar	Ch'aukiyay	
 Sustantivos	Medio, centro	Chaupi	
 Verbos	Cocer una comida	Chayachiy	
 Verbos	Llegar	Chayay	
-Otras palabras	Despuï¿½s de eso	Chaymanta	
-Otras palabras	O (Conjunciï¿½n)	Chayri	
+Otras palabras	Después de eso	Chaymanta	
+Otras palabras	O (Conjunción)	Chayri	
 Otras palabras	Sin embargo, pero	Chaywanpis	
 Sustantivos	Granizo	Chejchi	
 Otras palabras	Gris, manchado	Ch'ejchi	
@@ -111,11 +111,11 @@ Verbos	Mezclarse	Chhapukuy
 Verbos	Sumergir, mezclar	Chhapuy	
 Verbos	Perder la vista, ver borroso, no ver con claridad	Chharpuy, ayphuy	
 Otras palabras	Tanto, mucho	Chhika	
-Sustantivos	Rocï¿½o	Chhulla	
+Sustantivos	Rocío	Chhulla	
 Sustantivos	Hielo	Chhullunka	
 Otras palabras	Sucio	Ch'ichi	
 Verbos	Ensuciar	Ch'ichichay	
-Sustantivos	Tuï¿½tano	Chilina	
+Sustantivos	Tuétano	Chilina	
 Sustantivos	Polluelo	Chillwi	
 Otras palabras	Al otro lado, en la otra orilla.	Chimpa	
 Verbos	Contagiarse	Chimpachikuy	
@@ -129,7 +129,7 @@ Verbos	Enredar	Ch'ipaykuy
 Otras palabras	Frio	Chiri	
 Sustantivos	Frio	Chiri	
 Verbos	Enfriarse	Chiriyapuy	
-Sustantivos	Parpadeo, guiï¿½o	Ch'irmi	
+Sustantivos	Parpadeo, guiño	Ch'irmi	
 Verbos	Parpadear	Ch'irmiy	
 Verbos	Exprimir	Ch'irway	
 Sustantivos	Noche	Ch'isi	
@@ -142,11 +142,11 @@ Sustantivos	Choza	Ch'ujlla
 Verbos	Sentarse	Chukukuy	
 Otras palabras	Impar	Ch'ulla	
 Sustantivos	Gorro	Ch'ullu	
-Sustantivos	Faja para ceï¿½ir la cintura	Chumpi	
+Sustantivos	Faja para ceñir la cintura	Chumpi	
 Sustantivos	Intestino	Ch'unchula	
 Otras palabras	Diez	Chunka	
 Sustantivos	Rabo	Chupa	
-Sustantivos	Oposiciï¿½n	Churanakuy	
+Sustantivos	Oposición	Churanakuy	
 Verbos	Oponerse	Churanakuy	
 Verbos	Poner, colocar	Churay	
 Sustantivos	Hijo	Churi, qhari wawa	
@@ -163,14 +163,14 @@ Otras palabras	Chay	Eso
 Otras palabras	P'oqosqa	Fermentado	
 Sustantivos	Paja	Ichhu	
 Verbos	Llevar en brazos	Ichuy	
-Otras palabras	Quï¿½	Ima	
+Otras palabras	Qué	Ima	
 Sustantivos	Cosa	Ima	
-Otras palabras	Por quï¿½	Imarayku, Imajtin	
+Otras palabras	Por qué	Imarayku, Imajtin	
 Sustantivos	Adivinanza	Imasmari	
-Otras palabras	Cï¿½mo	Imayna	
-Sustantivos	Niï¿½a	Imilla	
+Otras palabras	Cómo	Imayna	
+Sustantivos	Niña	Imilla	
 Sustantivos	Sol	Inti	
-Sustantivos	Pichï¿½n	Irpa	
+Sustantivos	Pichón	Irpa	
 Otras palabras	Dos, par	Iskay	
 Otras palabras	Vacilante, indeciso	Iskay sonqo	
 Verbos	Vacilar, titubear	Iskaychakuy	
@@ -185,11 +185,11 @@ Verbos	Venir	Jamuy
 Sustantivos	Cielo	Janajpacha	
 Verbos	Agarrar, capturar, recibir	Jap'iy	
 Otras palabras	Aquel	Jaqay	
-Otras palabras	Allï¿½	Jaqaypi	
+Otras palabras	Allá	Jaqaypi	
 Sustantivos	Campamento	Jara	
 Verbos	Acampar	Jarakuy	
 Verbos	Protegerse	Jark'akuy	
-Sustantivos	Impedimento, Obstï¿½culo	Jark'ay	
+Sustantivos	Impedimento, Obstáculo	Jark'ay	
 Verbos	Atajar, proteger, impedir, detener	Jark'ay	
 Verbos	Levantarse	Jatariy, jatarikuy	
 Otras palabras	Grande	Jatun	
@@ -202,10 +202,10 @@ Verbos	Patear	Jayt'ay
 Verbos	Entregar	Jayway	
 Verbos	Derramar	Jich'ay	
 Sustantivos	Hipo	Jik'u	
-Otras palabras	Asï¿½, como	Jina	
-Otras palabras	Si es asï¿½	Jina kajtin	
+Otras palabras	Así, como	Jina	
+Otras palabras	Si es así	Jina kajtin	
 Otras palabras	De repente	Jinallapi	
-Verbos	Aï¿½n asï¿½, pero	Jinapis	
+Verbos	Aún así, pero	Jinapis	
 Otras palabras	Nueve	Jisq'on	
 Otras palabras	Sordo	Joq'ara, Lojt'u	
 Otras palabras	Humedo, mojado	Joq'o	
@@ -213,16 +213,16 @@ Sustantivos	Pecado	Jucha
 Verbos	Perdonar	Jucha pampachay	
 Verbos	Condenar, culpar	Juchachay	
 Otras palabras	Imperfecto	Juchasapa	
-Otras palabras	Pequeï¿½o	Juch'uy	
-Sustantivos	Bï¿½ho	Juku	
-Sustantivos	Ratï¿½n	Juk'ucha	
+Otras palabras	Pequeño	Juch'uy	
+Sustantivos	Búho	Juku	
+Sustantivos	Ratón	Juk'ucha	
 Sustantivos	Oso	Jukumari	
 Sustantivos	Sudor	Jump'i	
 Verbos	Transpirar	Jump'iy	
 Otras palabras	Lleno, completo	Junt'a	
 Verbos	Llenar o completar algo	Junt'achiy	
 Verbos	Llenar, cumplir, completar	Junt'ay	
-Otras palabras	Millï¿½n	Junu	
+Otras palabras	Millón	Junu	
 Sustantivos	Agujero	Jusk'u	
 Verbos	Agujerear, perforar	Jusk'uy	
 Sustantivos	Manantial	Juturi	
@@ -247,7 +247,7 @@ Verbos	Mandar, ordenar	Kamachiy
 Verbos	Retar, reprender	K'amiy	
 Sustantivos	Luz	K'anchay	
 Verbos	Alumbrar	K'anchay	
-Sustantivos	Borde, lï¿½mite	Kantu	
+Sustantivos	Borde, límite	Kantu	
 Verbos	Tener	Kapuy, tiyapuy	
 Otras palabras	Lejos	Karu	
 Verbos	Alejarse	Karunchakuy	
@@ -257,9 +257,9 @@ Verbos	Adherirse, apegarse	K'askakuy	leech
 Sustantivos	Palo	K'aspi	
 Sustantivos	Obediencia	Kasukuy	
 Verbos	Obedecer	Kasuy	
-Otras palabras	ï¿½nico	K'ata	
+Otras palabras	Único	K'ata	
 Sustantivos	Serpiente	Katari	
-Sustantivos	Resurrecciï¿½n	Kausariy, kausarimuy	
+Sustantivos	Resurrección	Kausariy, kausarimuy	
 Sustantivos	Vida	Kausay	
 Verbos	Vivir	Kausay	
 Otras palabras	Esto	Kay	
@@ -269,37 +269,37 @@ Verbos	Temblar, tiritar	Kharkatiy
 Sustantivos	Espina	Khiska	
 Otras palabras	Sucio, asqueroso	Khuchi	
 Sustantivos	Cerdo	Khuchi	
-Sustantivos	Inmoralidad, fornicaciï¿½n	Khuchichakuy	
+Sustantivos	Inmoralidad, fornicación	Khuchichakuy	
 Verbos	Cortar	Khuchuy	
 Sustantivos	Gusano	Khuru	
 Otras palabras	Juntos	Khuska	
 Verbos	Relacionar una cosa con otra	Khuskachay	
 Sustantivos	Mitad, medio	Khuskan	
-Sustantivos	Compasiï¿½n	Khuyakuy	
+Sustantivos	Compasión	Khuyakuy	
 Verbos	Abrir	Kichay	
 Otras palabras	Igual	Kikin	
 Verbos	Comparar	Kikinchay	
 Sustantivos	Luna, mes	Killa	
 Otras palabras	Tres	Kinsa	
-Otras palabras	Hijo ilegï¿½timo	K'ipa wawa	
-Sustantivos	Ladera de montaï¿½a, pendiente, cuesta	Kiray	
+Otras palabras	Hijo ilegítimo	K'ipa wawa	
+Sustantivos	Ladera de montaña, pendiente, cuesta	Kiray	
 Sustantivos	Tapa	Kirpana	
 Sustantivos	Diente	Kiru	
 Otras palabras	Salvaje, silvestre	K'ita	
 Sustantivos	Higado	K'iwicha	
 Otras palabras	Diligente	K'uchi	
-Sustantivos	Rincï¿½n	K'uchu	
+Sustantivos	Rincón	K'uchu	
 Verbos	Arrinconar (Ordenar)	K'uchunchay	
 Sustantivos	Fruto inmaduro	K'uku	
 Otras palabras	Morado	Kulli	
 Otras palabras	Angosto, estrecho	K'ullku	
-Sustantivos	Tronco de ï¿½rbol cortado, madera	K'ullu, kurku	
+Sustantivos	Tronco de árbol cortado, madera	K'ullu, kurku	
 Verbos	Agacharse, humillarse	K'umuykukuy	
-Otras palabras	Hace poco, reciï¿½n	Kunallan	
+Otras palabras	Hace poco, recién	Kunallan	
 Otras palabras	Ahora	Kunan	
 Sustantivos	Cuello	Kunka	
 Otras palabras	Mayor	Kuraj	
-Sustantivos	Araï¿½a	Kusi kusi	
+Sustantivos	Araña	Kusi kusi	
 Verbos	Alegrar a otro, causar alegria	Kusichiy	
 Verbos	Alegrarse	Kusikuy	
 Verbos	Divertirse	Kusirikuy	
@@ -338,25 +338,25 @@ Verbos	Ablandar	Llamp'uyachiy
 Sustantivos	Trabajo	Llank'ay	
 Verbos	"Trabajar&nbsp;"	Llank'ay	
 Verbos	Palpar, tocar	Llankhay	
-Sustantivos	Leï¿½a	Llant'a	
-Verbos	Cortar leï¿½a	Llant'ata ch'ejtay	
+Sustantivos	Leña	Llant'a	
+Verbos	Cortar leña	Llant'ata ch'ejtay	
 Sustantivos	Sombra	Llanthu	
 Sustantivos	Hoja, lamina	Llaqhe	
 Otras palabras	Pesado	Llasa	
-Otras palabras	Dï¿½bil	Llauch'i	
+Otras palabras	Débil	Llauch'i	
 Verbos	Debilitarse	Llauch'iyay	
-Sustantivos	ï¿½lcera	Llejti	
+Sustantivos	Úlcera	Llejti	
 Verbos	Rasgar, romper	Llik'iy	
 Otras palabras	Limpio	Llimphu	
 Verbos	Limpiar	Llimphuchay	
 Verbos	Salir	Llojsiy	
-Sustantivos	Niï¿½o	Lloqalla	
+Sustantivos	Niño	Lloqalla	
 Verbos	Montar	Lloq'ay	
 Sustantivos	Izquierda	Lloq'e	
 Verbos	Untar, embadurnar	Lluch'iy	
 Verbos	Sacar la ropa u otra prenda de vestir	Lluch'uy	
 Sustantivos	Soborno, Sobaco	Lluk'i	
-Sustantivos	Mentira, engaï¿½o	Llulla	
+Sustantivos	Mentira, engaño	Llulla	
 Verbos	Mentir	Llullakuy	
 Verbos	Escabullirse, escaparse sigilosamente	Llusp'iy	
 Verbos	Cubrir, recubrir	Llut'ay	
@@ -364,46 +364,46 @@ Verbos	Emborracharse	Machaykuy
 Otras palabras	Viejo	Machu	
 Verbos	Envejecer	Machuyay	
 Sustantivos	Mano	Maki	
-Otras palabras	Machu machu	Mal educado, burlï¿½n	
-Sustantivos	Mamï¿½	Mama	
+Otras palabras	Machu machu	Mal educado, burlón	
+Sustantivos	Mamá	Mama	
 Sustantivos	Mar	Mama qocha	
 Otras palabras	No	Mana	
-Otras palabras	Nunca, jamï¿½s	Mana/Ni jayk'aj	
+Otras palabras	Nunca, jamás	Mana/Ni jayk'aj	
 Otras palabras	Sino	Manachayqa, manaqa	
-Otras palabras	O sino	Manachayrï¿½	
+Otras palabras	O sino	Manachayrí	
 Otras palabras	Tampoco	Manallataj, Nillataj, Amallataj	
 Sustantivos	Miedo	Manchachikuy	
 Verbos	Asustarse	Manchachikuy	
 Verbos	"Asustar&nbsp;"	Manchachiy, Mancharichiy	
-Otras palabras	Tï¿½mido	Manchali	
+Otras palabras	Tímido	Manchali	
 Otras palabras	Sumamente, demasiado	Manchay	
 Sustantivos	Susto	Manchay	
 Sustantivos	Alfarero	Mania llut'aj	
 Sustantivos	Olla	Manka	
 Sustantivos	Deuda	Manu	
 Verbos	Deber una deuda	Manuy	
-Sustantivos	Oraciï¿½n	Maï¿½akuy	
-Verbos	Pedir la mano	Maï¿½aqay	
-Verbos	Prestar	Maï¿½ariy	
-Verbos	Pedir	Maï¿½ay	
+Sustantivos	Oración	Mañakuy	
+Verbos	Pedir la mano	Mañaqay	
+Verbos	Prestar	Mañariy	
+Verbos	Pedir	Mañay	
 Sustantivos	Guerra	Maqanakuy	
 Verbos	Golpear, pegar	Maqay	
 Verbos	Alzar en brazos	Marq'ay	
-Otras palabras	Cuï¿½nto	Mashkha	
-Sustantivos	Amigo, prï¿½jimo	Masi	
+Otras palabras	Cuánto	Mashkha	
+Sustantivos	Amigo, prójimo	Masi	
 Verbos	Hacerse amigo	Masichakuy	
 Verbos	Buscar	Mask'ay	
 Verbos	Extender, tender	Mast'ay	
 Verbos	Apretar	Mat'iy	
 Otras palabras	Usado, antiguo	Mauk'a	
-Otras palabras	Dï¿½nde	May	
+Otras palabras	Dónde	May	
 Otras palabras	Muy	May	
 Otras palabras	Cuando	Mayk'aj	
 Verbos	Lavar	Mayllay	
-Otras palabras	Cuï¿½l	Mayqen	
+Otras palabras	Cuál	Mayqen	
 Sustantivos	Envoltura	Mayt'una	
 Sustantivos	Rio	Mayu	
-Otras palabras	Mezquino, tacaï¿½o	Mich'a	
+Otras palabras	Mezquino, tacaño	Mich'a	
 Sustantivos	Pastor	Michej	
 Verbos	Pastorear	Michiy	
 Sustantivos	Comida	Mikhuna	
@@ -411,20 +411,20 @@ Verbos	Comer	Mikhuy
 Verbos	Sentir desagrado, repugnancia	Millachikuy	
 Otras palabras	Feo, desagradable	Millay	
 Sustantivos	Lana	Millma	
-Otras palabras	Pasado maï¿½ana	Minchha	
+Otras palabras	Pasado mañana	Minchha	
 Verbos	Contratar a alguien para un trabajo	Mink'akuy	
 Verbos	Multiplicar, aumentar	Miray	
 Sustantivos	Gato	Misi	
 Verbos	Tropezar	Misk'ay	
 Otras palabras	Dulce	Misk'i	
-Sustantivos	Generaciï¿½n, de un mismo tiempo o edad	Mita	
+Sustantivos	Generación, de un mismo tiempo o edad	Mita	
 Verbos	Maltratar, estropear, deteriorar	Mithay	
 Verbos	Desear, antojar	Moq'ey	
 Sustantivos	Rodilla	Moqo	
 Otras palabras	Nuevo	Mosoj	
 Verbos	Hacer nuevo, renovar	Mosojyachiy	
-Sustantivos	Sueï¿½o	Mosqoy	
-Verbos	"Soï¿½ar&nbsp;"	Mosqoy	
+Sustantivos	Sueño	Mosqoy	
+Verbos	"Soñar&nbsp;"	Mosqoy	
 Verbos	Besar	Much'ay	
 Otras palabras	Ancha	Mucho	
 Verbos	Aguantar	Muchuy	leech
@@ -437,7 +437,7 @@ Verbos	"Querer&nbsp;"	Munay
 Verbos	Cortar una parte del cuerpo, decapitar	Muruy	
 Verbos	Oler, percibir olores	Muskhiy	
 Verbos	Olfatear	Muskhiy	
-Verbos	Soï¿½ar despierto, desorientarse	Musphay	
+Verbos	Soñar despierto, desorientarse	Musphay	
 Sustantivos	Redondo, circulo	Muyu	
 Sustantivos	Vuelta, alrededor	Muyuy	
 Verbos	Girar, dar vueltas alrededor	Muyuy	
@@ -448,23 +448,23 @@ Verbos	Saludar	Napaykuy
 Sustantivos	Fuego	Nina	
 Sustantivos	Oreja, Oido	Ninri	
 Verbos	Decir	Niy	
-Sustantivos	Peine	ï¿½ajch'a	
-Sustantivos	Sufrimiento	ï¿½ak'ariy	
-Verbos	"Sufrir&nbsp;"	ï¿½ak'ariy	
-Sustantivos	Camino	ï¿½an	
-Sustantivos	Hermana de la mujer	ï¿½aï¿½a	
-Otras palabras	Delgado	ï¿½aï¿½u	
-Otras palabras	Zona lumbar	ï¿½aï¿½u wasa	
-Otras palabras	Hace un momento	ï¿½aqha	
-Otras palabras	Adelante, primero	ï¿½aupaj	
-Verbos	Progresar	ï¿½aupariy	
-Sustantivos	Ojo, vista	ï¿½awi	
-Verbos	Leer	ï¿½awiriy	
-Verbos	Apretar, presionar	ï¿½it'iy	
-Sustantivos	Nuera	ï¿½ojch'a	
-Sustantivos	Cerebro	ï¿½ojtu	
-Sustantivos	Pecho, seno	ï¿½uï¿½u	
-Sustantivos	Polvo	ï¿½ut'u	
+Sustantivos	Peine	Ñajch'a	
+Sustantivos	Sufrimiento	Ñak'ariy	
+Verbos	"Sufrir&nbsp;"	Ñak'ariy	
+Sustantivos	Camino	Ñan	
+Sustantivos	Hermana de la mujer	Ñaña	
+Otras palabras	Delgado	Ñañu	
+Otras palabras	Zona lumbar	Ñañu wasa	
+Otras palabras	Hace un momento	Ñaqha	
+Otras palabras	Adelante, primero	Ñaupaj	
+Verbos	Progresar	Ñaupariy	
+Sustantivos	Ojo, vista	Ñawi	
+Verbos	Leer	Ñawiriy	
+Verbos	Apretar, presionar	Ñit'iy	
+Sustantivos	Nuera	Ñojch'a	
+Sustantivos	Cerebro	Ñojtu	
+Sustantivos	Pecho, seno	Ñuñu	
+Sustantivos	Polvo	Ñut'u	
 Verbos	Abrazar	Ojllaykuy	
 Sustantivos	Enfermedad	Onqoy	
 Verbos	Enfermar	Onqoy	
@@ -474,7 +474,7 @@ Otras palabras	Plomo, pardo, gris	Oqe
 Verbos	Levantar algo	Oqhariy	
 Verbos	Tragar	Oqoy	
 Verbos	Sacar, extraer	Orqhoy	
-Sustantivos	Cerro, montaï¿½a	Orqo	
+Sustantivos	Cerro, montaña	Orqo	
 Sustantivos	Laqha	Oscuridad	
 Sustantivos	Tierra, mundo	Pacha	
 Sustantivos	Ropa	P'acha	
@@ -489,12 +489,12 @@ Verbos	Aplastar	P'altay
 Sustantivos	Llanura	Pampa	
 Verbos	Allanar, aplanar	Pampachay	
 Verbos	"Enterrar&nbsp;"	P'ampay	
-Sustantivos	Hermana del varï¿½n	Pana	
-Sustantivos	Error, equivocaciï¿½n	Pantay	
+Sustantivos	Hermana del varón	Pana	
+Sustantivos	Error, equivocación	Pantay	
 Verbos	Equivocarse	Pantay	
-Sustantivos	Derecha	Paï¿½a	
+Sustantivos	Derecha	Paña	
 Verbos	Nacer	Paqarikuy	
-Sustantivos	Maï¿½ana, momento del dia	Paqarin	
+Sustantivos	Mañana, momento del dia	Paqarin	
 Sustantivos	Lluvia	Para	
 Verbos	Llover	Paray	
 Otras palabras	Calentado, muy caliente	Parisqa	
@@ -502,7 +502,7 @@ Verbos	Hablar	Parlay
 Sustantivos	K'isa	Pasas, fruta seca	
 Otras palabras	Arriba	Pata	
 Verbos	Avergonzarse	P'enqakuy	
-Sustantivos	Vegï¿½enza	P'enqay	
+Sustantivos	Vegüenza	P'enqay	
 Sustantivos	Pared	Perqa	
 Sustantivos	Pajaro	P'esqo	
 Sustantivos	Pajaro	P'esqo	
@@ -514,15 +514,15 @@ Sustantivos	Vuelo	Phaway
 Verbos	Volar	Phaway	
 Verbos	Saltar	Phinkiy	
 Verbos	Echarse encima de alguien	Phinkiykuy	
-Sustantivos	Enojo	Phiï¿½a	
-Verbos	Enojarse	Phiï¿½akuy	
+Sustantivos	Enojo	Phiña	
+Verbos	Enojarse	Phiñakuy	
 Verbos	Destrozar	Phiriy	
 Otras palabras	Cinco	Phisqa	
 Verbos	Soplar	Phukuy	
 Sustantivos	Pluma	Phuru	
 Verbos	Entristecerse, apenarse	Phutikuy	
 Sustantivos	Nube	Phuyu	
-Otras palabras	Quiï¿½n	Pi	
+Otras palabras	Quién	Pi	
 Verbos	Barrer	Pichay	
 Sustantivos	Pato	Pili	
 Sustantivos	Mariposa	Pilpintu	
@@ -538,12 +538,12 @@ Verbos	Sobrar	Puchuy
 Verbos	Jugar	Pujllay	
 Sustantivos	Pozo, pozo de agua, cisterna	Pujyu	
 Otras palabras	Rojo	Puka	
-Sustantivos	Dï¿½a	P'unchay	
+Sustantivos	Día	P'unchay	
 Verbos	Hincharse	Punkiy	
 Sustantivos	Puerta	Punku	
-Otras palabras	Aplastado	Puï¿½asqa, ï¿½at'usqa	
-Sustantivos	Cï¿½ntaro	P'uï¿½u	
-Verbos	Dormir	Puï¿½uy	
+Otras palabras	Aplastado	Puñasqa, ñat'usqa	
+Sustantivos	Cántaro	P'uñu	
+Verbos	Dormir	Puñuy	
 Sustantivos	Ombligo	Pupu	
 Otras palabras	Ambos	Puraj	
 Verbos	Caminar	Puriy	
@@ -562,8 +562,8 @@ Verbos	Despedir olor (agradable o desagradable)	Q'apay
 Verbos	Apretar con la mano	Q'apiy	
 Sustantivos	Cuero, piel	Qara	
 Verbos	Regar	Qarpay	
-Otras palabras	Maï¿½ana	Q'aya	
-Sustantivos	Maï¿½ana, dia despuï¿½s de hoy	Q'aya	
+Otras palabras	Mañana	Q'aya	
+Sustantivos	Mañana, dia después de hoy	Q'aya	
 Otras palabras	Cerca	Qaylla	
 Verbos	Acercarse	Qayllaykuy	
 Otras palabras	Desabrido por falta de sal o azucar	Q'ayma	
@@ -578,12 +578,12 @@ Verbos	Esparcir	Qhallay, qhalliy
 Otras palabras	Rico, acaudalado	Qhapaj	
 Verbos	Gritar	Qhapariy	
 Sustantivos	Hombre	Qhari	
-Verbos	Cuervo	Qharqaï¿½a	
+Verbos	Cuervo	Qharqaña	
 Verbos	Expulsar	Qharqoy	
 Otras palabras	Helado	Qhasa	
 Sustantivos	Helada	Qhasa	
-Otras palabras	En vano, sin razï¿½n	Qhasimanta	
-Otras palabras	ï¿½spero	Qhasqa, qhashqa	
+Otras palabras	En vano, sin razón	Qhasimanta	
+Otras palabras	Áspero	Qhasqa, qhashqa	
 Sustantivos	Frazada, colcha, algo para cubrir o tapar	Qhatana	
 Verbos	Arrastrar	Qhatatay	
 Verbos	Cubrir, tapar	Qhatay	
@@ -594,7 +594,7 @@ Verbos	Mirar, observar	Qhaway
 Verbos	Quitar	Qhechuy	
 Otras palabras	Flojo	Qhella	
 Verbos	Escribir	Qhelqay	
-Otras palabras	Atrï¿½s	Qhepa	
+Otras palabras	Atrás	Qhepa	
 Verbos	Hacer quedar, retrasar	Qhepachiy	
 Verbos	Quedarse	Qhepakuy	
 Otras palabras	Siguiente, porterior	Qhepan	
@@ -608,12 +608,12 @@ Otras palabras	Verde	Q'omer
 Sustantivos	Olvido	Qonqay	
 Verbos	Olvidar	Qonqay	
 Verbos	Arrodillarse	Qonqorikuy	
-Otras palabras	Caliente	Q'oï¿½i	
+Otras palabras	Caliente	Q'oñi	
 Sustantivos	Basura	Q'opa	
 Sustantivos	Oro	Qori	
-Sustantivos	Colibrï¿½	Qori q'enti	
+Sustantivos	Colibrí	Qori q'enti	
 Sustantivos	Esposo	Qosa	
-Sustantivos	Humo	Q'osï¿½i	
+Sustantivos	Humo	Q'osñi	
 Sustantivos	Grupo	Qotu	
 Sustantivos	Conejo	Qowi	
 Verbos	Dar	Qoy	
@@ -637,7 +637,7 @@ Verbos	Hablar mal, en contra de alguien, retar	Rimay
 Verbos	Irse	Ripuy	
 Sustantivos	Nieve	Rit'i	
 Verbos	Ir	Riy	
-Otras palabras	Weq'oj	Ruido al vomitar o al tener nï¿½useas, acompaï¿½ado del verbo niy	
+Otras palabras	Weq'oj	Ruido al vomitar o al tener náuseas, acompañado del verbo niy	
 Sustantivos	Piedra	Rumi	
 Verbos	Apedrear	Rumiswan ch'anqay	
 Sustantivos	Gente, persona	Runa	
@@ -646,18 +646,18 @@ Sustantivos	Huevo	Runtu
 Otras palabras	Quemante, ardiente	Rupha	
 Verbos	Quemar	Ruphay	
 Verbos	Hacer, realizar	Ruway	
-Sustantivos	ï¿½rbol	Sach'a	
-Verbos	ï¿½ak'ay	Sacrificar un animal	
+Sustantivos	Árbol	Sach'a	
+Verbos	Ñak'ay	Sacrificar un animal	
 Verbos	Thalay	Sacudir, retemblar	
 Otras palabras	Malo	Sajra	
 Verbos	Saciarse, llenarse	Sajsay	
 Verbos	Descansar	Samariy	
-Sustantivos	Aliento, respiraciï¿½n	Samay	
+Sustantivos	Aliento, respiración	Samay	
 Verbos	Respirar	Samay	
 Otras palabras	Espeso	Sankhu	
 Otras palabras	Cada	Sapa	
-Otras palabras	Solo, solitario, aislado	Sapa (Con terminaciï¿½n de persona)	
-Sustantivos	Raï¿½z	Saphi	
+Otras palabras	Solo, solitario, aislado	Sapa (Con terminación de persona)	
+Sustantivos	Raíz	Saphi	
 Verbos	Abandonar	Saqerpariy	
 Verbos	Dejar	Saqey	
 Sustantivos	Maiz	Sara	
@@ -668,9 +668,9 @@ Verbos	Cansarse	Sayk'uy
 Sustantivos	Nariz	Senqa	
 Verbos	Azotar	Seq'oy	
 Sustantivos	Hormiga	Sik'imira	
-Verbos	Sacar, Arrancar de raï¿½z	Sik'iy	
+Verbos	Sacar, Arrancar de raíz	Sik'iy	
 Otras palabras	Delgado, de poco grosor	Sillp'a	
-Sustantivos	Uï¿½a, garra	Sillu	
+Sustantivos	Uña, garra	Sillu	
 Sustantivos	Lombriz de tierra	Silwikhuru	
 Sustantivos	Boca	Simi	
 Verbos	Discutir	Siminakuy	
@@ -681,7 +681,7 @@ Sustantivos	Mujer joven	Sipas
 Verbos	Coser	Siray	
 Verbos	Acostarse	Siriy, siriykuy	
 Otras palabras	Seis	Sojta	
-Sustantivos	Corazï¿½n	Sonqo	
+Sustantivos	Corazón	Sonqo	
 Sustantivos	Consuelo	Sonqochay	
 Verbos	Consolar	Sonqochay	
 Verbos	Correrse	Suchuriy	
@@ -691,7 +691,7 @@ Otras palabras	De buena calidad	Sumachaj
 Otras palabras	Excelente	Sumaj	
 Sustantivos	Barba	Sunkha	leech
 Sustantivos	Demonio	Supay	
-Sustantivos	ï¿½andu, avestruz	Suri	
+Sustantivos	Ñandu, avestruz	Suri	
 Verbos	Chorrear	Suruy	
 Sustantivos	Nombre	Suti	
 Otras palabras	Claro	Sut'i	
@@ -700,49 +700,49 @@ Verbos	Aclarar, Explicar	Sut'inchay
 Verbos	Amanecer	Sut'iyay	
 Sustantivos	Gota	Sut'u	leech
 Verbos	Gotear	Sut'uy	
-Sustantivos	Ladrï¿½n	Suwa	
+Sustantivos	Ladrón	Suwa	
 Verbos	Robar	Suway	
 Sustantivos	Buitre	Suwintu	
 Sustantivos	Esperanza	Suyakuy	
 Verbos	Esperar	Suyay	
-Sustantivos	Regiï¿½n, paï¿½s	Suyu	
+Sustantivos	Región, país	Suyu	
 Sustantivos	Palma de la mano	T'ajlla	
 Verbos	Aplaudir	T'ajllay	
 Verbos	Lavar ropa	T'ajsay	
 Verbos	Golpear la puerta	Takay	
-Sustantivos	Canciï¿½n	Takiy	
+Sustantivos	Canción	Takiy	
 Verbos	Cantar	Takiy	
 Verbos	Empujar	Tanqay	
 Sustantivos	Pan	T'anta	
-Sustantivos	Reuniï¿½n	Tantakuy	
+Sustantivos	Reunión	Tantakuy	
 Verbos	"Reunirse,&nbsp; juntarse"	Tantakuy	
 Verbos	Reunir, juntar	Tantay	
 Verbos	Anidar, hacerse un nido	Tapachakuy	
 Sustantivos	Pregunta	Tapuy	
 Verbos	"Preguntar&nbsp;"	Tapuy	
-Verbos	Divisiï¿½n	T'aqanakuy	
+Verbos	División	T'aqanakuy	
 Verbos	Separar	T'aqay	
 Verbos	Alcanzar, encontrar a alguien	Taripay	
 Verbos	Encontrar, hallar	Tariy	
 Sustantivos	Siembra	Tarpuy	
 Verbos	Sembrar	Tarpuy	
 Sustantivos	Ciervo	Taruka	
-Sustantivos	Papï¿½	Tata	
+Sustantivos	Papá	Tata	
 Verbos	Amontonar	Tauqay	
 Otras palabras	Cuatro	Tawa	
 Verbos	Sacudir	Thalay	
 Verbos	Vaciar el contenido	Thalliy	
 Otras palabras	Gastado	Thanta	
 Verbos	Desgastarse, deteriorarse	Thantakuy	
-Verbos	Parar un dolor, calmar un fenomeno atmosferico	Thaï¿½iy	
+Verbos	Parar un dolor, calmar un fenomeno atmosferico	Thañiy	
 Sustantivos	Nido de ave	Thapa	
 Verbos	Dar pasos	Thaskiy	
 Verbos	Extinguir, apagar	Thasnuy	
 Sustantivos	Saliva	Thoqay	
 Verbos	Escupir	Thoqay	leech
-Verbos	Derribar, demoler, destruir	Thuï¿½iy	
+Verbos	Derribar, demoler, destruir	Thuñiy	
 Sustantivos	Polilla	Thuta	
-Verbos	Murmurar, refunfuï¿½ar	Thutuy	
+Verbos	Murmurar, refunfuñar	Thutuy	
 Verbos	Cambiar, traducir	Tijray	
 Sustantivos	Flor	T'ika	
 Verbos	Hervir	T'impuy	
@@ -758,13 +758,13 @@ Verbos	Calmar	Tiyaykuchiy
 Sustantivos	Arena	T'iyu	
 Otras palabras	Imaymana	Toda clase de	
 Sustantivos	Trampa	Tojlla	
-Sustantivos	Bastï¿½n	Tojnu	
+Sustantivos	Bastón	Tojnu	
 Verbos	Toquetear, molestar	T'ojpiy	
-Verbos	Punzar, apuï¿½alar	T'ojsiy	
+Verbos	Punzar, apuñalar	T'ojsiy	
 Verbos	Explotar	T'ojyay	
 Sustantivos	Garganta	Tonqori	
 Sustantivos	Hoyo, hueco	T'oqo	
-Sustantivos	Epilepsia, parï¿½lisis	T'uku onqoy	
+Sustantivos	Epilepsia, parálisis	T'uku onqoy	
 Verbos	Terminar	Tukuchay	
 Verbos	Terminarse definitivamente	Tukukapuy	
 Sustantivos	Fin	Tukukuy	
@@ -794,23 +794,23 @@ Otras palabras	Adentro	Ukhu
 Verbos	Profundizar, analizar profundamente	Ukhunchay	
 Sustantivos	Cabeza	Uma	
 Verbos	Discursar	Umallirichiy	
-Otras palabras	Decaido, dï¿½bil, (deprimido)	Umphu	
+Otras palabras	Decaido, débil, (deprimido)	Umphu	
 Sustantivos	Antiguo, hace mucho tiempo	Unay	
 Verbos	Licuarse, derretirse	Unuyay	
-Sustantivos	Crï¿½a de una animal	Uï¿½a	
+Sustantivos	Cría de una animal	Uña	
 Otras palabras	Abajo	Ura	
 Verbos	Caer	Urmay	
 Sustantivos	Paloma	Urpi	
 Sustantivos	Piojo	Usa	
 Sustantivos	Ceniza	Uspha	
-Otras palabras	Rï¿½pido	Usqhay	
+Otras palabras	Rápido	Usqhay	
 Verbos	Desperdiciar	Usuchiy	
 Sustantivos	Hija	Ususi	
 Sustantivos	Cara, rostro	Uya	
-Verbos	Oï¿½r, escuchar	Uyariy	
+Verbos	Oír, escuchar	Uyariy	
 Verbos	Criar, proveer a la familia.	Uyway	
 Sustantivos	Vapor	Vausi, wawsi	
-Sustantivos	Aguijï¿½n	Wach'ina	
+Sustantivos	Aguijón	Wach'ina	
 Otras palabras	Otro	Waj	
 Otras palabras	De otra forma o manera	Waj jinamanta	
 Sustantivos	Pobre	Wajcha	
@@ -827,10 +827,10 @@ Sustantivos	Collar	Walqa
 Otras palabras	Tonto	Wampu	
 Sustantivos	Camilla	Wantuna	
 Sustantivos	Abono	Wanu	
-Verbos	Matar	Waï¿½uchiy	
-Sustantivos	Muerte	Waï¿½uy	
-Verbos	Morir	Waï¿½uy	
-Sustantivos	Lï¿½grima	Waqay	
+Verbos	Matar	Wañuchiy	
+Sustantivos	Muerte	Wañuy	
+Verbos	Morir	Wañuy	
+Sustantivos	Lágrima	Waqay	
 Verbos	Llorar	Waqay	
 Sustantivos	Honda	Warak'a	
 Otras palabras	Mil	Waranqa	
@@ -843,18 +843,18 @@ Verbos	Rebalsar	Wasariy
 Sustantivos	Casa	Wasi	
 Sustantivos	Cuerda trenzada	Waskha	
 Otras palabras	Grosero, mal educado	Wasu	
-Sustantivos	Aï¿½o	Wata	
+Sustantivos	Año	Wata	
 Sustantivos	Cuerda	Watana	
 Verbos	Amarrar, atar	Wataykuy	
 Otras palabras	De nuevo, nuevamente	Watejmanta	
 Verbos	Espiar	Wateqay	
-Sustantivos	Hermano del varï¿½n	Wauqe	
-Sustantivos	Bebï¿½, Niï¿½o pequeï¿½o	Wawa	
+Sustantivos	Hermano del varón	Wauqe	
+Sustantivos	Bebé, Niño pequeño	Wawa	
 Verbos	Evaporarse	Wawsiy, vausiy	
 Sustantivos	Bolsa, saco	Wayaqa	
 Verbos	Cocinar	Wayk'uy	
 Sustantivos	Hombre joven	Wayna	
-Sustantivos	Quebrada. caï¿½on	Wayq'o	
+Sustantivos	Quebrada. cañon	Wayq'o	
 Sustantivos	Viento	Wayra	
 Sustantivos	Abejorro	Wayronqo	
 Verbos	Subir	Wichariy	
@@ -865,8 +865,8 @@ Sustantivos	Noticia	Willay
 Verbos	Anunciar, avisar, contar	Willay	
 Verbos	Recostarse	Winkuy	
 Verbos	Tumbarse, recostarse	Winkuy	
-Verbos	Crecer	Wiï¿½ay	
-Otras palabras	Para siempre	Wiï¿½aypaj	
+Verbos	Crecer	Wiñay	
+Otras palabras	Para siempre	Wiñaypaj	
 Otras palabras	Gordo	Wira	
 Sustantivos	Grasa	Wira	
 Verbos	Engordar	Wirayay	
@@ -875,8 +875,8 @@ Verbos	Cerrar, Encerrar	Wisq'ay
 Otras palabras	Torcido, chueco	Wist'u	
 Verbos	Torcerse	Wist'uyay	
 Sustantivos	Maestro, profesor	Yachachej	
-Sustantivos	Enseï¿½anza	Yachachiy	
-Verbos	Enseï¿½ar	Yachachiy	
+Sustantivos	Enseñanza	Yachachiy	
+Verbos	Enseñar	Yachachiy	
 Verbos	Aprender	Yachakuy	
 Verbos	Imitar	Yachapayay	
 Sustantivos	Conocimiento	Yachay	
@@ -898,7 +898,7 @@ Sustantivos	Sangre	Yawar
 Verbos	Entrar	Yaykuy	
 Sustantivos	Censo	Yupay	
 Verbos	Contar	Yupay	
-Sustantivos	Adoraciï¿½n	Yupaychay	
+Sustantivos	Adoración	Yupaychay	
 Verbos	Adorar	Yupaychay	
 Otras palabras	Blanco	Yuraj	
 Sustantivos	Vasija, jarra	Yuru	
