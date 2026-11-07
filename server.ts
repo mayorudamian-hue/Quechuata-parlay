@@ -161,6 +161,40 @@ Rigen estrictamente las siguientes reglas lingüísticas y ortográficas normali
      * "Sichus sajra munayninchejta atipayta munanchej chayqa, concientes kananchej tiyan imachus debilidadninchej kasqanmanta."
      * "Jehová Diosta kasukunki chayqa, jamoj tiempopi ashkha bendicionesta japʼinki."
    - Glosa Leipzig: "sichus" = COND; "chayqa" = COND.TOP; "-nchej/-nchij" = 1PL.INCL; "ashkha" = mucho; "japʼinki" = recibir-2SG.
+
+10. CÓPULA CERO CON EL VERBO KAY EN PRESENTE (3.ª PERSONA ATRIBUTIVA):
+   - En oraciones de identidad o cualidad en tiempo presente y tercera persona, al verbo kay NO se le añade "-n" ni se dice "kan".
+   - Hay elisión obligatoria (cópula cero Ø):
+     * NUNCA digas: "Payqa José kan" (calco sintáctico agramatical del español "Él es José").
+     * DI SIEMPRE: "Payqa José" (Él es José) o "Payqa yachachej" (Él es profesor).
+   - La forma "kan" queda reservada estrictamente para existencia ("hay / existe"), ej. "Mana qolqe kanchu" (No hay dinero) o "Qolqe kan" (Hay dinero).
+
+11. FUTURO EXCLUIDO DE NOSOTROS (1PL.EXCL):
+   - Para la primera persona plural exclusiva de nosotros ("ellos y yo, pero no tú / noqayku") en tiempo futuro, en Cochabamba se usa sistemáticamente "-sajku" (con "j" boliviana) o "-sqayku":
+     * "Noqayku jamusajku" / "Noqayku jamusqayku" (Nosotros vendremos sin ti).
+     * "Noqayku risajku" / "Noqayku risqayku" (Nosotros iremos sin ti).
+   - En contraste con el futuro inclusivo (tú y yo) que utiliza "-sunchij" ("parlasunchij").
+
+12. SUFIJOS POSESIVOS NOMINALES Y EUFONÍA CON -NI-:
+   - Sustantivo terminado en VOCAL: añade directamente los sufijos de persona:
+     * -y (1SG, wasiy = mi casa), -yki (2SG, wasiyki = tu casa), -n (3SG, wasin = su casa)
+     * -nchij (1PL.INCL, wasinchij = nuestra casa tú y yo)
+     * -yku (1PL.EXCL, wasiyku = nuestra casa sin ti)
+     * -ykichij (2PL, wasiykichij = su casa de ustedes), -nku (3PL, wasinku = su casa de ellos).
+   - Sustantivo terminado en CONSONANTE: requiere obligatoriamente el interfijo eufónico "-ni-" para evitar cacofonía:
+     * -ni-y (yawarniy = mi sangre), -ni-yki (yawarniyki), -ni-n (yawarnin), -ni-nchij (yawarninchij), -ni-yku (yawarniyku), -ni-ykichij (yawarniykichij), -ni-nku (yawarninku).
+
+13. INTEGRACIÓN DE CASTELLANISMOS EN LA GRAMÁTICA QUECHUA:
+   - REGLA FUNDAMENTAL: Se deben utilizar prioritariamente los términos en quechua siempre que existan en el vocabulario del banco lingüístico estándar (ej. "llank'ay" para trabajar, "yachakuy" para estudiar).
+   - ADAPTACIÓN DE PRÉSTAMOS (CASTELLANISMOS): Si una palabra o verbo no tiene un equivalente directo en el banco, o se opta por el castellanismo de uso común en el valle de Cochabamba, este se somete a TODAS las reglas gramaticales y de conjugación correspondientes:
+     * Verbos prestados: la raíz verbal del español adopta obligatoriamente la terminación verbal en "-y" para el infinitivo: "estudiay" (estudiar), "trabajay" (trabajar), "necesitay" (necesitar), "pensay" (pensar), "parlay" (hablar).
+     * Conjugación verbal: la base verbal recibe todos los sufijos quechuas normales:
+       - Progresivo: "trabajashani" (trabaja-sha-ni = estoy trabajando).
+       - Persona y tiempo: "necesitanchej" (necesita-nchej = necesitamos), "estudiasunchej" (estudiaremos), "trabajarqani" (trabajé).
+     * Perífrasis y subordinación:
+       - "Necesitanchej estudiay" (necesita-nchej estudia-y = Necesitamos estudiar).
+       - "Sichus chayta ruwanchej chayqa, allin riwasunchej" (sichus chay-ta ruwa-nchej chay-qa allin ri-wa-sunchej = Si hacemos eso, nos irá bien).
+     * Glosa morfológica Leipzig: Descomponer el castellanismo en su base adaptada y sus sufijos (ej. "trabaja-sha-ni" -> "trabajar-PROG-1SG", "necesita-nchej" -> "necesitar-1PL.INCL", "estudia-y" -> "estudiar-INF").
 `;
 
 // Heuristic fallback analyzer for high availability
@@ -190,9 +224,27 @@ function generateLinguisticFallback(
     }
   }
 
-  // 2. Patrones canónicos de reglas gramaticales cargadas
+  // 2. Patrones canónicos de reglas gramaticales cargadas (incluidos castellanismos adaptados)
   if (!translatedText) {
-    if (cleanInput.includes('sajra') && cleanInput.includes('chayqa')) {
+    if (cleanInput.includes('necesitanchej') && cleanInput.includes('estudiay')) {
+      translatedText = isQuechua ? 'Necesitamos estudiar.' : 'Necesitanchej estudiay.';
+      grammaticalExplanation = 'Regla de castellanismos adaptados: "necesitar" conjugado con persona 1PL.INCL (-nchej) y "estudiar" con infinitivo en -y (estudiay).';
+    } else if (cleanInput.includes('necesitamos estudiar')) {
+      translatedText = 'Necesitanchej estudiay.';
+      grammaticalExplanation = 'Traducción con castellanismos adaptados a la morfología quechua: necesita-nchej estudia-y.';
+    } else if (cleanInput.includes('chayta ruwanchej') && cleanInput.includes('riwasunchej')) {
+      translatedText = isQuechua ? 'Si hacemos eso, nos irá bien.' : 'Sichus chayta ruwanchej chayqa, allin riwasunchej.';
+      grammaticalExplanation = 'Oración condicional con (sichus)...chayqa. En la consecuencia: ri-wa-sunchej (ir-1OBJ-1PL.INCL.FUT = nos irá a nosotros).';
+    } else if ((cleanInput.includes('si hacemos eso') && cleanInput.includes('bien')) || (cleanInput.includes('hacemos eso') && cleanInput.includes('ira bien'))) {
+      translatedText = 'Sichus chayta ruwanchej chayqa, allin riwasunchej.';
+      grammaticalExplanation = 'Oración condicional (sichus) ... chayqa con futuro inclusivo en -sunchej y clítico de objeto -wa-.';
+    } else if (cleanInput === 'trabajashani' || cleanInput.includes('trabajashani')) {
+      translatedText = isQuechua ? 'Estoy trabajando.' : 'Trabajashani.';
+      grammaticalExplanation = 'Castellanismo adaptado: verbo trabajar con aspecto progresivo cochabambino -sha- y 1ra persona -ni (trabaja-sha-ni).';
+    } else if (cleanInput === 'estoy trabajando' || cleanInput.includes('estoy trabajando')) {
+      translatedText = 'Trabajashani.';
+      grammaticalExplanation = 'Castellanismo adaptado con progresivo cochabambino -sha- (trabaja-sha-ni). Variante quechua nativa: Llank\'ashani.';
+    } else if (cleanInput.includes('sajra') && cleanInput.includes('chayqa')) {
       translatedText = isQuechua 
         ? 'Si queremos vencer nuestra debilidad (deseo malo), debemos ser conscientes de qué tipo de debilidad es.' 
         : 'Sichus sajra munayninchejta atipayta munanchej chayqa, concientes kananchej tiyan imachus debilidadninchej kasqanmanta.';
@@ -223,6 +275,20 @@ function generateLinguisticFallback(
     } else if (cleanInput.includes('ama llojsiychu')) {
       translatedText = isQuechua ? 'No salgas.' : 'Ama llojsiychu.';
       grammaticalExplanation = 'Prohibición con ama + llojsiy (ortografía boliviana RM 1032/84 con -j-) + -chu.';
+    } else if (cleanInput.includes('payqa jose kan') || cleanInput.includes('payqa josé kan') || cleanInput.includes('pay jose kan')) {
+      translatedText = isQuechua 
+        ? 'Él es José (calco corregido: se dice "Payqa José", con cópula cero, nunca "kan")' 
+        : 'Payqa José.';
+      grammaticalExplanation = 'Alerta de calco sintáctico del español: En quechua cochabambino el presente atributivo de 3ra persona omite el verbo kay (cópula cero). No se dice "Payqa José kan", sino "Payqa José". La forma "kan" queda reservada para existencia ("hay").';
+    } else if (cleanInput === 'payqa jose' || cleanInput === 'payqa josé' || cleanInput === 'pay jose') {
+      translatedText = isQuechua ? 'Él es José.' : 'Payqa José.';
+      grammaticalExplanation = 'Oración atributiva de 3.ª persona en presente con cópula cero (elisión de kay: no se usa "kan").';
+    } else if (cleanInput.includes('jamusajku') || cleanInput.includes('jamusqayku')) {
+      translatedText = isQuechua ? 'Nosotros (sin incluirte) vendremos.' : 'Noqayku jamusajku.';
+      grammaticalExplanation = 'Futuro de 1ra persona plural exclusiva de nosotros con sufijo cochabambino -sajku / -sqayku.';
+    } else if (cleanInput.includes('risajku') || cleanInput.includes('risqayku')) {
+      translatedText = isQuechua ? 'Nosotros (sin incluirte) iremos.' : 'Noqayku risajku.';
+      grammaticalExplanation = 'Futuro de 1ra persona plural exclusiva de nosotros con sufijo cochabambino -sajku / -sqayku.';
     } else if (cleanInput === 'wasis') {
       translatedText = isQuechua ? 'casas' : 'wasis';
       grammaticalExplanation = 'Pluralización nominal cochabambina: base en vocal (-i) añade desinencia "-s" (wasis).';
@@ -402,6 +468,34 @@ function generateLinguisticFallback(
       root = 'tiempo';
       suffixes.push('-pi');
       gloss = 'tiempo-LOC';
+    } else if (clean === 'necesitanchej' || clean === 'necesitanchij') {
+      root = 'necesitay';
+      suffixes.push('-nchej');
+      gloss = 'necesitar-1PL.INCL';
+    } else if (clean === 'estudiay') {
+      root = 'estudiay';
+      suffixes.push('-y');
+      gloss = 'estudiar-INF';
+    } else if (clean.includes('estudiasha')) {
+      root = 'estudiay';
+      suffixes.push('-sha-', clean.replace(/^.*estudiasha-?/, '') || '-ni');
+      gloss = 'estudiar-PROG';
+    } else if (clean === 'trabajashani') {
+      root = 'trabajay';
+      suffixes.push('-sha-', '-ni');
+      gloss = 'trabajar-PROG-1SG';
+    } else if (clean.includes('trabajasha')) {
+      root = 'trabajay';
+      suffixes.push('-sha-');
+      gloss = 'trabajar-PROG';
+    } else if (clean === 'riwasunchej' || clean === 'riwasunchij') {
+      root = 'riy';
+      suffixes.push('-wa-', '-sunchej');
+      gloss = 'ir-1OBJ-1PL.INCL.FUT';
+    } else if (clean === 'ruwanchej' || clean === 'ruwanchij') {
+      root = 'ruway';
+      suffixes.push('-nchej');
+      gloss = 'hacer-1PL.INCL';
     } else if (clean === 'wasiy') {
       root = 'wasi';
       suffixes.push('-y');
@@ -474,6 +568,28 @@ function generateLinguisticFallback(
       root = base + 'y';
       suffixes.push('-sunchij');
       gloss = `${base}-1PL.INCL.FUT`;
+    } else if (clean.endsWith('sajku')) {
+      const base = clean.replace(/sajku$/, '');
+      root = base + 'y';
+      suffixes.push('-sajku');
+      gloss = `${base}-1PL.EXCL.FUT`;
+    } else if (clean.endsWith('sqayku')) {
+      const base = clean.replace(/sqayku$/, '');
+      root = base + 'y';
+      suffixes.push('-sqayku');
+      gloss = `${base}-1PL.EXCL.FUT`;
+    } else if (clean.endsWith('saqku')) {
+      const base = clean.replace(/saqku$/, '');
+      root = base + 'y';
+      suffixes.push('-saqku');
+      gloss = `${base}-1PL.EXCL.FUT`;
+    } else if (clean === 'kan') {
+      root = 'kay';
+      suffixes.push('-n');
+      const isAttributiveCalque = /\bpayqa\s+\w+\s+kan\b/i.test(text) || /\bpay\s+\w+\s+kan\b/i.test(text);
+      gloss = isAttributiveCalque 
+        ? 'ser-3SG [CALCO: elidir cópula en atribución]' 
+        : 'haber/existir-3SG (hay)';
     } else if (clean.endsWith('nqa') && clean.length > 4) {
       const base = clean.replace(/nqa$/, '');
       root = base + 'y';
@@ -574,6 +690,18 @@ function generateLinguisticFallback(
       aiHypothesis: 'Sufijo pluralizante propio del quechua cusqueño',
       quechuistaQuestion: '¿Normalizar al plural inclusivo boliviano -nchij?',
       suggestedAction: 'Estandarizar a -nchij',
+      status: 'pending',
+    });
+  }
+  if (/\bpayqa\s+\w+\s+kan\b/i.test(text) || /\bpay\s+\w+\s+kan\b/i.test(text)) {
+    detectedDoubts.push({
+      term: 'Payqa ... kan',
+      trigger: 'dialect_variant',
+      contextPhrase: text,
+      occurrences: 1,
+      aiHypothesis: 'Calco sintáctico del español ("Él es..."). En quechua cochabambino el presente atributivo de 3ra persona omite obligatoriamente el verbo kay (cópula cero). No se dice "Payqa José kan", sino "Payqa José". La forma "kan" se reserva para existencia ("hay").',
+      quechuistaQuestion: '¿Confirmar elisión obligatoria de "kan" en oraciones atributivas de 3ra persona presente según la norma cochabambina?',
+      suggestedAction: 'Eliminar "kan" para aplicar la cópula cero: "Payqa José"',
       status: 'pending',
     });
   }
